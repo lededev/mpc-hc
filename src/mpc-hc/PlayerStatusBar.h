@@ -55,6 +55,8 @@ private:
     void Relayout();
     int m_initialWindowDPI = 0;
 
+    CString time_start;
+
 public:
     CPlayerStatusBar(CMainFrame* pMainFrame);
     virtual ~CPlayerStatusBar();
@@ -70,6 +72,11 @@ public:
 
     CString GetStatusTimer() const;
     CString GetStatusMessage() const;
+
+    typedef enum {LEFT_BTN, MID_BTN, RIGHT_BTN} btn_t;
+    void CopyTimeToClipboard(btn_t btn = LEFT_BTN);
+    void toClipboard(CString ts);
+    void ShowToast(CString & msg);
 
     CString PreparePathStatusMessage(CPath path);
 
@@ -98,4 +105,5 @@ protected:
     afx_msg void OnTimeDisplayClicked();
     afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
     afx_msg BOOL OnToolTipNotify(UINT id, NMHDR* pNMHDR, LRESULT* pResult);
+    afx_msg void OnMButtonDown(UINT nFlags, CPoint point);
 };

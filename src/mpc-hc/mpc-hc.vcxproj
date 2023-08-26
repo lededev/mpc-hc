@@ -126,6 +126,8 @@
   <ItemDefinitionGroup Condition="!$(Configuration.Contains('Lite'))">
     <Link>
       <AdditionalDependencies>RARFileSource.res;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/NODEFAULTLIB:library %(AdditionalOptions)</AdditionalOptions>
+      <IgnoreAllDefaultLibraries Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</IgnoreAllDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -319,6 +321,7 @@
     <ClCompile Include="..\thirdparty\XmlRpc4Win\TimXmlRpc.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="wintoastlib.cpp" />
     <ClCompile Include="YoutubeDL.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -517,6 +520,7 @@
     <ClInclude Include="WicUtils.h" />
     <ClInclude Include="WinHotkeyCtrl.h" />
     <ClInclude Include="..\thirdparty\XmlRpc4Win\timxmlrpc.h" />
+    <ClInclude Include="wintoastlib.h" />
     <ClInclude Include="YoutubeDL.h" />
   </ItemGroup>
   <ItemGroup>

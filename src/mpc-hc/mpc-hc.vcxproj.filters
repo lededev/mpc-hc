@@ -627,6 +627,7 @@
     <ClCompile Include="MPCFolderPickerDialog.cpp">
       <Filter>Modal Dialogs</Filter>
     </ClCompile>
+    <ClCompile Include="wintoastlib.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppSettings.h">
@@ -1163,6 +1164,7 @@
       <Filter>Main View</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\mpc-hc_config.h" />
+<<<<<<< HEAD
     <ClInclude Include="PPageTheme.h">
       <Filter>Property Dialogs\Player Options\Pages</Filter>
     </ClInclude>
@@ -1191,6 +1193,9 @@
     <ClInclude Include="MPCFolderPickerDialog.h">
       <Filter>Modal Dialogs</Filter>
     </ClInclude>
+=======
+    <ClInclude Include="wintoastlib.h" />
+>>>>>>> d98d36768 (time to clipbd)
   </ItemGroup>
   <ItemGroup>
     <None Include="res\ani.avi">

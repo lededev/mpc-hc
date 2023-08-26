@@ -220,7 +220,7 @@ CAppSettings::CAppSettings()
     , nLastWindowType(SIZE_RESTORED)
     , nLastUsedPage(0)
     , fRemainingTime(false)
-    , bHighPrecisionTimer(false)
+    , bHighPrecisionTimer(true)
     , bTimerShowPercentage(false)
     , fLastFullScreen(false)
     , fEnableEDLEditor(false)
@@ -2174,7 +2174,7 @@ void CAppSettings::LoadSettings()
     bToggleShaderScreenSpace = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_TOGGLESHADERSSCREENSPACE, TRUE);
 
     fRemainingTime = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_REMAINING_TIME, FALSE);
-    bHighPrecisionTimer = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_HIGH_PRECISION_TIMER, FALSE);
+    bHighPrecisionTimer = true; // !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_HIGH_PRECISION_TIMER, FALSE);
     bTimerShowPercentage = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_TIMER_SHOW_PERCENTAGE, FALSE);
 
     nUpdaterAutoCheck = pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_UPDATER_AUTO_CHECK, AUTOUPDATE_UNKNOWN);

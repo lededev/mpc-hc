@@ -27,7 +27,34 @@
 #include "CMPCTheme.h"
 #include "DpiHelper.h"
 
-// CPlayerStatusBar
+#include "wintoastlib.h"
+
+class CustomHandler : public WinToastLib::IWinToastHandler {
+public:
+    void toastActivated() const {
+    }
+
+    void toastActivated(int actionIndex) const {
+    }
+
+    void toastDismissed(WinToastDismissalReason state) const {
+        switch (state) {
+        case UserCanceled:
+            break;
+        case TimedOut:
+            break;
+        case ApplicationHidden:
+            break;
+        default:
+            break;
+        }
+    }
+
+    void toastFailed() const {
+    }
+};
+
+ // CPlayerStatusBar
 
 IMPLEMENT_DYNAMIC(CPlayerStatusBar, CDialogBar)
 
@@ -57,6 +84,8 @@ BOOL CPlayerStatusBar::Create(CWnd* pParentWnd)
 {
     BOOL ret = CDialogBar::Create(pParentWnd, IDD_PLAYERSTATUSBAR, WS_CHILD | WS_VISIBLE | CBRS_ALIGN_BOTTOM, IDD_PLAYERSTATUSBAR);
 
+    CString tooltip = _T("左:保存开始时间(秒) 右:开始-结束时间(秒)到剪切板 中:当前精确时间及总时长到剪切板 Ctrl+左:保存并复制 SHIFT+左:等同右 ALT+左:等同中");
+    auto lpt = tooltip.GetBuffer();
     // Should never be RTLed
     ModifyStyleEx(WS_EX_LAYOUTRTL, WS_EX_NOINHERITLAYOUT);
     if (AppIsThemeLoaded()) {
@@ -64,16 +93,17 @@ BOOL CPlayerStatusBar::Create(CWnd* pParentWnd)
         themedToolTip.SetDelayTime(TTDT_INITIAL, 0);
         themedToolTip.SetDelayTime(TTDT_AUTOPOP, 2500);
         themedToolTip.SetDelayTime(TTDT_RESHOW, 0);
-        themedToolTip.AddTool(&m_time, IDS_TOOLTIP_REMAINING_TIME);
-        themedToolTip.AddTool(&m_status);
+        themedToolTip.AddTool(&m_time, lpt/*IDS_TOOLTIP_REMAINING_TIME*/);
+        themedToolTip.AddTool(&m_status, lpt);
     } else {
         m_tooltip.Create(this, TTS_NOPREFIX | TTS_ALWAYSTIP);
         m_tooltip.SetDelayTime(TTDT_INITIAL, 0);
         m_tooltip.SetDelayTime(TTDT_AUTOPOP, 2500);
         m_tooltip.SetDelayTime(TTDT_RESHOW, 0);
-        m_tooltip.AddTool(&m_time, IDS_TOOLTIP_REMAINING_TIME);
-        m_tooltip.AddTool(&m_status);
+        m_tooltip.AddTool(&m_time, lpt/*IDS_TOOLTIP_REMAINING_TIME*/);
+        m_tooltip.AddTool(&m_status, lpt);
     }
+    tooltip.ReleaseBuffer();
 
     return ret;
 }
@@ -127,6 +157,12 @@ int CPlayerStatusBar::OnCreate(LPCREATESTRUCT lpCreateStruct)
     ScaleFont();
 
     Relayout();
+
+    using namespace WinToastLib;
+    WinToast::WinToastError error;
+    WinToast::instance()->setAppName(_T("MPC-HC"));
+    WinToast::instance()->setAppUserModelId(_T("MPC-HC App"));
+    const auto succedded = WinToast::instance()->initialize(&error);
 
     return 0;
 }
@@ -396,6 +432,7 @@ BEGIN_MESSAGE_MAP(CPlayerStatusBar, CDialogBar)
     ON_WM_SETCURSOR()
     ON_WM_CTLCOLOR()
     ON_WM_CONTEXTMENU()
+    ON_WM_MBUTTONDOWN()
     ON_NOTIFY_EX(TTN_NEEDTEXT, 0, OnToolTipNotify)
 END_MESSAGE_MAP()
 
@@ -485,8 +522,107 @@ void CPlayerStatusBar::OnSize(UINT nType, int cx, int cy)
     Relayout();
 }
 
+void CPlayerStatusBar::toClipboard(CString ts) {
+    size_t cbStr = (ts.GetLength() + 1) * sizeof(WCHAR);
+    HGLOBAL hGlob = GlobalAlloc(GMEM_MOVEABLE, cbStr);
+    if (hGlob) {
+        LPVOID pData = GlobalLock(hGlob);
+        if (pData) {
+            memcpy_s(GlobalLock(pData), cbStr, ts.GetBuffer(), cbStr);
+            GlobalUnlock(hGlob);
+            ts.ReleaseBuffer();
+
+            if (!OpenClipboard()) {
+                GlobalFree(hGlob);
+                return;
+            }
+            if (::EmptyClipboard() && ::SetClipboardData(CF_UNICODETEXT, hGlob)) {
+                hGlob = nullptr;
+            }
+            ::CloseClipboard();
+        }
+        if (hGlob) {
+            GlobalFree(hGlob);
+        }
+    }
+}
+
+void CPlayerStatusBar::ShowToast(CString & msg)
+{
+    using namespace WinToastLib;
+    if (WinToast::isCompatible()) {
+        WinToastTemplate templ = WinToastTemplate(WinToastTemplate::Text01);
+        templ.setTextField(msg.GetBuffer(), WinToastTemplate::FirstLine);
+        templ.setDuration(WinToastTemplate::Short);
+        WinToast::instance()->showToast(templ, new CustomHandler());
+        msg.ReleaseBuffer();
+    }
+}
+
+void CPlayerStatusBar::CopyTimeToClipboard(btn_t btn)
+{
+    if (btn == LEFT_BTN)
+    {
+        if (GetKeyState(VK_SHIFT) & 0x8000)
+            btn = RIGHT_BTN;
+        else if (GetKeyState(VK_MENU) & 0x8000)
+            btn = MID_BTN;
+    }
+    CString ts;
+    m_time.GetWindowTextW(ts);
+    if (btn != MID_BTN) {
+        int posd = ts.Find(_T("."));
+        if (posd >= 0)
+            ts.Delete(posd, ts.GetLength() - posd);
+    }
+    int pos0 = ts.Find(_T("00:00:0"));
+    int pos1 = ts.Find(_T("00:00:"));
+    int pos2 = ts.Find(_T("00:0"));
+    int pos3 = ts.Find(_T("00:"));
+    if (pos0 == 0)
+        ts.Delete(0, 7);
+    else if (pos1 == 0)
+        ts.Delete(0, 6);
+    else if (pos2 == 0)
+        ts.Delete(0, 4);
+    else if (pos3 == 0)
+        ts.Delete(0, 3);
+    if (btn == MID_BTN) {
+        ts.Replace(_T(" / "), _T(" "));
+        pos0 = ts.Find(_T(" 00:00:"));
+        pos1 = ts.Find(_T(" 00:0"));
+        pos2 = ts.Find(_T(" 00:"));
+        if (pos0 >= 0)
+            ts.Delete(pos0 + 1, 6);
+        else if (pos1 >= 0)
+            ts.Delete(pos1 + 1, 4);
+        else if (pos2 >= 0)
+            ts.Delete(pos2 + 1, 3);
+    }
+    else if (btn == RIGHT_BTN && time_start.GetLength())
+    {
+        ts = time_start + " " + ts;
+    }
+    else if (btn == LEFT_BTN) // save start time
+    {
+        time_start = ts;
+    }
+    CString act = _T("已保存");
+    if (btn != LEFT_BTN || GetKeyState(VK_CONTROL) & 0x8000) {
+        toClipboard(ts);
+        act = _T("已复制");
+    }
+
+    const WCHAR * btn_name[] = { _T("左"), _T("中"), _T("右") };
+    CString msg;
+    msg.Format(_T("%s '%s' %s"), btn_name[btn % 3], ts, act);
+    ShowToast(msg);
+}
+
 void CPlayerStatusBar::OnLButtonDown(UINT nFlags, CPoint point)
 {
+    CopyTimeToClipboard(LEFT_BTN);
+    return;
     CMainFrame* pFrame = ((CMainFrame*)GetParentFrame());
     pFrame->RestoreFocus();
 
@@ -495,7 +631,8 @@ void CPlayerStatusBar::OnLButtonDown(UINT nFlags, CPoint point)
     pFrame->GetWindowPlacement(&wp);
 
     if (m_time_rect.PtInRect(point)) {
-        OnTimeDisplayClicked();
+        //OnTimeDisplayClicked();
+        CopyTimeToClipboard(LEFT_BTN);
     } else if (!pFrame->m_fFullScreen && wp.showCmd != SW_SHOWMAXIMIZED) {
         CRect r;
         GetClientRect(r);
@@ -570,6 +707,8 @@ void CPlayerStatusBar::OnTimeDisplayClicked()
 
 void CPlayerStatusBar::OnContextMenu(CWnd* pWnd, CPoint point)
 {
+    CopyTimeToClipboard(RIGHT_BTN);
+    return;
     CPoint clientPoint = point;
     ScreenToClient(&clientPoint);
     if (!m_time_rect.PtInRect(clientPoint)) {
@@ -630,4 +769,19 @@ BOOL CPlayerStatusBar::OnToolTipNotify(UINT id, NMHDR* pNMHDR, LRESULT* pResult)
         }
     }
     return FALSE;
+}
+
+void CPlayerStatusBar::OnMButtonDown(UINT nFlags, CPoint point)
+{
+    CopyTimeToClipboard(MID_BTN);
+    return;
+    CMainFrame* pFrame = ((CMainFrame*)GetParentFrame());
+
+    WINDOWPLACEMENT wp;
+    wp.length = sizeof(wp);
+    pFrame->GetWindowPlacement(&wp);
+
+    if (m_time_rect.PtInRect(point)) {
+        CopyTimeToClipboard(MID_BTN);
+    }
 }
