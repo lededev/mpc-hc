@@ -18315,6 +18315,10 @@ void CMainFrame::CloseMedia(bool bNextIsQueued/* = false*/)
     TRACE(_T("CMainFrame::CloseMedia\n"));
 
     m_dwLastPause = 0;
+
+    if (m_bUseSeekPreview && m_wndPreView.IsWindowVisible()) {
+        m_wndPreView.ShowWindow(SW_HIDE);
+    }
     m_bUseSeekPreview = false;
 
     if (GetLoadState() == MLS::CLOSING || GetLoadState() == MLS::CLOSED) {
