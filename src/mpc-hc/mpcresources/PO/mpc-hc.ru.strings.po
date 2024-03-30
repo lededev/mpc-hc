@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the MPC-HC package.
 # Translators:
 # MPC HC <adiposegithub@gmail.com>, 2020
-# Alexandr Stankovich <sanekst00@yandex.ru>, 2021
 # CoolCmd, 2023
+# Alexandr Stankovich <sanekst00@yandex.ru>, 2024
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: MPC-HC\n"
-"POT-Creation-Date: 2023-11-23 01:08:04+0000\n"
+"POT-Creation-Date: 2024-03-28 16:29:05+0000\n"
 "PO-Revision-Date: 2020-01-02 07:46+0000\n"
-"Last-Translator: CoolCmd, 2023\n"
+"Last-Translator: Alexandr Stankovich <sanekst00@yandex.ru>, 2024\n"
 "Language-Team: Russian (https://app.transifex.com/mpchc/teams/106126/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -758,7 +758,7 @@ msgstr "Проигрыватель::Логотип"
 
 msgctxt "IDD_PPAGETHEME"
 msgid "Player::User Interface"
-msgstr ""
+msgstr "Проигрыватель::Интерфейс"
 
 msgctxt "IDD_PPAGEOUTPUT"
 msgid "Playback::Output"
@@ -1387,7 +1387,7 @@ msgstr "Клавиша"
 
 msgctxt "IDS_AG_MOUSE"
 msgid "Mouse"
-msgstr ""
+msgstr "Мышь"
 
 msgctxt "IDS_AG_APP_COMMAND"
 msgid "App Command"
@@ -3965,7 +3965,7 @@ msgstr "Онлайн поиск субтитров не удался."
 
 msgctxt "IDS_SUBDL_DLG_FAILED_DL"
 msgid "Subtitle download failed."
-msgstr ""
+msgstr "Загрузка субтитров не удалась."
 
 msgctxt "IDS_SUBDL_DLG_ABORTED"
 msgid "Online subtitles search aborted."
@@ -4734,6 +4734,49 @@ msgstr ""
 "правильного добавления выделенных в Проводнике файлов. Если указать слишком "
 "низкую длительность, то будет добавлена только часть выделенного."
 
+msgctxt "IDS_PPAGEADVANCED_FILEPOS_PLAYLIST"
+msgid "Remember playback position in local M3U and MPCPL playlist files."
+msgstr ""
+"Запоминать позицию воспроизведения в локальных M3U и MPCPL плейлистах."
+
+msgctxt "IDS_PPAGEADVANCED_FILEPOS_TRACK_SELECTION"
+msgid ""
+"Remember the selected audio and subtitle track (when file history is "
+"enabled)."
+msgstr ""
+"Запоминать выбранные дорожки аудио и субтитров (когда включен файл истории)."
+
+msgctxt "IDS_PPAGEADVANCED_YDL_AUDIO_FORMAT"
+msgid ""
+"Preferred audio format for stream that is selected from Youtube-DL results. Only applies if audio stream is separate from video stream.\n"
+"0: Automatic\n"
+"1: AAC\n"
+"2: OPUS"
+msgstr ""
+"Предпочтительный формат аудиопотока, выбираемый из результатов Youtube-DL. Применимо, только если аудиопоток отделён от потока видео.\n"
+"0: Автоматически\n"
+"1: AAC\n"
+"2: OPUS"
+
+msgctxt "IDS_PPAGEADVANCED_PREVENT_DISPLAY_SLEEP"
+msgid "Disable screen saver and monitor sleep mode during video playback."
+msgstr ""
+"Отключать заставку и спящий режим монитора во время воспроизведения видео."
+
+msgctxt "IDS_PPAGEADVANCED_STILL_VIDEO_DURATION"
+msgid ""
+"Display duration in seconds for images rendered by \"Generate Still Video\" "
+"and \"MPC Image Source\" filters. Use 0 for infinite."
+msgstr ""
+"Отображать продолжительность в секундах для изображений, отрисованных с "
+"помощью фильтров \"Generate Still Video\" и \"MPC Image Source\". "
+"Используйте 0 для отображения бесконечности."
+
+msgctxt "IDS_PPAGEADVANCED_CAPTURE_DEINTERLACE"
+msgid "Insert deinterlace filter (blend) in capture mode"
+msgstr ""
+"Добавлять фильтр устранения чересстрочности (смешивание) в режиме захвата."
+
 msgctxt "IDS_ARS_WASAPI_MODE"
 msgid "WASAPI mode:"
 msgstr "Режим WASAPI:"
@@ -4844,8 +4887,8 @@ msgstr ""
 
 msgctxt "IDS_SEEKBAR_HOVER_PREVIEW"
 msgid "Video Preview"
-msgstr ""
+msgstr "Предпросмотр видео"
 
 msgctxt "IDS_SEEKBAR_HOVER_TOOLTIP"
 msgid "Seek Time"
-msgstr ""
+msgstr "Время перемотки"

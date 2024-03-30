@@ -28,7 +28,7 @@ msgstr "&Rychle otevřít soubor..."
 
 msgctxt "ID_FILE_OPENMEDIA"
 msgid "&Open File/URL..."
-msgstr "Otevřít &soubor..."
+msgstr "Otevřít &soubor / URL..."
 
 msgctxt "ID_FILE_OPENDVDBD"
 msgid "Open &DVD/BD..."
@@ -440,7 +440,7 @@ msgstr "O&pravit rozdíl poměru stran monitoru a plochy"
 
 msgctxt "POPUP"
 msgid "P&nS Frame Adjust"
-msgstr "Pan & Scan přizpůsobení obrazu"
+msgstr "Pan a Scan přizpůsobení obrazu"
 
 msgctxt "ID_VIEW_INCSIZE"
 msgid "&Increase Size"

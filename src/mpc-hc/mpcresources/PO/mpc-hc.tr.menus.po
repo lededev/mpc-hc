@@ -145,11 +145,11 @@ msgstr "Arayüz ayrıntısı..."
 
 msgctxt "ID_VIEW_PRESETS_MINIMAL"
 msgid "&Minimal"
-msgstr "Minimal"
+msgstr "Yalın"
 
 msgctxt "ID_VIEW_PRESETS_COMPACT"
 msgid "&Compact"
-msgstr "Kompakt"
+msgstr "Dertop"
 
 msgctxt "ID_VIEW_PRESETS_NORMAL"
 msgid "&Normal"
@@ -181,7 +181,7 @@ msgstr "%&200"
 
 msgctxt "ID_VIEW_ZOOM_AUTOFIT"
 msgid "Auto &Fit"
-msgstr "&Otomatik uyum"
+msgstr "Otomatik &uy"
 
 msgctxt "POPUP"
 msgid "R&enderer Settings"
@@ -221,7 +221,7 @@ msgstr "&Sunum"
 
 msgctxt "ID_VIEW_D3DFULLSCREEN"
 msgid "D3D Fullscreen &Mode"
-msgstr "Tam ekran D3D &modu"
+msgstr "Tam ekran D3D tipi"
 
 msgctxt "ID_VIEW_FULLSCREENGUISUPPORT"
 msgid "D3D Fullscreen &GUI Support"
@@ -285,15 +285,15 @@ msgstr "Ortam &ışığı"
 
 msgctxt "ID_VIEW_CM_AMBIENTLIGHT_BRIGHT"
 msgid "&Bright (2.2 Gamma)"
-msgstr "&Parlak (2.2 Gama)"
+msgstr "&Parlak (2,2 Gama)"
 
 msgctxt "ID_VIEW_CM_AMBIENTLIGHT_DIM"
 msgid "&Dim (2.35 Gamma)"
-msgstr "&Sönük (2.35 Gama)"
+msgstr "&Sönük (2,35 Gama)"
 
 msgctxt "ID_VIEW_CM_AMBIENTLIGHT_DARK"
 msgid "D&ark (2.4 Gamma)"
-msgstr "&Karanlık (2.4 Gama)"
+msgstr "&Karanlık (2,4 Gama)"
 
 msgctxt "POPUP"
 msgid "&Rendering Intent"
@@ -305,7 +305,7 @@ msgstr "&Algısal"
 
 msgctxt "ID_VIEW_CM_INTENT_RELATIVECOLORIMETRIC"
 msgid "&Relative Colorimetric"
-msgstr "&Göreli Renkölçer"
+msgstr "&Göreli kolorimetrik"
 
 msgctxt "ID_VIEW_CM_INTENT_SATURATION"
 msgid "&Saturation"
@@ -313,7 +313,7 @@ msgstr "&Doygunluk"
 
 msgctxt "ID_VIEW_CM_INTENT_ABSOLUTECOLORIMETRIC"
 msgid "&Absolute Colorimetric"
-msgstr "&Mutlak Renkölçer"
+msgstr "&Mutlak kolorimetrik"
 
 msgctxt "POPUP"
 msgid "&VSync"
@@ -341,15 +341,15 @@ msgstr "VSync kaydırmasını a&rtır"
 
 msgctxt "POPUP"
 msgid "&GPU Control"
-msgstr "&GPU kontrolü"
+msgstr "&GPU denetimi"
 
 msgctxt "ID_VIEW_FLUSHGPU_BEFOREVSYNC"
 msgid "Flush GPU &before VSync"
-msgstr "GPU'yu VSync'den önce sıfırla"
+msgstr "VSync'den önce GPU'yu sıfırla"
 
 msgctxt "ID_VIEW_FLUSHGPU_AFTERPRESENT"
 msgid "Flush GPU &after Present"
-msgstr "GPU'yu seçimden &sonra sıfırla"
+msgstr "Sunumdan sonra GPU'yu sıfırla"
 
 msgctxt "ID_VIEW_FLUSHGPU_WAIT"
 msgid "&Wait for flushes"
@@ -433,7 +433,7 @@ msgstr "1&85:100"
 
 msgctxt "ID_ASPECTRATIO_SAR"
 msgid "Assume &square pixels (SAR)"
-msgstr "&Pikselleri kare olarak varsay (SAR)"
+msgstr "&Kare piksel varsayımı (SAR)"
 
 msgctxt "ID_VIEW_VF_COMPMONDESKARDIFF"
 msgid "&Correct Monitor/Desktop AR Diff"
@@ -533,7 +533,7 @@ msgstr "&Seçenekler..."
 
 msgctxt "POPUP"
 msgid "&Play"
-msgstr "&Yürütme"
+msgstr "&Oynatım"
 
 msgctxt "ID_PLAY_PLAYPAUSE"
 msgid "&Play/Pause"
@@ -577,7 +577,7 @@ msgstr "A-B (&B yi işaretle)"
 
 msgctxt "POPUP"
 msgid "&Playback Rate"
-msgstr "Oynatma &hızı"
+msgstr "Yürütme &hızı"
 
 msgctxt "ID_PLAY_PLAYBACKRATE_025"
 msgid "0.25 x"
@@ -689,7 +689,7 @@ msgstr "&Sesi kes"
 
 msgctxt "POPUP"
 msgid "Af&ter Playback"
-msgstr "Oy&natmadan Sonra"
+msgstr "Oy&natımdan sonra"
 
 msgctxt "ID_AFTERPLAYBACK_DONOTHING"
 msgid "Do no&thing"
@@ -709,11 +709,11 @@ msgstr "Uygulamadan &çık"
 
 msgctxt "ID_AFTERPLAYBACK_STANDBY"
 msgid "&Stand By"
-msgstr "&Askıya Al"
+msgstr "Hazırda beklet"
 
 msgctxt "ID_AFTERPLAYBACK_HIBERNATE"
 msgid "&Hibernate"
-msgstr "Hazırda beklet"
+msgstr "Derin uyku"
 
 msgctxt "ID_AFTERPLAYBACK_SHUTDOWN"
 msgid "Shut&down"
@@ -729,7 +729,7 @@ msgstr "Oturumu kilitle"
 
 msgctxt "POPUP"
 msgid "&Navigate"
-msgstr "G&ezinti"
+msgstr "G&ezinim"
 
 msgctxt "ID_NAVIGATE_SKIPBACK"
 msgid "&Previous"
@@ -769,7 +769,7 @@ msgstr "&Bölüm Menüsü"
 
 msgctxt "ID_FAVORITES"
 msgid "F&avorites"
-msgstr "&Favoriler"
+msgstr "Gö&zdeler"
 
 msgctxt "POPUP"
 msgid "&Help"

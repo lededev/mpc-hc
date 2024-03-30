@@ -4683,6 +4683,38 @@ msgid ""
 "a part of your selection being added to playlist."
 msgstr ""
 
+msgctxt "IDS_PPAGEADVANCED_FILEPOS_PLAYLIST"
+msgid "Remember playback position in local M3U and MPCPL playlist files."
+msgstr ""
+
+msgctxt "IDS_PPAGEADVANCED_FILEPOS_TRACK_SELECTION"
+msgid ""
+"Remember the selected audio and subtitle track (when file history is "
+"enabled)."
+msgstr ""
+
+msgctxt "IDS_PPAGEADVANCED_YDL_AUDIO_FORMAT"
+msgid ""
+"Preferred audio format for stream that is selected from Youtube-DL results. Only applies if audio stream is separate from video stream.\n"
+"0: Automatic\n"
+"1: AAC\n"
+"2: OPUS"
+msgstr ""
+
+msgctxt "IDS_PPAGEADVANCED_PREVENT_DISPLAY_SLEEP"
+msgid "Disable screen saver and monitor sleep mode during video playback."
+msgstr ""
+
+msgctxt "IDS_PPAGEADVANCED_STILL_VIDEO_DURATION"
+msgid ""
+"Display duration in seconds for images rendered by \"Generate Still Video\" "
+"and \"MPC Image Source\" filters. Use 0 for infinite."
+msgstr ""
+
+msgctxt "IDS_PPAGEADVANCED_CAPTURE_DEINTERLACE"
+msgid "Insert deinterlace filter (blend) in capture mode"
+msgstr ""
+
 msgctxt "IDS_ARS_WASAPI_MODE"
 msgid "WASAPI mode:"
 msgstr ""
