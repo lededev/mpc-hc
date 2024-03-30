@@ -294,7 +294,7 @@ BOOL CPPageTheme::OnApply()
     if (m_iSeekPreviewSize < 5) m_iSeekPreviewSize = 5;
     if (m_iSeekPreviewSize > 40) m_iSeekPreviewSize = 40;
     CMainFrame* pFrame = ((CMainFrame*)GetParentFrame());
-    if (s.iSeekPreviewSize != m_iSeekPreviewSize) {
+    if (pFrame && s.iSeekPreviewSize != m_iSeekPreviewSize) {
         s.iSeekPreviewSize = m_iSeekPreviewSize;
         pFrame->m_wndPreView.SetRelativeSize(m_iSeekPreviewSize);
     }
@@ -316,10 +316,12 @@ BOOL CPPageTheme::OnApply()
     s.bHideWindowedControls = !!m_bHideWindowedControls;
 
     s.bUseEnhancedTaskBar = !!m_bUseEnhancedTaskBar;
-    if (m_bUseEnhancedTaskBar) {
-        pFrame->CreateThumbnailToolbar();
+    if (pFrame) {
+        if (m_bUseEnhancedTaskBar) {
+            pFrame->CreateThumbnailToolbar();
+        }
+        pFrame->UpdateThumbarButton();
     }
-    pFrame->UpdateThumbarButton();
 
     s.bUseSMTC = !!m_bUseSMTC;
 
