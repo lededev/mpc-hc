@@ -68,7 +68,11 @@ END_MESSAGE_MAP()
 
 void CMPCThemeFloatEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-    if (!(nChar >= '0' && nChar <= '9' || nChar == '.' || nChar == '\b')) {
+    if (!(nChar >= '0' && nChar <= '9' || nChar == '.' || nChar == '\b' || nChar == '-')) {
+        return;
+    }
+
+    if (nChar == '-' && m_lower >= 0) {
         return;
     }
 
