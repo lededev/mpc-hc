@@ -207,27 +207,6 @@ CFGFilter* LookupFilterRegistry(const GUID& guid, CAtlList<CFGFilter*>& list, UI
     }
 }
 
-bool CFGManager::HasRarFilter(LPCWSTR lpcwstrFileName) {
-    CFGFilterList fl;
-    HRESULT hr;
-    if (FAILED(hr = EnumSourceFilters(lpcwstrFileName, fl))) {
-        return false;
-    }
-
-    hr = VFW_E_CANNOT_RENDER;
-
-    POSITION pos = fl.GetHeadPosition();
-    while (pos) {
-        CComPtr<IBaseFilter> pBF;
-        CFGFilter* pFG = fl.GetNext(pos);
-        if (pFG->GetCLSID() == __uuidof(CRARFileSource) && HRESULT_FACILITY(hr) == FACILITY_ITF) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 HRESULT CFGManager::EnumSourceFilters(LPCWSTR lpcwstrFileName, CFGFilterList& fl)
 {
     // TODO: use overrides

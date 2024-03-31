@@ -12850,22 +12850,20 @@ HRESULT CMainFrame::PreviewWindowShow(REFERENCE_TIME rtCur2) {
 }
 
 HRESULT CMainFrame::HandleMultipleEntryRar(CStringW fn) {
-    CComPtr<CFGManager> fgm = static_cast<CFGManager*>(m_pGB.p);
-    if (fgm->HasRarFilter(fn)) {
-        CRFSList <CRFSFile> file_list;
-        int num_files, num_ok_files;
+    CRFSList <CRFSFile> file_list;
+    int num_files, num_ok_files;
 
-        CRARFileSource::ScanArchive(fn.GetBuffer(), &file_list, &num_files, &num_ok_files);
-        if (num_ok_files > 1) {
-            RarEntrySelectorDialog entrySelector(&file_list, GetModalParent());
-            if (IDOK == entrySelector.DoModal()) {
-                CStringW entryName = entrySelector.GetCurrentEntry();
-                if (entryName.GetLength() > 0) {
-                    return fgm->RenderRFSFileEntry(fn, nullptr, entryName);
-                }
+    CRARFileSource::ScanArchive(fn.GetBuffer(), &file_list, &num_files, &num_ok_files);
+    if (num_ok_files > 1) {
+        RarEntrySelectorDialog entrySelector(&file_list, GetModalParent());
+        if (IDOK == entrySelector.DoModal()) {
+            CStringW entryName = entrySelector.GetCurrentEntry();
+            if (entryName.GetLength() > 0) {
+                CComPtr<CFGManager> fgm = static_cast<CFGManager*>(m_pGB.p);
+                return fgm->RenderRFSFileEntry(fn, nullptr, entryName);
             }
-            return RFS_E_ABORT; //we found multiple entries but no entry selected.
         }
+        return RFS_E_ABORT; //we found multiple entries but no entry selected.
     }
     return E_NOTIMPL; //not a multi-entry rar
 }
@@ -12895,8 +12893,16 @@ void CMainFrame::OpenFile(OpenFileData* pOFD)
             lastOpenFile = fn;
         }
 
-        HRESULT hr, rarHR;
-        rarHR = HandleMultipleEntryRar(fn);
+        HRESULT hr;
+        HRESULT rarHR = E_NOTIMPL;
+#if INTERNAL_SOURCEFILTER_RFS
+        if (s.SrcFilters[SRC_RFS] && !PathUtils::IsURL(fn)) {
+            CString ext = CPath(fn).GetExtension().MakeLower();
+            if (ext == L".rar") {
+                rarHR = HandleMultipleEntryRar(fn);
+            }
+        }
+#endif
         if (E_NOTIMPL == rarHR) {
             hr = m_pGB->RenderFile(fn, nullptr);
         } else {
