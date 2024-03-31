@@ -12859,10 +12859,12 @@ HRESULT CMainFrame::HandleMultipleEntryRar(CStringW fn) {
         if (IDOK == entrySelector.DoModal()) {
             CStringW entryName = entrySelector.GetCurrentEntry();
             if (entryName.GetLength() > 0) {
+                file_list.Clear();
                 CComPtr<CFGManager> fgm = static_cast<CFGManager*>(m_pGB.p);
                 return fgm->RenderRFSFileEntry(fn, nullptr, entryName);
             }
         }
+        file_list.Clear();
         return RFS_E_ABORT; //we found multiple entries but no entry selected.
     }
     return E_NOTIMPL; //not a multi-entry rar
