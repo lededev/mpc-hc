@@ -257,9 +257,6 @@ BOOL CPPageOutput::OnInitDialog()
             case VIDRNDT_DS_DEFAULT:
                 resName = IDS_PPAGE_OUTPUT_VMR7;
                 break;
-            case VIDRNDT_DS_OLDRENDERER:
-                resName = IDS_PPAGE_OUTPUT_OLDRENDERER;
-                break;
             case VIDRNDT_DS_OVERLAYMIXER:
                 resName = IDS_PPAGE_OUTPUT_OVERLAYMIXER;
                 break;
@@ -320,7 +317,6 @@ BOOL CPPageOutput::OnInitDialog()
     addRenderer(VIDRNDT_DS_DEFAULT);
     addRenderer(VIDRNDT_DS_DXR);
     addRenderer(VIDRNDT_DS_OVERLAYMIXER);
-    addRenderer(VIDRNDT_DS_OLDRENDERER);
     addRenderer(VIDRNDT_DS_NULL_COMP);
     addRenderer(VIDRNDT_DS_NULL_UNCOMP);
 
@@ -537,10 +533,6 @@ void CPPageOutput::OnDSRendererChange()
         case VIDRNDT_DS_DEFAULT:
             m_iDSSaveImageSupport.SetIcon(m_tick);
             m_wndToolTip.UpdateTipText(ResStr(IDC_DSSYSDEF), GetDlgItem(IDC_VIDRND_COMBO));
-            break;
-        case VIDRNDT_DS_OLDRENDERER:
-            m_iDSSaveImageSupport.SetIcon(m_tick);
-            m_wndToolTip.UpdateTipText(ResStr(IDC_DSOLD), GetDlgItem(IDC_VIDRND_COMBO));
             break;
         case VIDRNDT_DS_OVERLAYMIXER:
             m_wndToolTip.UpdateTipText(ResStr(IDC_DSOVERLAYMIXER), GetDlgItem(IDC_VIDRND_COMBO));
