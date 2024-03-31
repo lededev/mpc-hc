@@ -2553,19 +2553,6 @@ void CFGManagerCustom::InsertSubtitleFilters(bool IsPreview)
             m_transform.AddTail(DEBUG_NEW CFGFilterRegistry(CLSID_AssFilter, MERIT64_DO_NOT_USE));
             m_transform.AddTail(DEBUG_NEW CFGFilterRegistry(CLSID_AssFilter_AutoLoader, MERIT64_DO_NOT_USE));
             break;
-        case CAppSettings::SubtitleRenderer::ASS_FILTER:
-            pFGF = DEBUG_NEW CFGFilterRegistry(CLSID_AssFilter_AutoLoader, MERIT64_ABOVE_DSHOW);
-            if (pFGF) {
-                pFGF->AddType(MEDIASUBTYPE_NULL, MEDIASUBTYPE_NULL);
-                m_override.AddTail(pFGF);
-            }
-            if (s.fBlockVSFilter) {
-                m_transform.AddTail(DEBUG_NEW CFGFilterRegistry(CLSID_VSFilter, MERIT64_DO_NOT_USE));
-                m_transform.AddTail(DEBUG_NEW CFGFilterRegistry(CLSID_VSFilter2, MERIT64_DO_NOT_USE));
-            }
-            m_transform.AddTail(DEBUG_NEW CFGFilterRegistry(CLSID_XySubFilter, MERIT64_DO_NOT_USE));
-            m_transform.AddTail(DEBUG_NEW CFGFilterRegistry(CLSID_XySubFilter_AutoLoader, MERIT64_DO_NOT_USE));
-            break;
         case CAppSettings::SubtitleRenderer::NONE:
             m_transform.AddTail(DEBUG_NEW CFGFilterRegistry(CLSID_VSFilter, MERIT64_DO_NOT_USE));
             m_transform.AddTail(DEBUG_NEW CFGFilterRegistry(CLSID_VSFilter2, MERIT64_DO_NOT_USE));

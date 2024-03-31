@@ -4090,10 +4090,6 @@ msgstr ""
 "Verwendet wieder die nicht-vektorisierte Standard-Toolbar (Neustart "
 "erforderlich)."
 
-msgctxt "IDS_SUBTITLE_RENDERER_ASS_FILTER"
-msgid "AssFilter"
-msgstr "AssFilter"
-
 msgctxt "IDS_SUBMENU_COPYURL"
 msgid "Copy URL"
 msgstr "URL kopieren"

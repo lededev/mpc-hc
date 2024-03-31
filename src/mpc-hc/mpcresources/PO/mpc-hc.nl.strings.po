@@ -4086,10 +4086,6 @@ msgid "Use legacy toolbar instead of new vectorized one."
 msgstr ""
 "Gebruik de veroude werkbalk in plaats van de niewe vectorized werkbalk"
 
-msgctxt "IDS_SUBTITLE_RENDERER_ASS_FILTER"
-msgid "AssFilter"
-msgstr "Ass-filter"
-
 msgctxt "IDS_SUBMENU_COPYURL"
 msgid "Copy URL"
 msgstr "Kopieer URL"

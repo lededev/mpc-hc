@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MPC-HC\n"
-"POT-Creation-Date: 2024-03-28 16:29:05+0000\n"
+"POT-Creation-Date: 2024-03-31 12:14:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3907,10 +3907,6 @@ msgstr ""
 
 msgctxt "IDS_PPAGEADVANCED_USE_LEGACY_TOOLBAR"
 msgid "Use legacy toolbar instead of new vectorized one."
-msgstr ""
-
-msgctxt "IDS_SUBTITLE_RENDERER_ASS_FILTER"
-msgid "AssFilter"
 msgstr ""
 
 msgctxt "IDS_SUBMENU_COPYURL"

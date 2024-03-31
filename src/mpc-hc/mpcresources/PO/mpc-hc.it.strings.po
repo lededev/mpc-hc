@@ -4099,10 +4099,6 @@ msgid "Use legacy toolbar instead of new vectorized one."
 msgstr ""
 "Usa la barra degli strumenti legacy invece di quella nuova vettorializzata."
 
-msgctxt "IDS_SUBTITLE_RENDERER_ASS_FILTER"
-msgid "AssFilter"
-msgstr "AssFilter"
-
 msgctxt "IDS_SUBMENU_COPYURL"
 msgid "Copy URL"
 msgstr "Copia URL"

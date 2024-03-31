@@ -761,8 +761,6 @@ CAppSettings::SubtitleRenderer CAppSettings::GetSubtitleRenderer() const
             return IsSubtitleRendererSupported(SubtitleRenderer::INTERNAL, iDSVideoRendererType) ? eSubtitleRenderer : SubtitleRenderer::VS_FILTER;
         case SubtitleRenderer::XY_SUB_FILTER:
             return IsSubtitleRendererSupported(SubtitleRenderer::XY_SUB_FILTER, iDSVideoRendererType) ? eSubtitleRenderer : SubtitleRenderer::VS_FILTER;
-        case SubtitleRenderer::ASS_FILTER:
-            return IsSubtitleRendererSupported(SubtitleRenderer::ASS_FILTER, iDSVideoRendererType) ? eSubtitleRenderer : SubtitleRenderer::VS_FILTER;
         default:
             return eSubtitleRenderer;
     }
@@ -777,8 +775,6 @@ bool CAppSettings::IsSubtitleRendererRegistered(SubtitleRenderer eSubtitleRender
             return IsCLSIDRegistered(CLSID_VSFilter);
         case SubtitleRenderer::XY_SUB_FILTER:
             return IsCLSIDRegistered(CLSID_XySubFilter);
-        case SubtitleRenderer::ASS_FILTER:
-            return IsCLSIDRegistered(CLSID_AssFilter);
         case SubtitleRenderer::NONE:
             return true;
         default:
@@ -806,7 +802,6 @@ bool CAppSettings::IsSubtitleRendererSupported(SubtitleRenderer eSubtitleRendere
             return true;
 
         case SubtitleRenderer::XY_SUB_FILTER:
-        case SubtitleRenderer::ASS_FILTER:
             switch (videoRenderer) {
                 case VIDRNDT_DS_VMR9RENDERLESS:
                 case VIDRNDT_DS_EVR_CUSTOM:
@@ -2108,8 +2103,11 @@ void CAppSettings::LoadSettings()
     bEnableLogging = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_LOGGING, FALSE);
     bUseLegacyToolbar = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_USE_LEGACY_TOOLBAR, FALSE);
 
-    eSubtitleRenderer = static_cast<SubtitleRenderer>(pApp->GetProfileInt(IDS_R_SETTINGS,
-                                                      IDS_RS_SUBTITLE_RENDERER, static_cast<int>(SubtitleRenderer::INTERNAL)));
+    eSubtitleRenderer = static_cast<SubtitleRenderer>(pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_SUBTITLE_RENDERER, static_cast<int>(SubtitleRenderer::INTERNAL)));
+    if (eSubtitleRenderer == SubtitleRenderer::RESERVED) {
+        eSubtitleRenderer = SubtitleRenderer::INTERNAL;
+        bRenderSSAUsingLibass = true;
+    }
 
     nDefaultToolbarSize = pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_DEFAULTTOOLBARSIZE, 24);
 
