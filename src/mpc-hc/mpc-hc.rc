@@ -187,8 +187,8 @@ BEGIN
     GROUPBOX        "Build information",IDC_STATIC,7,80,246,60
     LTEXT           "Version:",IDC_STATIC,13,92,85,8
     LTEXT           "",IDC_VERSION,95,92,155,8
-    LTEXT           "Build date:", IDC_STATIC, 13, 104, 85, 8
-    LTEXT           "", IDC_STATIC2, 95, 104, 155, 8
+    LTEXT           "Build date:",IDC_STATIC,13,104,85,8
+    LTEXT           "",IDC_STATIC2,95,104,155,8
     LTEXT           "",IDC_STATIC5,13,116,85,8
     LTEXT           "Not used",IDC_LAVFILTERS_VERSION,95,116,155,8
     GROUPBOX        "Operating system",IDC_STATIC,7,146,246,36
@@ -965,7 +965,7 @@ BEGIN
     GROUPBOX        "",IDC_STATIC,6,112,343,174
     CONTROL         "Use autochange fullscreen monitor mode",IDC_CHECK2,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,114,331,8
-    CONTROL         "",IDC_LIST1,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP | WS_CLIPCHILDREN,12,125,272,130
+    CONTROL         "",IDC_LIST1,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_ALIGNLEFT | WS_CLIPCHILDREN | WS_BORDER | WS_TABSTOP,12,125,272,130
     PUSHBUTTON      "Add",IDC_BUTTON1,287,125,54,14
     PUSHBUTTON      "Del",IDC_BUTTON2,287,147,54,14
     PUSHBUTTON      "Up",IDC_BUTTON3,287,176,54,14
@@ -1170,7 +1170,6 @@ BEGIN
     LTEXT           "Control buttons size:",IDC_STATIC3,12,48,82,8
     EDITTEXT        IDC_EDIT1,130,48,42,14,ES_CENTER | ES_AUTOHSCROLL | ES_NUMBER
     CONTROL         "",IDC_SPIN1,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | UDS_NOTHOUSANDS | UDS_HOTTRACK,160,48,13,14
-
     GROUPBOX        "Seekbar",IDC_STATIC4,6,70,170,90
     LTEXT           "Modern Seekbar height:",IDC_STATIC,12,84,82,8
     EDITTEXT        IDC_MODERNSEEKBARHEIGHT,130,84,42,14,ES_CENTER | ES_AUTOHSCROLL | ES_NUMBER
@@ -1182,34 +1181,30 @@ BEGIN
     LTEXT           "Preview width (% of screen)",IDC_STATIC7,12,129,118,8
     EDITTEXT        IDC_EDIT4,130,129,40,14,ES_CENTER | ES_AUTOHSCROLL | ES_NUMBER
     CONTROL         "",IDC_SPIN2,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | UDS_NOTHOUSANDS | UDS_HOTTRACK,160,129,13,14
-    CONTROL         "Show chapter marks on seekbar",IDC_CHECK2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,146,118,8
-
+    CONTROL         "Show chapter marks on seekbar",IDC_CHECK2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,146,163,8
     GROUPBOX        "Status Bar Elements",IDC_STATIC10,6,163,170,85
-    CONTROL         "Track Language",IDC_CHECK3,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,177,114,8
-    CONTROL         "Video Info",IDC_CHECK4,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,191,114,8
-    CONTROL         "Audio Info",IDC_CHECK12,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,205,114,8
-    CONTROL         "FPS",IDC_CHECK5,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,219,114,8
-    CONTROL         "A-B Marks",IDC_CHECK6,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,233,114,8
-
+    CONTROL         "Track Language",IDC_CHECK3,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,177,162,8
+    CONTROL         "Video Info",IDC_CHECK4,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,191,162,8
+    CONTROL         "Audio Info",IDC_CHECK12,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,205,163,8
+    CONTROL         "FPS",IDC_CHECK5,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,219,161,8
+    CONTROL         "A-B Marks",IDC_CHECK6,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,233,161,8
     GROUPBOX        "Language",IDC_STATIC21,6,251,170,33
     LTEXT           "Language:",IDC_STATIC5,12,265,82,8
     COMBOBOX        IDC_COMBO2,88,265,84,20,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-
     GROUPBOX        "On Screen Display (OSD)",IDC_STATIC9,181,6,168,58
-    CONTROL         "Show OSD (requires restart)",IDC_SHOW_OSD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,187,20,130,8
+    CONTROL         "Show OSD (requires restart)",IDC_SHOW_OSD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,187,20,160,8
     LTEXT           "Font:",IDC_STATIC6,187,34,80,8
     COMBOBOX        IDC_COMBO5,217,34,128,61,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Font size:",IDC_STATIC23,187,48,80,8
     COMBOBOX        IDC_COMBO6,315,48,30,61,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-
     GROUPBOX        "Window Behavior",IDC_STATIC,181,67,168,57
     CONTROL         "Limit window proportions on resize",IDC_CHECK7,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,187,81,160,8
     CONTROL         "Snap to desktop edges",IDC_CHECK9,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,187,95,160,8
     CONTROL         "Hide Windowed Controls",IDC_CHECK10,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,187,109,160,8
-
     GROUPBOX        "Windows Integration",IDC_STATIC,181,128,168,43
-    CONTROL         "Use enhanced taskbar features",IDC_CHECK_ENHANCED_TASKBAR, "Button",BS_AUTOCHECKBOX | WS_TABSTOP,187,142,130,8
-    CONTROL         "Control via Windows UI (SMTC)",IDC_CHECK11, "Button",BS_AUTOCHECKBOX | WS_TABSTOP,187,156,130,8
+    CONTROL         "Use enhanced taskbar features",IDC_CHECK_ENHANCED_TASKBAR,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,187,142,160,8
+    CONTROL         "Control via Windows UI (SMTC)",IDC_CHECK11,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,187,156,161,8
 END
 
 IDD_RAR_ENTRY_SELECTOR DIALOGEX 0, 0, 316, 115
@@ -3098,7 +3093,6 @@ BEGIN
     IDS_PPAGEADVANCED_LOGGER "Enables logging to file (requires restart)"
     IDS_TIMER_REMAINING_TIME "Remaining time"
     IDS_TIMER_HIGH_PRECISION "High precision"
-    IDS_TIMER_SHOW_PERCENTAGE "Show percentage"
     IDS_AFTERPLAYBACK_REWIND "After Playback: Rewind current file"
     IDS_AFTERPLAYBACK_CLOSE "After Playback: Close"
     IDS_FRAME_INIT_FAILED   "MPC-HC encountered a problem during initialization."
@@ -3108,6 +3102,31 @@ BEGIN
     IDS_WEBUI_PREVIEW_WARNING 
                             "This option can be used to preview media files from remote location. Use it only on a properly secured private network.\n\nDo you really want to enable this option?"
     IDS_SUBTITLE_RENDERER_INTERNAL "Internal Subtitle Renderer"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_SUBTITLE_RENDERER_NONE "None"
+    IDS_PPAGEADVANCED_MOUSE_LEFTUP_DELAY 
+                            "Maximum delay in milliseconds of mouse LeftUp event when clicking on the video."
+    IDS_PPAGEADVANCED_USE_FREETYPE 
+                            "Use FreeType for subtitle rendering.  Enables support for per-language glyphs."
+    IDS_PPAGEADVANCED_USE_MEDIAINFO_LOAD_FILE_DURATION 
+                            "Load file duration when adding items to playlist (uses MediaInfo and results may vary)"
+    IDS_TIMER_SHOW_PERCENTAGE "Show percentage"
+    IDS_SUBDL_DLG_FAILED_DL "Subtitle download failed."
+    IDS_PPAGEADVANCED_FILEPOS_PLAYLIST 
+                            "Remember playback position in local M3U and MPCPL playlist files."
+    IDS_PPAGEADVANCED_FILEPOS_TRACK_SELECTION 
+                            "Remember the selected audio and subtitle track (when file history is enabled)."
+    IDS_PPAGEADVANCED_YDL_AUDIO_FORMAT 
+                            "Preferred audio format for stream that is selected from Youtube-DL results. Only applies if audio stream is separate from video stream.\n0: Automatic\n1: AAC\n2: OPUS"
+    IDS_PPAGEADVANCED_PREVENT_DISPLAY_SLEEP 
+                            "Disable screen saver and monitor sleep mode during video playback."
+    IDS_PPAGEADVANCED_STILL_VIDEO_DURATION 
+                            "Display duration in seconds for images rendered by ""Generate Still Video"" and ""MPC Image Source"" filters. Use 0 for infinite."
+    IDS_PPAGEADVANCED_CAPTURE_DEINTERLACE 
+                            "Insert deinterlace filter (blend) in capture mode"
 END
 
 STRINGTABLE
@@ -3542,6 +3561,8 @@ STRINGTABLE
 BEGIN
     IDS_AG_ZOOM_ADD         "Zoom Window +"
     IDS_AG_ZOOM_SUB         "Zoom Window -"
+    IDS_SEEKBAR_HOVER_PREVIEW "Video Preview"
+    IDS_SEEKBAR_HOVER_TOOLTIP "Seek Time"
 END
 
 STRINGTABLE
@@ -3878,7 +3899,6 @@ BEGIN
     IDS_SUBDL_DLG_DOWNLOADS_COL "Downloads"
     IDS_SUBDL_DLG_SCORE_COL "Score"
     IDS_SUBDL_DLG_FAILED    "Online subtitles search failed."
-    IDS_SUBDL_DLG_FAILED_DL "Subtitle download failed."
     IDS_SUBDL_DLG_ABORTED   "Online subtitles search aborted."
     IDS_SUBDL_DLG_FOUND     "Online subtitles search completed, %d subtitles found."
     IDS_SUBDL_DLG_NOTFOUND  "Online subtitles search completed, no subtitles found."
@@ -3909,15 +3929,6 @@ BEGIN
     IDS_PPAGEADVANCED_USE_LEGACY_TOOLBAR 
                             "Use legacy toolbar instead of new vectorized one."
     IDS_SUBMENU_COPYURL     "Copy URL"
-END
-
-STRINGTABLE
-BEGIN
-    IDS_SUBTITLE_RENDERER_NONE "None"
-    IDS_PPAGEADVANCED_MOUSE_LEFTUP_DELAY 
-                            "Maximum delay in milliseconds of mouse LeftUp event when clicking on the video."
-    IDS_PPAGEADVANCED_USE_FREETYPE 
-                            "Use FreeType for subtitle rendering.  Enables support for per-language glyphs."
 END
 
 STRINGTABLE
@@ -4110,22 +4121,6 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_PPAGEADVANCED_FILEPOS_PLAYLIST
-                            "Remember playback position in local M3U and MPCPL playlist files."
-    IDS_PPAGEADVANCED_FILEPOS_TRACK_SELECTION
-                            "Remember the selected audio and subtitle track (when file history is enabled)."
-    IDS_PPAGEADVANCED_YDL_AUDIO_FORMAT
-                            "Preferred audio format for stream that is selected from Youtube-DL results. Only applies if audio stream is separate from video stream.\n0: Automatic\n1: AAC\n2: OPUS"
-    IDS_PPAGEADVANCED_PREVENT_DISPLAY_SLEEP
-                            "Disable screen saver and monitor sleep mode during video playback."
-    IDS_PPAGEADVANCED_STILL_VIDEO_DURATION
-                            "Display duration in seconds for images rendered by ""Generate Still Video"" and ""MPC Image Source"" filters. Use 0 for infinite."
-    IDS_PPAGEADVANCED_CAPTURE_DEINTERLACE
-                            "Insert deinterlace filter (blend) in capture mode"
-END
-
-STRINGTABLE
-BEGIN
     IDS_ARS_WASAPI_MODE     "WASAPI mode:"
     IDS_ARS_EXCLUSIVE       "Exclusive"
     IDS_ARS_SHARED          "Shared"
@@ -4156,13 +4151,6 @@ BEGIN
                             "The renderer will try to initialize the device skipping some checks."
     IDS_FILTER_RESET_SETTINGS "Reset"
     IDS_AG_DEFAULT          "Default"
-		IDS_PPAGEADVANCED_USE_MEDIAINFO_LOAD_FILE_DURATION "Load file duration when adding items to playlist (uses MediaInfo and results may vary)"
-END
-
-STRINGTABLE
-BEGIN
-	IDS_SEEKBAR_HOVER_PREVIEW	"Video Preview"
-	IDS_SEEKBAR_HOVER_TOOLTIP	"Seek Time"
 END
 
 #endif    // English (United States) resources
