@@ -1178,7 +1178,6 @@ public:
 
     CFullscreenWnd* m_pDedicatedFSVideoWnd;
     CVMROSD     m_OSD;
-    bool        m_bOSDDisplayTime;
     int         m_nCurSubtitle;
     long        m_lSubtitleShift;
     REFERENCE_TIME m_rtCurSubPos;

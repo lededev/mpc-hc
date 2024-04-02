@@ -56,6 +56,7 @@ private:
     CMPCThemeSpinButtonCtrl m_SeekPreviewSizeCtrl;
     CMPCThemeEdit m_SeekPreviewSizeEdit;
     BOOL m_fShowOSD;
+    BOOL m_fShowCurrentTimeInOSD;
     BOOL m_bShowVideoInfoInStatusbar;
     BOOL m_bShowAudioFormatInStatusbar;
     BOOL m_bShowLangInStatusbar;

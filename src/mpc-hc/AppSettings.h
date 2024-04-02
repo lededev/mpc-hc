@@ -579,6 +579,7 @@ public:
     bool            fAllowMultipleInst;
     bool            fTrayIcon;
     bool            fShowOSD;
+    bool            fShowCurrentTimeInOSD;
     bool            fLimitWindowProportions;
     bool            fSnapToDesktopEdges;
     bool            fHideCDROMsSubMenu;

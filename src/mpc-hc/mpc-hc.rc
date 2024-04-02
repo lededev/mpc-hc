@@ -1191,20 +1191,21 @@ BEGIN
     GROUPBOX        "Language",IDC_STATIC21,6,251,170,33
     LTEXT           "Language:",IDC_STATIC5,12,265,82,8
     COMBOBOX        IDC_COMBO2,88,265,84,20,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    GROUPBOX        "On Screen Display (OSD)",IDC_STATIC9,181,6,168,58
+    GROUPBOX        "On Screen Display (OSD)",IDC_STATIC9,181,6,168,69
     CONTROL         "Show OSD (requires restart)",IDC_SHOW_OSD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,187,20,160,8
     LTEXT           "Font:",IDC_STATIC6,187,34,80,8
     COMBOBOX        IDC_COMBO5,217,34,128,61,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Font size:",IDC_STATIC23,187,48,80,8
+    CONTROL         "Display Current T&ime",IDC_CHECK13,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,187,62,160,8
     COMBOBOX        IDC_COMBO6,315,48,30,61,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    GROUPBOX        "Window Behavior",IDC_STATIC,181,67,168,57
-    CONTROL         "Limit window proportions on resize",IDC_CHECK7,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,187,81,160,8
-    CONTROL         "Snap to desktop edges",IDC_CHECK9,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,187,95,160,8
-    CONTROL         "Hide Windowed Controls",IDC_CHECK10,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,187,109,160,8
-    GROUPBOX        "Windows Integration",IDC_STATIC,181,128,168,43
+    GROUPBOX        "Window Behavior",IDC_STATIC,181,79,168,57
+    CONTROL         "Limit window proportions on resize",IDC_CHECK7,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,187,93,160,8
+    CONTROL         "Snap to desktop edges",IDC_CHECK9,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,187,107,160,8
+    CONTROL         "Hide Windowed Controls",IDC_CHECK10,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,187,121,160,8
+    GROUPBOX        "Windows Integration",IDC_STATIC,181,140,168,43
     CONTROL         "Use enhanced taskbar features",IDC_CHECK_ENHANCED_TASKBAR,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,187,142,160,8
-    CONTROL         "Control via Windows UI (SMTC)",IDC_CHECK11,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,187,156,161,8
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,187,154,160,8
+    CONTROL         "Control via Windows UI (SMTC)",IDC_CHECK11,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,187,168,161,8
 END
 
 IDD_RAR_ENTRY_SELECTOR DIALOGEX 0, 0, 316, 115

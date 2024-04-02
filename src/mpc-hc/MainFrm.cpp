@@ -869,7 +869,6 @@ CMainFrame::CMainFrame()
     , m_pVideoWnd(nullptr)
     , m_pDedicatedFSVideoWnd(nullptr)
     , m_OSD(this)
-    , m_bOSDDisplayTime(false)
     , m_nCurSubtitle(-1)
     , m_lSubtitleShift(0)
     , m_rtCurSubPos(0)
@@ -2090,7 +2089,7 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
                     case PM_FILE:
                     // no break
                     case PM_DVD:
-                        if (m_bOSDDisplayTime && m_OSD.CanShowMessage()) {
+                        if (AfxGetAppSettings().fShowCurrentTimeInOSD && m_OSD.CanShowMessage()) {
                             m_OSD.DisplayTime(m_wndStatusBar.GetStatusTimer());
                         }
                         break;
@@ -2102,7 +2101,7 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
                             REFERENCE_TIME rtNow = REFERENCE_TIME(tNow - NowNext.startTime) * 10000000;
                             REFERENCE_TIME rtDur = REFERENCE_TIME(NowNext.duration) * 10000000;
                             m_wndStatusBar.SetStatusTimer(rtNow, rtDur, false, TIME_FORMAT_MEDIA_TIME);
-                            if (m_bOSDDisplayTime && m_OSD.CanShowMessage()) {
+                            if (AfxGetAppSettings().fShowCurrentTimeInOSD && m_OSD.CanShowMessage()) {
                                 m_OSD.DisplayTime(m_wndStatusBar.GetStatusTimer());
                             }
                         } else {
@@ -7219,14 +7218,15 @@ void CMainFrame::OnUpdateViewOSDDisplayTime(CCmdUI* pCmdUI)
 {
     const CAppSettings& s = AfxGetAppSettings();
     pCmdUI->Enable(s.fShowOSD && GetLoadState() != MLS::CLOSED);
-    pCmdUI->SetCheck(m_bOSDDisplayTime);
+    pCmdUI->SetCheck(AfxGetAppSettings().fShowCurrentTimeInOSD);
 }
 
 void CMainFrame::OnViewOSDDisplayTime()
 {
-    m_bOSDDisplayTime = !m_bOSDDisplayTime;
+    auto &showTime = AfxGetAppSettings().fShowCurrentTimeInOSD;
+    showTime = !showTime;
 
-    if (!m_bOSDDisplayTime) {
+    if (!showTime) {
         m_OSD.ClearTime();
     }
 
