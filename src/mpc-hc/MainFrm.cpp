@@ -17165,7 +17165,7 @@ void CMainFrame::ToggleSubtitleOnOff(bool bDisplayMessage /*= false*/)
             if (m_pCAP) {
                 m_pCAP->SetSubPicProvider(nullptr);
             }
-            currentSubLang.Empty();
+            currentSubLang = ResStr(IDS_AG_DISABLED);
 
             if (bDisplayMessage) {
                 m_OSD.DisplayMessage(OSD_TOPLEFT, ResStr(IDS_SUBTITLE_STREAM_OFF));
