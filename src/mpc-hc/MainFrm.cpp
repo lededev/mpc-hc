@@ -361,6 +361,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
     ON_UPDATE_COMMAND_UI(ID_VIEW_SUBRESYNC, OnUpdateViewSubresync)
     ON_COMMAND(ID_VIEW_PLAYLIST, OnViewPlaylist)
     ON_UPDATE_COMMAND_UI(ID_VIEW_PLAYLIST, OnUpdateViewPlaylist)
+    ON_COMMAND(ID_PLAYLIST_TOGGLE_SHUFFLE, OnPlaylistToggleShuffle)
     ON_COMMAND(ID_VIEW_EDITLISTEDITOR, OnViewEditListEditor)
     ON_COMMAND(ID_EDL_IN, OnEDLIn)
     ON_UPDATE_COMMAND_UI(ID_EDL_IN, OnUpdateEDLIn)
@@ -7498,6 +7499,12 @@ void CMainFrame::OnViewPlaylist()
 void CMainFrame::OnUpdateViewPlaylist(CCmdUI* pCmdUI)
 {
     pCmdUI->SetCheck(m_controls.ControlChecked(CMainFrameControls::Panel::PLAYLIST));
+}
+
+void CMainFrame::OnPlaylistToggleShuffle() {
+    CAppSettings& s = AfxGetAppSettings();
+    s.bShufflePlaylistItems = !s.bShufflePlaylistItems;
+    m_wndPlaylistBar.m_pl.SetShuffle(s.bShufflePlaylistItems);
 }
 
 void CMainFrame::OnViewEditListEditor()

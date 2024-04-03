@@ -943,6 +943,7 @@ public:
     afx_msg void OnViewSubresync();
     afx_msg void OnUpdateViewSubresync(CCmdUI* pCmdUI);
     afx_msg void OnViewPlaylist();
+    afx_msg void OnPlaylistToggleShuffle();
     afx_msg void OnUpdateViewPlaylist(CCmdUI* pCmdUI);
     afx_msg void OnViewEditListEditor();
     afx_msg void OnEDLIn();
