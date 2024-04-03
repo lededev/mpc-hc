@@ -7737,10 +7737,10 @@ void CMainFrame::OnViewModifySize(UINT nID)
 
     CRect rect;
     GetWindowRect(&rect);
-    rect.right = rect.right + newWidth - videoRect.Width();
-    rect.bottom = rect.bottom + newHeight - videoRect.Height();
-    
-    MoveWindow(&rect);
+
+    CSize cs = rect.Size() + CSize(newWidth - videoRect.Width(), newHeight - videoRect.Height());
+
+    MoveWindow(GetZoomWindowRect(cs));
 }
 
 void CMainFrame::OnViewDefaultVideoFrame(UINT nID)
