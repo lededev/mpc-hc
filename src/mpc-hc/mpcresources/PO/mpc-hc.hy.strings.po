@@ -1171,6 +1171,10 @@ msgctxt "IDS_PLAYLIST_SHUFFLE"
 msgid "Sh&uffle"
 msgstr "Պատահական"
 
+msgctxt "IDS_PLAYLIST_TOGGLE_SHUFFLE"
+msgid "Toggle Playlist Shuffle"
+msgstr ""
+
 msgctxt "IDS_PLAYLIST_SHOWFOLDER"
 msgid "Ope&n file location"
 msgstr ""
@@ -1604,10 +1608,6 @@ msgctxt "IDS_TIMER_HIGH_PRECISION"
 msgid "High precision"
 msgstr ""
 
-msgctxt "IDS_TIMER_SHOW_PERCENTAGE"
-msgid "Show percentage"
-msgstr ""
-
 msgctxt "IDS_AFTERPLAYBACK_REWIND"
 msgid "After Playback: Rewind current file"
 msgstr ""
@@ -1639,6 +1639,68 @@ msgstr ""
 
 msgctxt "IDS_SUBTITLE_RENDERER_INTERNAL"
 msgid "Internal Subtitle Renderer"
+msgstr ""
+
+msgctxt "IDS_SUBTITLE_RENDERER_NONE"
+msgid "None"
+msgstr ""
+
+msgctxt "IDS_PPAGEADVANCED_MOUSE_LEFTUP_DELAY"
+msgid ""
+"Maximum delay in milliseconds of mouse LeftUp event when clicking on the "
+"video."
+msgstr ""
+
+msgctxt "IDS_PPAGEADVANCED_USE_FREETYPE"
+msgid ""
+"Use FreeType for subtitle rendering.  Enables support for per-language "
+"glyphs."
+msgstr ""
+
+msgctxt "IDS_PPAGEADVANCED_USE_MEDIAINFO_LOAD_FILE_DURATION"
+msgid ""
+"Load file duration when adding items to playlist (uses MediaInfo and results"
+" may vary)"
+msgstr ""
+
+msgctxt "IDS_TIMER_SHOW_PERCENTAGE"
+msgid "Show percentage"
+msgstr ""
+
+msgctxt "IDS_SUBDL_DLG_FAILED_DL"
+msgid "Subtitle download failed."
+msgstr ""
+
+msgctxt "IDS_PPAGEADVANCED_FILEPOS_PLAYLIST"
+msgid "Remember playback position in local M3U and MPCPL playlist files."
+msgstr ""
+
+msgctxt "IDS_PPAGEADVANCED_FILEPOS_TRACK_SELECTION"
+msgid ""
+"Remember the selected audio and subtitle track (when file history is "
+"enabled)."
+msgstr ""
+
+msgctxt "IDS_PPAGEADVANCED_YDL_AUDIO_FORMAT"
+msgid ""
+"Preferred audio format for stream that is selected from Youtube-DL results. Only applies if audio stream is separate from video stream.\n"
+"0: Automatic\n"
+"1: AAC\n"
+"2: OPUS"
+msgstr ""
+
+msgctxt "IDS_PPAGEADVANCED_PREVENT_DISPLAY_SLEEP"
+msgid "Disable screen saver and monitor sleep mode during video playback."
+msgstr ""
+
+msgctxt "IDS_PPAGEADVANCED_STILL_VIDEO_DURATION"
+msgid ""
+"Display duration in seconds for images rendered by \"Generate Still Video\" "
+"and \"MPC Image Source\" filters. Use 0 for infinite."
+msgstr ""
+
+msgctxt "IDS_PPAGEADVANCED_CAPTURE_DEINTERLACE"
+msgid "Insert deinterlace filter (blend) in capture mode"
 msgstr ""
 
 msgctxt "IDS_AG_OPEN_DEVICE"
@@ -2948,6 +3010,14 @@ msgctxt "IDS_AG_ZOOM_SUB"
 msgid "Zoom Window -"
 msgstr ""
 
+msgctxt "IDS_SEEKBAR_HOVER_PREVIEW"
+msgid "Video Preview"
+msgstr ""
+
+msgctxt "IDS_SEEKBAR_HOVER_TOOLTIP"
+msgid "Seek Time"
+msgstr ""
+
 msgctxt "IDS_AG_VIDFRM_ZOOM1"
 msgid "Video Frame Zoom 1"
 msgstr ""
@@ -3884,10 +3954,6 @@ msgctxt "IDS_SUBDL_DLG_FAILED"
 msgid "Online subtitles search failed."
 msgstr ""
 
-msgctxt "IDS_SUBDL_DLG_FAILED_DL"
-msgid "Subtitle download failed."
-msgstr ""
-
 msgctxt "IDS_SUBDL_DLG_ABORTED"
 msgid "Online subtitles search aborted."
 msgstr ""
@@ -3990,22 +4056,6 @@ msgstr ""
 
 msgctxt "IDS_SUBMENU_COPYURL"
 msgid "Copy URL"
-msgstr ""
-
-msgctxt "IDS_SUBTITLE_RENDERER_NONE"
-msgid "None"
-msgstr ""
-
-msgctxt "IDS_PPAGEADVANCED_MOUSE_LEFTUP_DELAY"
-msgid ""
-"Maximum delay in milliseconds of mouse LeftUp event when clicking on the "
-"video."
-msgstr ""
-
-msgctxt "IDS_PPAGEADVANCED_USE_FREETYPE"
-msgid ""
-"Use FreeType for subtitle rendering.  Enables support for per-language "
-"glyphs."
 msgstr ""
 
 msgctxt "IDS_SUBUL_DLG_STATUS_NOTIMPLEMENTED"
@@ -4354,7 +4404,9 @@ msgid "/startpos hh:mm:ss\tStart playing at position hh:mm:ss"
 msgstr ""
 
 msgctxt "IDS_CMD_FIXEDSIZE"
-msgid "/fixedsize w,h\tSet a fixed window size"
+msgid ""
+"/fixedsize w,h[,x,y]\tSet a fixed window size; optionally specificy upper-"
+"left window position"
 msgstr ""
 
 msgctxt "IDS_CMD_MONITOR"
@@ -4549,38 +4601,6 @@ msgid ""
 "a part of your selection being added to playlist."
 msgstr ""
 
-msgctxt "IDS_PPAGEADVANCED_FILEPOS_PLAYLIST"
-msgid "Remember playback position in local M3U and MPCPL playlist files."
-msgstr ""
-
-msgctxt "IDS_PPAGEADVANCED_FILEPOS_TRACK_SELECTION"
-msgid ""
-"Remember the selected audio and subtitle track (when file history is "
-"enabled)."
-msgstr ""
-
-msgctxt "IDS_PPAGEADVANCED_YDL_AUDIO_FORMAT"
-msgid ""
-"Preferred audio format for stream that is selected from Youtube-DL results. Only applies if audio stream is separate from video stream.\n"
-"0: Automatic\n"
-"1: AAC\n"
-"2: OPUS"
-msgstr ""
-
-msgctxt "IDS_PPAGEADVANCED_PREVENT_DISPLAY_SLEEP"
-msgid "Disable screen saver and monitor sleep mode during video playback."
-msgstr ""
-
-msgctxt "IDS_PPAGEADVANCED_STILL_VIDEO_DURATION"
-msgid ""
-"Display duration in seconds for images rendered by \"Generate Still Video\" "
-"and \"MPC Image Source\" filters. Use 0 for infinite."
-msgstr ""
-
-msgctxt "IDS_PPAGEADVANCED_CAPTURE_DEINTERLACE"
-msgid "Insert deinterlace filter (blend) in capture mode"
-msgstr ""
-
 msgctxt "IDS_ARS_WASAPI_MODE"
 msgid "WASAPI mode:"
 msgstr ""
@@ -4677,18 +4697,4 @@ msgstr ""
 
 msgctxt "IDS_AG_DEFAULT"
 msgid "Default"
-msgstr ""
-
-msgctxt "IDS_PPAGEADVANCED_USE_MEDIAINFO_LOAD_FILE_DURATION"
-msgid ""
-"Load file duration when adding items to playlist (uses MediaInfo and results"
-" may vary)"
-msgstr ""
-
-msgctxt "IDS_SEEKBAR_HOVER_PREVIEW"
-msgid "Video Preview"
-msgstr ""
-
-msgctxt "IDS_SEEKBAR_HOVER_TOOLTIP"
-msgid "Seek Time"
 msgstr ""

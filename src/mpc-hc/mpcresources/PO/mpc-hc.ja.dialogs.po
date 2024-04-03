@@ -1910,6 +1910,10 @@ msgctxt "IDD_PPAGETHEME_IDC_STATIC23"
 msgid "Font size:"
 msgstr "フォント サイズ:"
 
+msgctxt "IDD_PPAGETHEME_IDC_CHECK13"
+msgid "Display Current T&ime"
+msgstr ""
+
 msgctxt "IDD_PPAGETHEME_IDC_STATIC"
 msgid "Window Behavior"
 msgstr "ウィンドウの動作"
