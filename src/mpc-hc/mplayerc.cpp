@@ -1980,6 +1980,7 @@ BOOL CMPlayerCApp::InitInstance()
 
     m_pMainWnd = pFrame;
     pFrame->m_controls.LoadState();
+    CPoint borderAdjustDirection;
     pFrame->SetDefaultWindowRect((m_s->nCLSwitches & CLSW_MONITOR) ? m_s->iMonitor : 0);
     if (!m_s->slFiles.IsEmpty()) {
         pFrame->m_controls.DelayShowNotLoaded(true);
@@ -2002,6 +2003,17 @@ BOOL CMPlayerCApp::InitInstance()
     }
 
     pFrame->ActivateFrame(m_nCmdShow);
+
+    if (AfxGetAppSettings().HasFixedWindowSize() && IsWindows8OrGreater()) {//make adjustments for drop shadow frame
+        CRect rect, frame;
+        pFrame->GetWindowRect(&rect);
+        DwmGetWindowAttribute(pFrame->GetSafeHwnd(), DWMWA_EXTENDED_FRAME_BOUNDS, &frame, sizeof(RECT));
+
+        CRect diff(CPoint(frame.TopLeft() - rect.TopLeft()), CPoint(rect.BottomRight() - frame.BottomRight()));
+        rect.InflateRect(diff);
+
+        pFrame->SetWindowPos(nullptr, rect.left, rect.top, rect.Width(), rect.Height(), SWP_NOZORDER | SWP_NOACTIVATE);
+    }
 
     /* adipose 2019-11-12:
         LoadPlayList this used to be performed inside OnCreate,

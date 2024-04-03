@@ -162,6 +162,8 @@ enum MCE_RAW_INPUT {
 #define DEF_MIN_AUTOFIT_SCALE_FACTOR 40
 #define DEF_MAX_AUTOFIT_SCALE_FACTOR 80
 
+#define NO_FIXED_POSITION CPoint(INT_MIN, INT_MIN)
+
 enum dvstype {
     DVS_HALF,
     DVS_NORMAL,
@@ -561,6 +563,7 @@ public:
     DVD_HMSF_TIMECODE   DVDPosition;
 
     CSize sizeFixedWindow;
+    CPoint fixedWindowPosition;
     bool HasFixedWindowSize() const {
         return sizeFixedWindow.cx > 0 || sizeFixedWindow.cy > 0;
     }
