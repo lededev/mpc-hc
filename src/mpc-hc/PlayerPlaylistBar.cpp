@@ -115,6 +115,11 @@ BOOL CPlayerPlaylistBar::PreCreateWindow(CREATESTRUCT& cs)
 BOOL CPlayerPlaylistBar::PreTranslateMessage(MSG* pMsg)
 {
     if (IsWindow(pMsg->hwnd) && IsVisible() && pMsg->message >= WM_KEYFIRST && pMsg->message <= WM_KEYLAST) {
+        if (GetKeyState(VK_MENU) & 0x8000) {
+            if (TranslateAccelerator(m_pMainFrame->GetSafeHwnd(), m_pMainFrame->GetDefaultAccelerator(), pMsg)) {
+                return TRUE;
+            }
+        }
         if (IsDialogMessage(pMsg)) {
             return TRUE;
         }
