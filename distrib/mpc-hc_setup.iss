@@ -118,8 +118,8 @@
 #ifdef x64Build
 AppId                     = {{2ACBF1FA-F5C3-4B19-A774-B22A31F231B9}
 DefaultGroupName          = {#app_name} x64
-ArchitecturesAllowed      = x64
-ArchitecturesInstallIn64BitMode = x64
+ArchitecturesAllowed      = x64 arm64
+ArchitecturesInstallIn64BitMode = x64 arm64
 #else
 AppId                     = {{2624B969-7135-4EB1-B0F6-2D8C397B45F7}
 DefaultGroupName          = {#app_name}
