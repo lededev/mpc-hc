@@ -1105,7 +1105,10 @@ BOOL CPPageAccelTbl::OnApply()
     }
     s.hAccel = CreateAcceleratorTable(pAccel.GetData(), accel_count);
 
-    GetParentFrame()->m_hAccelTable = s.hAccel;
+    CFrameWnd* parent = GetParentFrame();
+    if (parent) {
+        parent->m_hAccelTable = s.hAccel;
+    }
 
     s.fWinLirc = !!m_fWinLirc;
     s.strWinLircAddr = m_WinLircAddr;
