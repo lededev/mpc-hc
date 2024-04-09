@@ -25,7 +25,7 @@ extern CString ResStr(UINT nID);
 extern void SetCursor(HWND m_hWnd, LPCWSTR lpCursorName);
 extern void SetCursor(HWND m_hWnd, UINT nID, LPCWSTR lpCursorName);
 
-extern void CorrectComboListWidth(CComboBox& ComboBox);
+extern int CorrectComboListWidth(CComboBox& ComboBox, bool dryRun = false);
 extern void CorrectComboBoxHeaderWidth(CWnd* pComboBox);
 extern void CorrectCWndWidth(CWnd* pWnd);
 

@@ -1062,3 +1062,70 @@ CPoint CMPCThemeUtil::GetRegionOffset(CWnd* window) {
     CPoint offset = tcr.TopLeft() - twr.TopLeft();
     return offset;
 }
+
+void CMPCThemeUtil::AdjustDynamicWidth(CWnd* window, int leftWidget, int rightWidget, DynamicAlignWindowType lType, DynamicAlignWindowType rType) {
+    if (window && IsWindow(window->m_hWnd)) {
+        DpiHelper dpiWindow;
+        dpiWindow.Override(window->GetSafeHwnd());
+        LONG dynamicSpace = dpiWindow.ScaleX(5);
+
+        CWnd* leftW = window->GetDlgItem(leftWidget);
+        CWnd* rightW = window->GetDlgItem(rightWidget);
+        if (leftW && rightW && IsWindow(leftW->m_hWnd) && IsWindow(rightW->m_hWnd)) {
+            CRect l, r;
+            LONG leftWantsRight, rightWantsLeft;
+
+            leftW->GetWindowRect(l);
+            leftW->GetOwner()->ScreenToClient(l);
+            rightW->GetWindowRect(r);
+            rightW->GetOwner()->ScreenToClient(r);
+            CDC* lpDC = leftW->GetDC();
+            CFont* pFont = leftW->GetFont();
+            leftWantsRight = l.right;
+            rightWantsLeft = r.left;
+            {
+                int left = l.left;
+                if (lType == DynamicAlignCheckBox) {
+                    left += dpiWindow.GetSystemMetricsDPI(SM_CXMENUCHECK) + 2;
+                }
+
+                CFont* pOldFont = lpDC->SelectObject(pFont);
+                TEXTMETRIC tm;
+                lpDC->GetTextMetricsW(&tm);
+
+                CString str;
+                leftW->GetWindowTextW(str);
+                CSize szText = lpDC->GetTextExtent(str);
+                lpDC->SelectObject(pOldFont);
+
+                leftWantsRight = left + szText.cx + tm.tmAveCharWidth;
+                leftW->ReleaseDC(lpDC);
+            }
+
+            {
+                if (rType == DynamicAlignCombo) {
+                    //int wantWidth = (int)::SendMessage(rightW->m_hWnd, CB_GETDROPPEDWIDTH, 0, 0);
+                    CComboBox *cb = DYNAMIC_DOWNCAST(CComboBox, rightW);
+                    if (cb) {
+                        int wantWidth = CorrectComboListWidth(*cb);
+                        if (wantWidth != CB_ERR) {
+                            rightWantsLeft = r.right - wantWidth - GetSystemMetrics(SM_CXVSCROLL);
+                        }
+                    }
+                }
+            }
+            if (leftWantsRight > rightWantsLeft - dynamicSpace //overlaps; we will assume defaults are best
+                || (leftWantsRight < l.right && rightWantsLeft > r.left)) { // there is no need to resize
+                return;
+            } else {
+                l.right = leftWantsRight;
+                //if necessary space would shrink the right widget, instead get as close to original size as possible
+                //this minimizes noticeable layout changes
+                r.left = std::min(rightWantsLeft, std::max(l.right + dynamicSpace, r.left));
+
+                leftW->MoveWindow(l);
+                rightW->MoveWindow(r);
+            }
+        }
+    }
+}

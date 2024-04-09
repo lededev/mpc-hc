@@ -41,10 +41,10 @@ void SetCursor(HWND m_hWnd, UINT nID, LPCWSTR lpCursorName)
 	SetCursor(::GetDlgItem(m_hWnd, nID), lpCursorName);
 }
 
-void CorrectComboListWidth(CComboBox& ComboBox)
+int CorrectComboListWidth(CComboBox& ComboBox, bool dryRun /*= false*/)
 {
 	if (ComboBox.GetCount() <= 0)
-		return;
+		return CB_ERR;
 
 	CString    str;
 	CSize      sz;
@@ -83,7 +83,10 @@ void CorrectComboListWidth(CComboBox& ComboBox)
 	dx += scroll_width + 2*::GetSystemMetrics(SM_CXEDGE);
 
 	// Set the width of the list box so that every item is completely visible.
-	ComboBox.SetDroppedWidth(dx);
+    if (!dryRun) {
+        ComboBox.SetDroppedWidth(dx);
+    }
+    return dx; //the min width -- may be less than actual width
 }
 
 void CorrectCWndWidth(CWnd* pWnd)

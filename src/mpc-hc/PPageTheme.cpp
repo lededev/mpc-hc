@@ -172,6 +172,7 @@ BOOL CPPageTheme::OnInitDialog()
     m_HoverPosition.AddString(ResStr(IDS_TIME_TOOLTIP_ABOVE));
     m_HoverPosition.AddString(ResStr(IDS_TIME_TOOLTIP_BELOW));
     m_HoverPosition.SetCurSel(s.nHoverPosition);
+    AdjustDynamicWidth(this, IDC_CHECK8, IDC_COMBO3, DynamicAlignCheckBox, DynamicAlignCombo);
     CorrectComboListWidth(m_HoverPosition);
 
     m_nOSDSize = s.nOSDSize;
