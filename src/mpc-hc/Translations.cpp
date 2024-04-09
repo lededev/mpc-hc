@@ -25,6 +25,7 @@
 #include "VersionInfo.h"
 #include "PPageSheet.h"
 #include "CMPCThemePropertySheet.h"
+#include "CMPCThemeResizablePropertySheet.h"
 #include "ComPropertySheet.h"
 
 namespace
@@ -87,6 +88,7 @@ namespace
                 CWnd* wnd = CWnd::FromHandle(hWnd);
                 if (nullptr == DYNAMIC_DOWNCAST(CPPageSheet, wnd)
                     && nullptr == DYNAMIC_DOWNCAST(CMPCThemePropertySheet, wnd)
+                    && nullptr == DYNAMIC_DOWNCAST(CMPCThemeResizablePropertySheet, wnd)
                     && nullptr == DYNAMIC_DOWNCAST(CComPropertySheet, wnd)) { //see CPPageSheet::DoModal().  in Windows 11, SetWindowLongPtr corrupts CPPageSheet dialog
                     SetWindowLongPtr(hWnd, GWL_EXSTYLE, GetWindowLongPtr(hWnd, GWL_EXSTYLE) | WS_EX_LAYOUTRTL);
                 }

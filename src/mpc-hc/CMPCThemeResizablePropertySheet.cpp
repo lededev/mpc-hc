@@ -5,11 +5,13 @@
 
 CMPCThemeResizablePropertySheet::CMPCThemeResizablePropertySheet(UINT nIDCaption, CWnd* pParentWnd, UINT iSelectPage)
     :CResizableSheet(nIDCaption, pParentWnd, iSelectPage)
+    ,isModal(false)
 {
 }
 
 CMPCThemeResizablePropertySheet::CMPCThemeResizablePropertySheet(LPCTSTR pszCaption, CWnd* pParentWnd, UINT iSelectPage)
     :CResizableSheet(pszCaption, pParentWnd, iSelectPage)
+    ,isModal(false)
 {
 }
 
@@ -52,4 +54,10 @@ HBRUSH CMPCThemeResizablePropertySheet::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nC
         HBRUSH hbr = __super::OnCtlColor(pDC, pWnd, nCtlColor);
         return hbr;
     }
+}
+
+INT_PTR CMPCThemeResizablePropertySheet::DoModal() {
+    isModal = true;
+    PreDoModalRTL(&m_psh);
+    return __super::DoModal();
 }
