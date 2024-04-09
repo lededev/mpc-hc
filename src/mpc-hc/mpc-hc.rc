@@ -1109,7 +1109,7 @@ BEGIN
     LTEXT           "",IDC_STATIC4,300,146,36,8
     GROUPBOX        "Note",IDC_STATIC7,6,176,343,58
     LTEXT           "To minimize audio distortion, it is recommended to keep player volume at around 85% when playing loud lossy-encoded content.",IDC_STATIC8,16,190,323,33
-    PUSHBUTTON      "MPC Audio Renderer Settings",IDC_BUTTON3,7,260,105,15
+    PUSHBUTTON      "MPC Audio Renderer Settings",IDC_BUTTON3,7,260,147,15
 END
 
 IDD_SAVEIMAGEDIALOGTEMPL DIALOGEX 0, 0, 304, 20
@@ -2933,11 +2933,36 @@ BEGIN
     IDS_FAVORITES_ADD       "&Add to Favorites..."
     IDS_FAVORITES_ORGANIZE  "Organize Favorites..."
     IDS_PLAYLIST_SHUFFLE    "Sh&uffle"
-    IDS_PLAYLIST_TOGGLE_SHUFFLE    "Toggle Playlist Shuffle"
     IDS_PLAYLIST_SHOWFOLDER "Ope&n file location"
     IDS_CONTROLS_CLOSING    "Closing..."
     IDS_CONTROLS_PLAYING    "Playing"
     IDS_CONTROLS_PAUSED     "Paused"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_SUBTITLE_RENDERER_NONE "None"
+    IDS_PPAGEADVANCED_MOUSE_LEFTUP_DELAY 
+                            "Maximum delay in milliseconds of mouse LeftUp event when clicking on the video."
+    IDS_PPAGEADVANCED_USE_FREETYPE 
+                            "Use FreeType for subtitle rendering.  Enables support for per-language glyphs."
+    IDS_PPAGEADVANCED_USE_MEDIAINFO_LOAD_FILE_DURATION 
+                            "Load file duration when adding items to playlist (uses MediaInfo and results may vary)"
+    IDS_TIMER_SHOW_PERCENTAGE "Show percentage"
+    IDS_SUBDL_DLG_FAILED_DL "Subtitle download failed."
+    IDS_PPAGEADVANCED_FILEPOS_PLAYLIST 
+                            "Remember playback position in local M3U and MPCPL playlist files."
+    IDS_PPAGEADVANCED_FILEPOS_TRACK_SELECTION 
+                            "Remember the selected audio and subtitle track (when file history is enabled)."
+    IDS_PPAGEADVANCED_YDL_AUDIO_FORMAT 
+                            "Preferred audio format for stream that is selected from Youtube-DL results. Only applies if audio stream is separate from video stream.\n0: Automatic\n1: AAC\n2: OPUS"
+    IDS_PPAGEADVANCED_PREVENT_DISPLAY_SLEEP 
+                            "Disable screen saver and monitor sleep mode during video playback."
+    IDS_PPAGEADVANCED_STILL_VIDEO_DURATION 
+                            "Display duration in seconds for images rendered by ""Generate Still Video"" and ""MPC Image Source"" filters. Use 0 for infinite."
+    IDS_PPAGEADVANCED_CAPTURE_DEINTERLACE 
+                            "Insert deinterlace filter (blend) in capture mode"
+    IDS_PLAYLIST_TOGGLE_SHUFFLE "Toggle Playlist Shuffle"
 END
 
 STRINGTABLE
@@ -3104,31 +3129,6 @@ BEGIN
     IDS_WEBUI_PREVIEW_WARNING 
                             "This option can be used to preview media files from remote location. Use it only on a properly secured private network.\n\nDo you really want to enable this option?"
     IDS_SUBTITLE_RENDERER_INTERNAL "Internal Subtitle Renderer"
-END
-
-STRINGTABLE
-BEGIN
-    IDS_SUBTITLE_RENDERER_NONE "None"
-    IDS_PPAGEADVANCED_MOUSE_LEFTUP_DELAY 
-                            "Maximum delay in milliseconds of mouse LeftUp event when clicking on the video."
-    IDS_PPAGEADVANCED_USE_FREETYPE 
-                            "Use FreeType for subtitle rendering.  Enables support for per-language glyphs."
-    IDS_PPAGEADVANCED_USE_MEDIAINFO_LOAD_FILE_DURATION 
-                            "Load file duration when adding items to playlist (uses MediaInfo and results may vary)"
-    IDS_TIMER_SHOW_PERCENTAGE "Show percentage"
-    IDS_SUBDL_DLG_FAILED_DL "Subtitle download failed."
-    IDS_PPAGEADVANCED_FILEPOS_PLAYLIST 
-                            "Remember playback position in local M3U and MPCPL playlist files."
-    IDS_PPAGEADVANCED_FILEPOS_TRACK_SELECTION 
-                            "Remember the selected audio and subtitle track (when file history is enabled)."
-    IDS_PPAGEADVANCED_YDL_AUDIO_FORMAT 
-                            "Preferred audio format for stream that is selected from Youtube-DL results. Only applies if audio stream is separate from video stream.\n0: Automatic\n1: AAC\n2: OPUS"
-    IDS_PPAGEADVANCED_PREVENT_DISPLAY_SLEEP 
-                            "Disable screen saver and monitor sleep mode during video playback."
-    IDS_PPAGEADVANCED_STILL_VIDEO_DURATION 
-                            "Display duration in seconds for images rendered by ""Generate Still Video"" and ""MPC Image Source"" filters. Use 0 for infinite."
-    IDS_PPAGEADVANCED_CAPTURE_DEINTERLACE 
-                            "Insert deinterlace filter (blend) in capture mode"
 END
 
 STRINGTABLE
