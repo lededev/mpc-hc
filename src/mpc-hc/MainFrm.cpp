@@ -19085,6 +19085,14 @@ afx_msg void CMainFrame::OnSubtitleFontSize(UINT nID)
             }
 
             CRenderedTextSubtitle* pRTS = (CRenderedTextSubtitle*)(ISubStream*)m_pCurrentSubInput.pSubStream;
+
+            if (pRTS->m_LibassContext.IsLibassActive()) {
+                // not supported by libass (yet)
+                if (!IsFullScreenMode()) {
+                    AfxMessageBox(_T("Adjusting subtitle text size is not possible when using libass."), MB_ICONERROR, 0);
+                }
+            }
+
             {
                 CAutoLock cAutoLock(&m_csSubLock);
                 pRTS->Deinit();
@@ -19093,6 +19101,10 @@ afx_msg void CMainFrame::OnSubtitleFontSize(UINT nID)
 
             if (GetMediaState() != State_Running) {
                 m_pCAP->Paint(false);
+            }
+        } else {
+            if (!IsFullScreenMode()) {
+                AfxMessageBox(_T("Adjusting subtitle text size is not possible for image based subtitle formats."), MB_ICONERROR, 0);
             }
         }
     }
