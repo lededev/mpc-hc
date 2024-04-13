@@ -2175,13 +2175,13 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 
                     for (int i = 0, j = m_pBI->GetCount(); i < j; i++) {
                         int samples, size;
-                        if (S_OK == m_pBI->GetStatus(i, samples, size)) {
-                            sInfo.AppendFormat(_T("[%d]: %03d/%d KB "), i, samples, size / 1024);
+                        if (S_OK == m_pBI->GetStatus(i, samples, size) && (i < 2 || size > 0)) { // third pin is usually subs 
+                            sInfo.AppendFormat(_T("[P%d] %03d samples / %d KB   "), i, samples, size / 1024);
                         }
                     }
 
                     if (!sInfo.IsEmpty()) {
-                        sInfo.AppendFormat(_T("(p%lu)"), m_pBI->GetPriority());
+                        //sInfo.AppendFormat(_T("(p%lu)"), m_pBI->GetPriority());
                         m_wndStatsBar.SetLine(StrRes(IDS_AG_BUFFERS), sInfo);
                     }
                 }
@@ -2196,7 +2196,7 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
                                 DWORD nAvg = pBRI->GetAverageBitRate() / 1000;
 
                                 if (nAvg > 0) {
-                                    sInfo.AppendFormat(_T("[%u]: %lu/%lu kb/s "), i, nAvg, pBRI->GetCurrentBitRate() / 1000);
+                                    sInfo.AppendFormat(_T("[P%u] %lu/%lu kb/s   "), i, nAvg, pBRI->GetCurrentBitRate() / 1000);
                                 }
                             }
                             i++;
