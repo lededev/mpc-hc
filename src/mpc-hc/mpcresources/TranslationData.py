@@ -22,6 +22,7 @@ from collections import OrderedDict
 import configparser as ConfigParser
 from datetime import datetime
 import polib
+import csv
 
 def xstr(s):
     return '' if s is None else s
@@ -219,6 +220,12 @@ class TranslationData:
                     dataPair[0][dataID] = dataIDTranslated[1]
 
     def translate(self, translationData):
+        migrations={}
+        with open('migrate.csv', 'r', newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                if row['OLDID'] != None and row['NEWID'] != None and row['String'] != None:
+                    migrations[(row['NEWID'],row['String'])]=(row['OLDID'],row['String'])
         self.dialogsHeader = translationData.dialogsHeader
         self.menusHeader = translationData.menusHeader
         self.stringsHeader = translationData.stringsHeader
@@ -227,3 +234,5 @@ class TranslationData:
             for dataID in dataPair[0]:
                 if dataID in dataPair[1]:
                     dataPair[0][dataID] = dataPair[1][dataID]
+                elif dataID in migrations and migrations[dataID] in translationData.dialogs:
+                    dataPair[0][dataID] = translationData.dialogs[migrations[dataID]]
