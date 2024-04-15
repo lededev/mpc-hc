@@ -1636,15 +1636,25 @@ void CMainFrame::OnSizing(UINT nSide, LPRECT lpRect)
 {
     __super::OnSizing(nSide, lpRect);
 
-    const auto& s = AfxGetAppSettings();
-    bool bCtrl = GetKeyState(VK_CONTROL) < 0;
-
-    if (GetLoadState() != MLS::LOADED || m_fFullScreen ||
-            s.iDefaultVideoSize == DVS_STRETCH || !bCtrl == !s.fLimitWindowProportions || IsAeroSnapped()) {
+    if (m_fFullScreen) {
         return;
     }
 
-    CSize videoSize = GetVideoSize();
+    bool bCtrl = GetKeyState(VK_CONTROL) < 0;
+    OnSizingFixWndToVideo(nSide, lpRect, bCtrl);
+    OnSizingSnapToScreen(nSide, lpRect, bCtrl);
+}
+
+void CMainFrame::OnSizingFixWndToVideo(UINT nSide, LPRECT lpRect, bool bCtrl)
+{
+    const auto& s = AfxGetAppSettings();
+
+    if (GetLoadState() != MLS::LOADED || s.iDefaultVideoSize == DVS_STRETCH ||
+        bCtrl == s.fLimitWindowProportions || IsAeroSnapped()) {
+        return;
+    }
+
+    CSize videoSize = m_fAudioOnly ? m_wndView.GetLogoSize() : GetVideoSize();
     if (videoSize.cx == 0 || videoSize.cy == 0) {
         return;
     }
@@ -1712,6 +1722,104 @@ void CMainFrame::OnSizing(UINT nSide, LPRECT lpRect)
         case WMSZ_BOTTOMLEFT:
             lpRect->left = lpRect->right - newWindowSize.cx;
             lpRect->bottom = lpRect->top + newWindowSize.cy;
+            break;
+    }
+}
+
+void CMainFrame::OnSizingSnapToScreen(UINT nSide, LPRECT lpRect, bool bCtrl /*= false*/)
+{
+    const auto& s = AfxGetAppSettings();
+    if (!s.fSnapToDesktopEdges)
+        return;
+
+    CRect areaRect;
+    CMonitors::GetNearestMonitor(this).GetWorkAreaRect(areaRect);
+    const CRect invisibleBorderSize = GetInvisibleBorderSize();
+    areaRect.InflateRect(invisibleBorderSize);
+
+    CRect& rect = *reinterpret_cast<CRect*>(lpRect);
+    const CSize threshold(m_dpi.ScaleX(16), m_dpi.ScaleY(16));
+    const auto SnapTo = [](LONG& val, LONG to, LONG threshold) {
+        return (std::abs(val - to) < threshold && val != to) ? (val = to, true) : false;
+    };
+
+    CSize videoSize = GetVideoSize();
+    if (bCtrl == s.fLimitWindowProportions || videoSize.cx == 0 || videoSize.cy == 0) {
+        SnapTo(rect.left, areaRect.left, threshold.cx);
+        SnapTo(rect.top, areaRect.top, threshold.cy);
+        SnapTo(rect.right, areaRect.right, threshold.cx);
+        SnapTo(rect.bottom, areaRect.bottom, threshold.cy);
+        return;
+    }
+
+    const CRect rectOrig(rect);
+    switch (nSide) {
+        case WMSZ_TOPLEFT:
+            if (SnapTo(rect.left, areaRect.left, threshold.cx)) {
+                OnSizingFixWndToVideo(WMSZ_LEFT, &rect);
+                rect.OffsetRect(0, rectOrig.bottom - rect.bottom);
+                if (rect.top < areaRect.top && SnapTo(rect.top, areaRect.top, threshold.cy)) {
+                    OnSizingFixWndToVideo(WMSZ_TOP, &rect);
+                    rect.OffsetRect(rectOrig.right - rect.right, 0);
+                }
+            } else if (SnapTo(rect.top, areaRect.top, threshold.cy)) {
+                OnSizingFixWndToVideo(WMSZ_TOP, &rect);
+                rect.OffsetRect(rectOrig.right - rect.right, 0);
+                if (rect.left < areaRect.left && SnapTo(rect.left, areaRect.left, threshold.cx)) {
+                    OnSizingFixWndToVideo(WMSZ_LEFT, &rect);
+                    rect.OffsetRect(0, rectOrig.bottom - rect.bottom);
+                }
+            }
+            break;
+        case WMSZ_TOP:
+        case WMSZ_TOPRIGHT:
+            if (SnapTo(rect.right, areaRect.right, threshold.cx)) {
+                OnSizingFixWndToVideo(WMSZ_RIGHT, &rect);
+                rect.OffsetRect(0, rectOrig.bottom - rect.bottom);
+                if (rect.top < areaRect.top && SnapTo(rect.top, areaRect.top, threshold.cy)) {
+                    OnSizingFixWndToVideo(WMSZ_TOP, &rect);
+                    rect.OffsetRect(rectOrig.left - rect.left, 0);
+                }
+            }
+            else if (SnapTo(rect.top, areaRect.top, threshold.cy)) {
+                OnSizingFixWndToVideo(WMSZ_TOP, &rect);
+                rect.OffsetRect(rectOrig.left - rect.left, 0);
+                if (areaRect.right < rect.right && SnapTo(rect.right, areaRect.right, threshold.cx)) {
+                    OnSizingFixWndToVideo(WMSZ_RIGHT, &rect);
+                    rect.OffsetRect(0, rectOrig.bottom - rect.bottom);
+                }
+            }
+            break;
+        case WMSZ_RIGHT:
+        case WMSZ_BOTTOM:
+        case WMSZ_BOTTOMRIGHT:
+            if (SnapTo(rect.right, areaRect.right, threshold.cx)) {
+                OnSizingFixWndToVideo(WMSZ_RIGHT, &rect);
+                if (areaRect.bottom < rect.bottom && SnapTo(rect.bottom, areaRect.bottom, threshold.cy)) {
+                    OnSizingFixWndToVideo(WMSZ_BOTTOM, &rect);
+                }
+            } else if (SnapTo(rect.bottom, areaRect.bottom, threshold.cy)) {
+                OnSizingFixWndToVideo(WMSZ_BOTTOM, &rect);
+                if (areaRect.right < rect.right && SnapTo(rect.right, areaRect.right, threshold.cx)) {
+                    OnSizingFixWndToVideo(WMSZ_RIGHT, &rect);
+                }
+            }
+            break;
+        case WMSZ_LEFT:
+        case WMSZ_BOTTOMLEFT:
+            if (SnapTo(rect.left, areaRect.left, threshold.cx)) {
+                OnSizingFixWndToVideo(WMSZ_LEFT, &rect);
+                if (areaRect.bottom < rect.bottom && SnapTo(rect.bottom, areaRect.bottom, threshold.cy)) {
+                    OnSizingFixWndToVideo(WMSZ_BOTTOM, &rect);
+                    rect.OffsetRect(rectOrig.right - rect.right, 0);
+                }
+            } else if (SnapTo(rect.bottom, areaRect.bottom, threshold.cy)) {
+                OnSizingFixWndToVideo(WMSZ_BOTTOM, &rect);
+                rect.OffsetRect(rectOrig.right - rect.right, 0);
+                if (rect.left < areaRect.left && SnapTo(rect.left, areaRect.left, threshold.cx)) {
+                    OnSizingFixWndToVideo(WMSZ_LEFT, &rect);
+                }
+            }
             break;
     }
 }
@@ -7721,8 +7829,7 @@ void CMainFrame::OnViewZoomAutoFitLarger()
     m_OSD.DisplayMessage(OSD_TOPLEFT, ResStr(IDS_OSD_ZOOM_AUTO_LARGER), 3000);
 }
 
-void CMainFrame::OnViewModifySize(UINT nID)
-{
+void CMainFrame::OnViewModifySize(UINT nID) {
     if (m_fFullScreen || !m_pVideoWnd || IsZoomed() || IsIconic()) {
         return;
     }
@@ -7740,7 +7847,7 @@ void CMainFrame::OnViewModifySize(UINT nID)
 
     CSize cs = rect.Size() + CSize(newWidth - videoRect.Width(), newHeight - videoRect.Height());
 
-    MoveWindow(GetZoomWindowRect(cs));
+    MoveWindow(GetZoomWindowRect(cs, true));
 }
 
 void CMainFrame::OnViewDefaultVideoFrame(UINT nID)
@@ -12062,7 +12169,7 @@ CSize CMainFrame::GetZoomWindowSize(double dScale)
     return ret;
 }
 
-CRect CMainFrame::GetZoomWindowRect(const CSize& size)
+CRect CMainFrame::GetZoomWindowRect(const CSize& size, bool ignoreSavedPosition /*= false*/)
 {
     const auto& s = AfxGetAppSettings();
     CRect ret;
@@ -12089,14 +12196,14 @@ CRect CMainFrame::GetZoomWindowRect(const CSize& size)
             // do nothing
         } else if (m_bWasSnapped && ret.right == rcWork.right) {
             ret.left = ret.right - windowSize.cx;
-        } else if (!s.fRememberWindowPos) {
+        } else if (!s.fRememberWindowPos || ignoreSavedPosition) {
             ret.left += (ret.right - ret.left) / 2 - windowSize.cx / 2;
         }
         if (m_bWasSnapped && ret.top == rcWork.top) {
             // do nothing
         } else if (m_bWasSnapped && ret.bottom == rcWork.bottom) {
             ret.top = ret.bottom - windowSize.cy;
-        } else if (!s.fRememberWindowPos) {
+        } else if (!s.fRememberWindowPos || ignoreSavedPosition) {
             ret.top += (ret.bottom - ret.top) / 2 - windowSize.cy / 2;
         }
 
@@ -12160,7 +12267,7 @@ void CMainFrame::ZoomVideoWindow(double dScale/* = ZOOM_DEFAULT_LEVEL*/)
             ASSERT(FALSE);
             return;
         }
-        MoveWindow(GetZoomWindowRect(GetZoomWindowSize(dScale)));
+        MoveWindow(GetZoomWindowRect(GetZoomWindowSize(dScale), true));
     }
 }
 
