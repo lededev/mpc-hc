@@ -7847,7 +7847,17 @@ void CMainFrame::OnViewModifySize(UINT nID) {
 
     CSize cs = rect.Size() + CSize(newWidth - videoRect.Width(), newHeight - videoRect.Height());
 
-    MoveWindow(GetZoomWindowRect(cs, true));
+    CRect newRect;
+    CRect work;
+    //if old rect was constrained to a single monitor, we zoom incrementally
+    if (GetWorkAreaRect(work) && work.PtInRect(rect.TopLeft()) && work.PtInRect(rect.BottomRight())) {
+        newRect = GetZoomWindowRect(cs, true);
+    } else {
+        newRect = CRect(rect.TopLeft(), cs);
+    }
+
+
+    MoveWindow(newRect);
 }
 
 void CMainFrame::OnViewDefaultVideoFrame(UINT nID)
@@ -12169,21 +12179,28 @@ CSize CMainFrame::GetZoomWindowSize(double dScale)
     return ret;
 }
 
+bool CMainFrame::GetWorkAreaRect(CRect& work) {
+    MONITORINFO mi = { sizeof(mi) };
+    if (GetMonitorInfo(MonitorFromWindow(m_hWnd, MONITOR_DEFAULTTONEAREST), &mi)) {
+        work = mi.rcWork;
+        // account for invisible borders on Windows 10 by allowing
+        // the window to go out of screen a bit
+        if (IsWindows10OrGreater()) {
+            work.InflateRect(GetInvisibleBorderSize());
+        }
+        return true;
+    }
+    return false;
+}
+
 CRect CMainFrame::GetZoomWindowRect(const CSize& size, bool ignoreSavedPosition /*= false*/)
 {
     const auto& s = AfxGetAppSettings();
     CRect ret;
     GetWindowRect(ret);
 
-    MONITORINFO mi = { sizeof(mi) };
-    if (GetMonitorInfo(MonitorFromWindow(m_hWnd, MONITOR_DEFAULTTONEAREST), &mi)) {
-        CRect rcWork = mi.rcWork;
-        // account for invisible borders on Windows 10 by allowing
-        // the window to go out of screen a bit
-        if (IsWindows10OrGreater()) {
-            rcWork.InflateRect(GetInvisibleBorderSize());
-        }
-
+    CRect rcWork;
+    if (GetWorkAreaRect(rcWork)) {
         CSize windowSize(size);
 
         // don't go larger than the current monitor working area

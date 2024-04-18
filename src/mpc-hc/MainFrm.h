@@ -361,6 +361,7 @@ private:
     void RestoreDefaultWindowRect();
     CRect GetInvisibleBorderSize() const;
     CSize GetZoomWindowSize(double dScale);
+    bool GetWorkAreaRect(CRect& work);
     CRect GetZoomWindowRect(const CSize& size, bool ignoreSavedPosition = false);
     void ZoomVideoWindow(double dScale = ZOOM_DEFAULT_LEVEL);
     double GetZoomAutoFitScale();
