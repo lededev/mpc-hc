@@ -11688,14 +11688,16 @@ bool CMainFrame::GetCurDispMode(const CString& displayName, DisplayMode& dm)
 
 bool CMainFrame::GetDispMode(CString displayName, int i, DisplayMode& dm)
 {
-    DEVMODE devmode;
-    devmode.dmSize = sizeof(DEVMODE);
     if (displayName == _T("Current") || displayName.IsEmpty()) {
         CMonitor monitor = CMonitors::GetNearestMonitor(AfxGetApp()->m_pMainWnd);
         monitor.GetName(displayName);
     }
 
-    dm.bValid = !!EnumDisplaySettings(displayName, i, &devmode);
+    DEVMODE devmode;
+    devmode.dmSize = sizeof(DEVMODE);
+    devmode.dmDriverExtra = 0;
+
+    dm.bValid = !!EnumDisplaySettingsExW(displayName, i, &devmode, EDS_RAWMODE);
 
     if (dm.bValid) {
         dm.size = CSize(devmode.dmPelsWidth, devmode.dmPelsHeight);
