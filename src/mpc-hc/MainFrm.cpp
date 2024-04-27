@@ -7833,14 +7833,44 @@ void CMainFrame::OnViewModifySize(UINT nID) {
     if (m_fFullScreen || !m_pVideoWnd || IsZoomed() || IsIconic()) {
         return;
     }
+    const CAppSettings& s = AfxGetAppSettings();
+    MINMAXINFO mmi;
+    CSize videoSize = GetVideoOrArtSize(mmi);
+    int minWidth = (int)mmi.ptMinTrackSize.x;
 
-    CSize videoSize = m_fAudioOnly ? m_wndView.GetLogoSize() : GetVideoSize();
+    int mult = (nID == ID_VIEW_ZOOM_ADD ? 1 : ID_VIEW_ZOOM_SUB ? -1 : 0);
+
     double videoRatio = double(videoSize.cy) / double(videoSize.cx);
 
-    CRect videoRect;
+    CRect videoRect, workRect;
     m_pVideoWnd->GetWindowRect(&videoRect);
-    LONG newWidth = videoRect.Width() + 32 * (nID == ID_VIEW_ZOOM_ADD ? 1 : ID_VIEW_ZOOM_SUB ? -1 : 0);
-    LONG newHeight = (LONG)ceil(newWidth * videoRatio);
+    double videoRectRatio = double(videoRect.Height()) / double(videoRect.Width());
+
+    GetWorkAreaRect(workRect);
+
+    int newWidth = videoRect.Width();
+    int newHeight = videoRect.Height();
+    if (double(videoRect.Height()) / videoRect.Width() + 0.01f < videoRatio) { //wider than aspect ratio, so use height instead
+        int growPixels = int(.01f * workRect.Height());
+        newHeight = videoRect.Height() + growPixels * mult;
+        double newRatio = double(newHeight) / double(videoRect.Width());
+        if (s.fLimitWindowProportions || IsNearlyEqual(videoRectRatio, videoRatio, 0.01) || SGN(newRatio-videoRatio) != SGN(videoRectRatio-videoRatio)) {
+            newWidth = std::max(int(ceil(newHeight / videoRatio)), minWidth);
+            if (mult == 1) {
+                newWidth = std::max(newWidth, videoRect.Width());
+            }
+        }
+    } else {
+        int growPixels = int(.01f * workRect.Width());
+        newWidth = std::max(videoRect.Width() + growPixels * mult, minWidth);
+        double newRatio = double(videoRect.Height()) / double(newWidth);
+        if (s.fLimitWindowProportions || IsNearlyEqual(videoRectRatio, videoRatio, 0.01) || SGN(newRatio - videoRatio) != SGN(videoRectRatio - videoRatio)) {
+            newHeight = int(ceil(newWidth * videoRatio));
+            if (mult == 1) {
+                newHeight = std::max(newHeight, videoRect.Height());
+            }
+        }
+    }
 
     CRect rect;
     GetWindowRect(&rect);
@@ -7855,7 +7885,6 @@ void CMainFrame::OnViewModifySize(UINT nID) {
     } else {
         newRect = CRect(rect.TopLeft(), cs);
     }
-
 
     MoveWindow(newRect);
 }
@@ -12079,6 +12108,32 @@ void CMainFrame::HideVideoWindow(bool fHide)
     m_bLockedZoomVideoWindow = fHide;
 }
 
+CSize CMainFrame::GetVideoOrArtSize(MINMAXINFO& mmi)
+{
+    const auto& s = AfxGetAppSettings();
+    CSize videoSize;
+    OnGetMinMaxInfo(&mmi);
+
+    if (m_fAudioOnly) {
+        videoSize = m_wndView.GetLogoSize();
+
+        if (videoSize.cx > videoSize.cy) {
+            if (videoSize.cx > s.nCoverArtSizeLimit) {
+                videoSize.cy = MulDiv(videoSize.cy, s.nCoverArtSizeLimit, videoSize.cx);
+                videoSize.cx = s.nCoverArtSizeLimit;
+            }
+        } else {
+            if (videoSize.cy > s.nCoverArtSizeLimit) {
+                videoSize.cx = MulDiv(videoSize.cx, s.nCoverArtSizeLimit, videoSize.cy);
+                videoSize.cy = s.nCoverArtSizeLimit;
+            }
+        }
+    } else {
+        videoSize = GetVideoSize();
+    }
+    return videoSize;
+}
+
 CSize CMainFrame::GetZoomWindowSize(double dScale)
 {
     const auto& s = AfxGetAppSettings();
@@ -12086,34 +12141,14 @@ CSize CMainFrame::GetZoomWindowSize(double dScale)
 
     if (dScale >= 0.0 && GetLoadState() == MLS::LOADED) {
         MINMAXINFO mmi;
-        OnGetMinMaxInfo(&mmi);
-        CSize videoSize;
-
-        if (m_fAudioOnly) {
-            videoSize = m_wndView.GetLogoSize();
-
-            if (videoSize.cx > videoSize.cy) {
-                if (videoSize.cx > s.nCoverArtSizeLimit) {
-                    videoSize.cy = MulDiv(videoSize.cy, s.nCoverArtSizeLimit, videoSize.cx);
-                    videoSize.cx = s.nCoverArtSizeLimit;
-                }
-            } else {
-                if (videoSize.cy > s.nCoverArtSizeLimit) {
-                    videoSize.cx = MulDiv(videoSize.cx, s.nCoverArtSizeLimit, videoSize.cy);
-                    videoSize.cy = s.nCoverArtSizeLimit;
-                }
-            }
-
-            if (videoSize.cx <= 1 || videoSize.cy <= 1) {
-                // Do not adjust window width if blank logo is used (1x1px) or cover-art size is limited
-                // to avoid shrinking window width too much and give ability to revert pre 94dc87c behavior
-                videoSize.SetSize(0, 0);
-                CRect windowRect;
-                GetWindowRect(windowRect);
-                mmi.ptMinTrackSize.x = std::max<long>(windowRect.Width(), mmi.ptMinTrackSize.x);
-            }
-        } else {
-            videoSize = GetVideoSize();
+        CSize videoSize = GetVideoOrArtSize(mmi);
+        if (videoSize.cx <= 1 || videoSize.cy <= 1) {
+            // Do not adjust window width if blank logo is used (1x1px) or cover-art size is limited
+            // to avoid shrinking window width too much and give ability to revert pre 94dc87c behavior
+            videoSize.SetSize(0, 0);
+            CRect windowRect;
+            GetWindowRect(windowRect);
+            mmi.ptMinTrackSize.x = std::max<long>(windowRect.Width(), mmi.ptMinTrackSize.x);
         }
 
         CSize videoTargetSize(int(videoSize.cx * dScale + 0.5), int(videoSize.cy * dScale + 0.5));

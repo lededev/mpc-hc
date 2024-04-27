@@ -360,6 +360,7 @@ private:
     void SetDefaultFullscreenState();
     void RestoreDefaultWindowRect();
     CRect GetInvisibleBorderSize() const;
+    CSize GetVideoOrArtSize(MINMAXINFO& mmi);
     CSize GetZoomWindowSize(double dScale);
     bool GetWorkAreaRect(CRect& work);
     CRect GetZoomWindowRect(const CSize& size, bool ignoreSavedPosition = false);
