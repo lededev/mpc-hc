@@ -60,6 +60,7 @@ inline void expand_range(T const& val, T& lo, T& hi)
 
 uint32_t CountBits(uint32_t v);
 uint32_t BitNum(uint32_t v, uint32_t b);
+void fill_u32(void* dst, uint32_t c, size_t count);
 
 // a * b / c
 uint64_t RescaleU64x32(uint64_t a, uint32_t b, uint32_t c);

@@ -868,6 +868,7 @@ CMainFrame::CMainFrame()
     , m_wndCaptureBar(this)
     , m_wndNavigationBar(this)
     , m_pVideoWnd(nullptr)
+    , m_pOSDWnd(nullptr)
     , m_pDedicatedFSVideoWnd(nullptr)
     , m_OSD(this)
     , m_nCurSubtitle(-1)
@@ -996,6 +997,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     m_wndView.ModifyStyleEx(WS_EX_LAYOUTRTL, WS_EX_NOINHERITLAYOUT);
 
     const CAppSettings& s = AfxGetAppSettings();
+
+    // Create OSD Window
+    CreateOSDBar();
 
     // Create Preview Window
     if (s.fSeekPreview) {
@@ -1130,6 +1134,48 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     }
 
     return 0;
+}
+
+void CMainFrame::CreateOSDBar() {
+    if (SUCCEEDED(m_OSD.Create(&m_wndView))) {
+        m_pOSDWnd = &m_wndView;
+    }
+}
+
+bool CMainFrame::OSDBarSetPos() {
+    if (!m_OSD || !(::IsWindow(m_OSD.GetSafeHwnd())) || m_OSD.GetOSDType() != OSD_TYPE_GDI) {
+        return false;
+    }
+    const CAppSettings& s = AfxGetAppSettings();
+
+    if (s.iDSVideoRendererType == VIDRNDT_DS_MADVR || !m_wndView.IsWindowVisible()) {
+        if (m_OSD.IsWindowVisible()) {
+            m_OSD.ShowWindow(SW_HIDE);
+        }
+        return false;
+    }
+
+    CRect r_wndView;
+    m_wndView.GetWindowRect(&r_wndView);
+
+    int pos = 0;
+
+    CRect MainWndRect;
+    m_wndView.GetWindowRect(&MainWndRect);
+    MainWndRect.right -= pos;
+    m_OSD.SetWndRect(MainWndRect);
+    if (m_OSD.IsWindowVisible()) {
+        ::PostMessageW(m_OSD.m_hWnd, WM_OSD_DRAW, WPARAM(0), LPARAM(0));
+    }
+
+    return false;
+}
+
+void CMainFrame::DestroyOSDBar() {
+    if (m_OSD) {
+        m_OSD.Stop();
+        m_OSD.DestroyWindow();
+    }
 }
 
 void CMainFrame::OnMeasureItem(int nIDCtl, LPMEASUREITEMSTRUCT lpMeasureItemStruct)
@@ -1400,6 +1446,7 @@ void CMainFrame::RecalcLayout(BOOL bNotify)
         r |= CRect(r.TopLeft(), CSize(min));
         MoveWindow(r);
     }
+    OSDBarSetPos();
 }
 
 void CMainFrame::EnableDocking(DWORD dwDockStyle)
@@ -1532,6 +1579,8 @@ void CMainFrame::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
     lpMMI->ptMaxTrackSize.x = GetSystemMetrics(SM_CXVIRTUALSCREEN) + decorationsRect.Width();
     lpMMI->ptMaxTrackSize.y = GetSystemMetrics(SM_CYVIRTUALSCREEN)
                               + ((GetStyle() & WS_THICKFRAME) ? GetSystemMetrics(SM_CYSIZEFRAME) : 0);
+
+    OSDBarSetPos();
 }
 
 void CMainFrame::OnMove(int x, int y)
@@ -1547,6 +1596,8 @@ void CMainFrame::OnMove(int x, int y)
     if (!m_fFirstFSAfterLaunchOnFS && !m_fFullScreen && IsWindowVisible() && wp.flags != WPF_RESTORETOMAXIMIZED && wp.showCmd != SW_SHOWMINIMIZED) {
         GetWindowRect(AfxGetAppSettings().rcLastWindowPos);
     }
+
+    OSDBarSetPos();
 }
 
 void CMainFrame::OnEnterSizeMove()
@@ -1614,6 +1665,7 @@ void CMainFrame::OnMoving(UINT fwSide, LPRECT pRect)
     }
 
     __super::OnMoving(fwSide, pRect);
+    OSDBarSetPos();
 }
 
 void CMainFrame::OnSize(UINT nType, int cx, int cy)
@@ -1629,6 +1681,9 @@ void CMainFrame::OnSize(UINT nType, int cx, int cy)
             }
             s.nLastWindowType = nType;
         }
+    }
+    if (nType != SIZE_MINIMIZED) {
+        OSDBarSetPos();
     }
 }
 
@@ -1724,6 +1779,7 @@ void CMainFrame::OnSizingFixWndToVideo(UINT nSide, LPRECT lpRect, bool bCtrl)
             lpRect->bottom = lpRect->top + newWindowSize.cy;
             break;
     }
+    OSDBarSetPos();
 }
 
 void CMainFrame::OnSizingSnapToScreen(UINT nSide, LPRECT lpRect, bool bCtrl /*= false*/)
@@ -2175,7 +2231,7 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
                 m_wndSeekBar.Enable(!g_bNoDuration);
                 m_wndSeekBar.SetRange(0, rtDur);
                 m_wndSeekBar.SetPos(rtNow);
-                m_OSD.SetRange(0, rtDur);
+                m_OSD.SetRange(rtDur);
                 m_OSD.SetPos(rtNow);
                 m_Lcd.SetMediaRange(0, rtDur);
                 m_Lcd.SetMediaPos(rtNow);
@@ -4200,7 +4256,7 @@ void CMainFrame::OnFilePostClosemedia(bool bNextIsQueued/* = false*/)
     m_wndStatusBar.ShowTimer(false);
     currentAudioLang.Empty();
     currentSubLang.Empty();
-    m_OSD.SetRange(0, 0);
+    m_OSD.SetRange(0);
     m_OSD.SetPos(0);
     m_Lcd.SetMediaRange(0, 0);
     m_Lcd.SetMediaPos(0);
@@ -7542,6 +7598,7 @@ void CMainFrame::SetCaptionState(MpcCaptionState eState)
     }
 
     VERIFY(SetWindowPos(nullptr, windowRect.left, windowRect.top, windowRect.Width(), windowRect.Height(), uFlags));
+    OSDBarSetPos();
 }
 
 void CMainFrame::OnViewCaptionmenu()
@@ -11461,7 +11518,6 @@ void CMainFrame::ToggleFullscreen(bool fToNearest, bool fSwitchScreenResWhenHasT
             CreateFullScreenWindow(false);
             // Assign the windowed video frame and pass it to the relevant classes.
             m_pVideoWnd = m_pDedicatedFSVideoWnd;
-            m_OSD.SetVideoWindow(m_pVideoWnd);
             if (m_pMFVDC) {
                 m_pMFVDC->SetVideoWindow(m_pVideoWnd->m_hWnd);
             } else if (m_pVMRWC) {
@@ -11474,7 +11530,6 @@ void CMainFrame::ToggleFullscreen(bool fToNearest, bool fSwitchScreenResWhenHasT
             m_eventc.FireEvent(MpcEvent::SWITCHING_FROM_FULLSCREEN);
 
             m_pVideoWnd = &m_wndView;
-            m_OSD.SetVideoWindow(m_pVideoWnd);
             if (m_pMFVDC) {
                 m_pMFVDC->SetVideoWindow(m_pVideoWnd->m_hWnd);
             } else if (m_pVMRWC) {
@@ -11531,7 +11586,6 @@ void CMainFrame::ToggleFullscreen(bool fToNearest, bool fSwitchScreenResWhenHasT
 
             if (m_pVideoWnd != &m_wndView) {
                 m_pVideoWnd = &m_wndView;
-                m_OSD.SetVideoWindow(m_pVideoWnd);
                 if (m_pMFVDC) {
                     m_pMFVDC->SetVideoWindow(m_pVideoWnd->m_hWnd);
                 } else if (m_pVMRWC) {
@@ -11653,7 +11707,6 @@ void CMainFrame::ToggleD3DFullscreen(bool fSwitchScreenResWhenHasTo)
 
             // Assign the windowed video frame and pass it to the relevant classes.
             m_pVideoWnd = &m_wndView;
-            m_OSD.SetVideoWindow(m_pVideoWnd);
             if (m_pMFVDC) {
                 m_pMFVDC->SetVideoWindow(m_pVideoWnd->m_hWnd);
             } else {
@@ -11690,7 +11743,6 @@ void CMainFrame::ToggleD3DFullscreen(bool fSwitchScreenResWhenHasTo)
 
             // Assign the windowed video frame and pass it to the relevant classes.
             m_pVideoWnd = m_pDedicatedFSVideoWnd;
-            m_OSD.SetVideoWindow(m_pVideoWnd);
             if (m_pMFVDC) {
                 m_pMFVDC->SetVideoWindow(m_pVideoWnd->m_hWnd);
             } else {
@@ -12018,7 +12070,6 @@ void CMainFrame::MoveVideoWindow(bool fShowStats/* = false*/, bool bSetStoppedVi
         } else {
             m_wndView.SetVideoRect(&windowRect);
         }
-        m_OSD.SetSize(windowRect, videoRect);
     } else {
         m_wndView.SetVideoRect();
     }
@@ -12422,11 +12473,11 @@ double CMainFrame::GetZoomAutoFitScale()
 
 }
 
-void CMainFrame::RepaintVideo()
+void CMainFrame::RepaintVideo(const bool bForceRepaint/* = false*/)
 {
     if (!m_bDelaySetOutputRect && (m_pCAP || m_pMFVDC)) {
         OAFilterState fs = GetMediaState();
-        if (fs == State_Paused || fs == State_Stopped) {
+        if (fs == State_Paused || fs == State_Stopped || bForceRepaint) {
             if (m_pCAP) {
                 m_pCAP->Paint(false);
             } else if (m_pMFVDC) {
@@ -14990,12 +15041,18 @@ bool CMainFrame::OpenMediaPrivate(CAutoPtr<OpenMediaData> pOMD)
         pMVTO = m_pCAP;
 
         if (s.fShowOSD || s.fShowDebugInfo) { // Force OSD on when the debug switch is used
-            if (pVMB) {
-                m_OSD.Start(m_pVideoWnd, pVMB, IsD3DFullScreenMode());
-            } else if (pMFVMB) {
-                m_OSD.Start(m_pVideoWnd, pMFVMB, IsD3DFullScreenMode());
-            } else if (pMVTO) {
-                m_OSD.Start(m_pVideoWnd, pMVTO);
+            m_OSD.Stop();
+
+            if (IsD3DFullScreenMode() && !m_fAudioOnly) {
+                if (pMFVMB) {
+                    m_OSD.Start(m_pVideoWnd, pMFVMB, true);
+                }
+            } else {
+                if (pMVTO) {
+                    m_OSD.Start(m_pVideoWnd, pMVTO);
+                } else {
+                    m_OSD.Start(m_pOSDWnd);
+                }
             }
         }
         checkAborted();
@@ -18077,13 +18134,19 @@ bool CMainFrame::BuildGraphVideoAudio(int fVPreview, bool fVCapture, int fAPrevi
                 m_pVMRWC->SetVideoClippingWindow(m_pVideoWnd->m_hWnd);
             }
 
-            if (s.fShowOSD || s.fShowDebugInfo) {
-                if (pVMB) {
-                    m_OSD.Start(m_pVideoWnd, pVMB, IsD3DFullScreenMode());
-                } else if (pMFVMB) {
-                    m_OSD.Start(m_pVideoWnd, pMFVMB, IsD3DFullScreenMode());
-                } else if (pMVTO) {
-                    m_OSD.Start(m_pVideoWnd, pMVTO);
+            if (s.fShowOSD || s.fShowDebugInfo) { // Force OSD on when the debug switch is used
+                m_OSD.Stop();
+
+                if (IsD3DFullScreenMode() && !m_fAudioOnly) {
+                    if (pMFVMB) {
+                        m_OSD.Start(m_pVideoWnd, pMFVMB, true);
+                    }
+                } else {
+                    if (pMVTO) {
+                        m_OSD.Start(m_pVideoWnd, pMVTO);
+                    } else {
+                        m_OSD.Start(m_pOSDWnd);
+                    }
                 }
             }
         }

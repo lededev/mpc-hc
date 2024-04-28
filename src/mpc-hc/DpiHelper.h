@@ -41,6 +41,9 @@ public:
     inline double ScaleFactorX() const { return m_dpix / 96.0; }
     inline double ScaleFactorY() const { return m_dpiy / 96.0; }
 
+    // Convert a point size (1/72 of an inch) to raw pixels.
+    inline int PointsToPixels(int pt) const { return MulDiv(pt, m_dpiy, 72); }
+
     inline int ScaleFloorX(int x) const { return x * m_dpix / 96; }
     inline int ScaleFloorY(int y) const { return y * m_dpiy / 96; }
     inline int ScaleX(int x) const { return MulDiv(x, m_dpix, 96); }

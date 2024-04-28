@@ -43,7 +43,7 @@
 #include "SubtitleDlDlg.h"
 #include "SubtitleUpDlg.h"
 #include "TimerWrappers.h"
-#include "VMROSD.h"
+#include "OSD.h"
 #include "CMPCThemeMenu.h"
 #include "../SubPic/MemSubPic.h"
 #include <initguid.h>
@@ -388,6 +388,9 @@ private:
     void OnNavStreamSelectSubMenu(UINT id, DWORD dwSelGroup);
     void OnStreamSelect(bool forward, DWORD dwSelGroup);
     static CString GetStreamOSDString(CString name, LCID lcid, DWORD dwSelGroup);
+    void CreateOSDBar();
+    bool OSDBarSetPos();
+    void DestroyOSDBar();
 
     CMPCThemeMenu m_mainPopupMenu, m_popupMenu;
     CMPCThemeMenu m_openCDsMenu;
@@ -657,7 +660,7 @@ public:
     void MoveVideoWindow(bool fShowStats = false, bool bSetStoppedVideoRect = false);
     void SetPreviewVideoPosition();
 
-    void RepaintVideo();
+    void RepaintVideo(const bool bForceRepaint = false);
     void HideVideoWindow(bool fHide);
 
     OAFilterState GetMediaStateDirect() const;
@@ -1171,7 +1174,9 @@ public:
     CMPC_Lcd m_Lcd;
 
     CWnd*       m_pVideoWnd;            // Current Video (main display screen or 2nd)
+    CWnd*       m_pOSDWnd;
     CPreView    m_wndPreView;           // SeekPreview
+
 
     void ReleasePreviewGraph();
     HRESULT PreviewWindowHide();
@@ -1180,7 +1185,7 @@ public:
     bool CanPreviewUse();
 
     CFullscreenWnd* m_pDedicatedFSVideoWnd;
-    CVMROSD     m_OSD;
+    COSD        m_OSD;
     int         m_nCurSubtitle;
     long        m_lSubtitleShift;
     REFERENCE_TIME m_rtCurSubPos;

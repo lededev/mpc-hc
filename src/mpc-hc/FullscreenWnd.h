@@ -31,9 +31,13 @@ class CFullscreenWnd final : public CMouseWndWithArtView
 
     explicit CFullscreenWnd(CMainFrame* pMainFrame);
     bool IsWindow() const;
+    void SetCursor(LPCWSTR lpCursorName);
 
 private:
     CMainFrame* m_pMainFrame;
+    HCURSOR		m_hCursor;
+    bool		m_bCursorVisible = false;
+    bool		m_bTrackingMouseLeave = false;
 
 protected:
     BOOL PreCreateWindow(CREATESTRUCT& cs) override;

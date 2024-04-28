@@ -95,3 +95,9 @@ void CFullscreenWnd::OnDestroy()
         pMainWnd->SetActiveWindow();
     }
 }
+
+void CFullscreenWnd::SetCursor(LPCWSTR lpCursorName) {
+    m_hCursor = ::LoadCursorW(nullptr, lpCursorName);
+    m_bCursorVisible = true;
+    PostMessageW(WM_SETCURSOR, 0, 0);
+}

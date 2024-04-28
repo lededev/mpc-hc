@@ -94,7 +94,9 @@ enum {
     WM_TUNER_NEW_CHANNEL,
     WM_DVB_EIT_DATA_READY,
     WM_LOADSUBTITLES,
-    WM_GETSUBTITLES
+    WM_GETSUBTITLES,
+    WM_OSD_HIDE,
+    WM_OSD_DRAW,
 };
 
 enum ControlType {

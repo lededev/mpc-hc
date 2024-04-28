@@ -417,9 +417,6 @@
     <ClCompile Include="FullscreenWnd.cpp">
       <Filter>Main View</Filter>
     </ClCompile>
-    <ClCompile Include="VMROSD.cpp">
-      <Filter>Main View</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerCaptureBar.cpp">
       <Filter>Panels</Filter>
     </ClCompile>
@@ -614,7 +611,13 @@
     <ClCompile Include="CMPCThemeResizablePropertySheet.cpp">
       <Filter>MPCTheme</Filter>
     </ClCompile>
-    <ClCompile Include="RarEntrySelectorDialog.cpp"/>
+    <ClCompile Include="RarEntrySelectorDialog.cpp" />
+    <ClCompile Include="OSD.cpp">
+      <Filter>Main View</Filter>
+    </ClCompile>
+    <ClCompile Include="WicUtils.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppSettings.h">
@@ -962,9 +965,6 @@
     <ClInclude Include="FullscreenWnd.h">
       <Filter>Main View</Filter>
     </ClInclude>
-    <ClInclude Include="VMROSD.h">
-      <Filter>Main View</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\version.h">
       <Filter>Build Info</Filter>
     </ClInclude>
@@ -1166,7 +1166,13 @@
     <ClInclude Include="CMPCThemeResizablePropertySheet.h">
       <Filter>MPCTheme</Filter>
     </ClInclude>
-    <ClInclude Include="RarEntrySelectorDialog.h"/>
+    <ClInclude Include="RarEntrySelectorDialog.h" />
+    <ClInclude Include="OSD.h">
+      <Filter>Main View</Filter>
+    </ClInclude>
+    <ClInclude Include="WicUtils.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\ani.avi">

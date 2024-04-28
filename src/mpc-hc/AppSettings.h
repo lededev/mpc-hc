@@ -36,6 +36,7 @@
 #include <afxsock.h>
 #include "CMPCTheme.h"
 
+
 class FilterOverride;
 
 // flags for CAppSettings::nCS
@@ -583,6 +584,8 @@ public:
     bool            fTrayIcon;
     bool            fShowOSD;
     bool            fShowCurrentTimeInOSD;
+    int             nOSDTransparent;
+
     bool            fLimitWindowProportions;
     bool            fSnapToDesktopEdges;
     bool            fHideCDROMsSubMenu;

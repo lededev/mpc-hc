@@ -1834,6 +1834,18 @@ CString ReftimeToString3(const REFERENCE_TIME& rtVal)
     return strTemp;
 }
 
+//for compatibility with mpc-be ReftimeToString2, which has option to exclude hours
+CStringW ReftimeToString4(REFERENCE_TIME rt, bool showZeroHours /* = true*/)
+{
+    if (rt == INT64_MIN) {
+        return L"INVALID TIME";
+    }
+
+    DVD_HMSF_TIMECODE tc = RT2HMSF(rt);
+
+    return DVDtimeToString(tc, showZeroHours);
+}
+
 CString DVDtimeToString(const DVD_HMSF_TIMECODE& rtVal, bool bAlwaysShowHours)
 {
     CString strTemp;
