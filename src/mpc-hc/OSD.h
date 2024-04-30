@@ -152,7 +152,7 @@ public:
 
     HRESULT Create(CWnd* pWnd);
 
-    void Start(CWnd* pWnd, IMFVideoMixerBitmap* pMFVMB, bool bShowSeekBar);
+    void Start(CWnd* pWnd, CComPtr<IMFVideoMixerBitmap> pMFVMB, bool bShowSeekBar);
     void Start(CWnd* pWnd, IMadVRTextOsd* pMVTO);
     void Start(CWnd* pWnd);
     void Stop();

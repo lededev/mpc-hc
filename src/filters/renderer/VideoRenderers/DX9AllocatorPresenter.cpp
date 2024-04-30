@@ -212,6 +212,7 @@ CDX9AllocatorPresenter::~CDX9AllocatorPresenter()
     m_pD3DDev     = nullptr;
     m_pD3DDevEx   = nullptr;
 
+    m_pAlphaBitmapTexture.Release();
     CleanupRenderingEngine();
 
     m_pD3D   = nullptr;
@@ -534,6 +535,10 @@ HRESULT CDX9AllocatorPresenter::CreateDevice(CString& _Error)
     m_pOSDTexture = nullptr;
     m_pOSDSurface = nullptr;
     m_pDirectDraw = nullptr;
+
+    m_bAlphaBitmapEnable = false;
+    m_pAlphaBitmapTexture.Release();
+    ZeroMemory(&m_AlphaBitmapParams, sizeof(m_AlphaBitmapParams));
 
     CleanupRenderingEngine();
 
@@ -1428,6 +1433,11 @@ STDMETHODIMP_(bool) CDX9AllocatorPresenter::Paint(bool bAll)
             }
             m_VMR9AlphaBitmap.dwFlags ^= VMRBITMAP_UPDATE;
 
+        }
+
+        if (m_bAlphaBitmapEnable && m_pAlphaBitmapTexture) {
+            CRect rcDst(rSrcPri);
+            AlphaBlt(rSrcPri, rcDst, m_pAlphaBitmapTexture);
         }
 
         if (rd->m_bResetStats) {

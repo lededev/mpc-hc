@@ -351,6 +351,8 @@ STDMETHODIMP CEVRAllocatorPresenter::NonDelegatingQueryInterface(REFIID riid, vo
         hr = GetInterface((IMFAsyncCallback*)this, ppv);
     } else if (riid == __uuidof(IMFVideoDisplayControl)) {
         hr = GetInterface((IMFVideoDisplayControl*)this, ppv);
+    } else if (riid == __uuidof(IMFVideoMixerBitmap)) {
+        hr = GetInterface((IMFVideoMixerBitmap*)this, ppv);
     } else if (riid == __uuidof(IEVRTrustedVideoPlugin)) {
         hr = GetInterface((IEVRTrustedVideoPlugin*)this, ppv);
     } else if (riid == IID_IQualProp) {
@@ -1371,50 +1373,50 @@ STDMETHODIMP CEVRAllocatorPresenter::RepaintVideo()
 
 STDMETHODIMP CEVRAllocatorPresenter::GetCurrentImage(BITMAPINFOHEADER *pBih, BYTE **pDib, DWORD *pcbDib, LONGLONG *pTimeStamp)
 {
-	if (!pBih || !pDib || !pcbDib) {
-		return E_POINTER;
-	}
-	CheckPointer(m_pD3DDevEx, E_ABORT);
+    if (!pBih || !pDib || !pcbDib) {
+        return E_POINTER;
+    }
+    CheckPointer(m_pD3DDevEx, E_ABORT);
 
-	HRESULT hr = S_OK;
-	const unsigned width  = m_windowRect.Width();
-	const unsigned height = m_windowRect.Height();
-	const unsigned len = width * height * 4;
+    HRESULT hr = S_OK;
+    const unsigned width  = m_windowRect.Width();
+    const unsigned height = m_windowRect.Height();
+    const unsigned len = width * height * 4;
 
-	memset(pBih, 0, sizeof(BITMAPINFOHEADER));
-	pBih->biSize      = sizeof(BITMAPINFOHEADER);
-	pBih->biWidth     = width;
-	pBih->biHeight    = height;
-	pBih->biBitCount  = 32;
-	pBih->biPlanes    = 1;
-	pBih->biSizeImage = DIBSIZE(*pBih);
+    memset(pBih, 0, sizeof(BITMAPINFOHEADER));
+    pBih->biSize      = sizeof(BITMAPINFOHEADER);
+    pBih->biWidth     = width;
+    pBih->biHeight    = height;
+    pBih->biBitCount  = 32;
+    pBih->biPlanes    = 1;
+    pBih->biSizeImage = DIBSIZE(*pBih);
 
-	BYTE* p = (BYTE*)CoTaskMemAlloc(len); // only this allocator can be used
-	if (!p) {
-		return E_OUTOFMEMORY;
-	}
+    BYTE* p = (BYTE*)CoTaskMemAlloc(len); // only this allocator can be used
+    if (!p) {
+        return E_OUTOFMEMORY;
+    }
 
-	CComPtr<IDirect3DSurface9> pBackBuffer;
-	CComPtr<IDirect3DSurface9> pDestSurface;
-	D3DLOCKED_RECT r;
-	if (FAILED(hr = m_pD3DDevEx->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &pBackBuffer))
-			|| FAILED(hr = m_pD3DDevEx->CreateRenderTarget(width, height, D3DFMT_X8R8G8B8, D3DMULTISAMPLE_NONE, 0, TRUE, &pDestSurface, nullptr))
-			|| (FAILED(hr = m_pD3DDevEx->StretchRect(pBackBuffer, m_windowRect, pDestSurface, nullptr, D3DTEXF_NONE)))
-			|| (FAILED(hr = pDestSurface->LockRect(&r, nullptr, D3DLOCK_READONLY)))) {
+    CComPtr<IDirect3DSurface9> pBackBuffer;
+    CComPtr<IDirect3DSurface9> pDestSurface;
+    D3DLOCKED_RECT r;
+    if (FAILED(hr = m_pD3DDevEx->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &pBackBuffer))
+            || FAILED(hr = m_pD3DDevEx->CreateRenderTarget(width, height, D3DFMT_X8R8G8B8, D3DMULTISAMPLE_NONE, 0, TRUE, &pDestSurface, nullptr))
+            || (FAILED(hr = m_pD3DDevEx->StretchRect(pBackBuffer, m_windowRect, pDestSurface, nullptr, D3DTEXF_NONE)))
+            || (FAILED(hr = pDestSurface->LockRect(&r, nullptr, D3DLOCK_READONLY)))) {
         CString Error = GetWindowsErrorMessage(hr, nullptr);
         TRACE_EVR(L"CEVRAllocatorPresenter::GetCurrentImage failed : %s", S_OK == hr ? L"S_OK" : Error.GetBuffer());
-		CoTaskMemFree(p);
-		return hr;
-	}
+        CoTaskMemFree(p);
+        return hr;
+    }
 
-	RetrieveBitmapData(width, height, 32, p, (BYTE*)r.pBits, r.Pitch);
+    RetrieveBitmapData(width, height, 32, p, (BYTE*)r.pBits, r.Pitch);
 
-	pDestSurface->UnlockRect();
+    pDestSurface->UnlockRect();
 
-	*pDib = p;
-	*pcbDib = len;
+    *pDib = p;
+    *pcbDib = len;
 
-	return S_OK;
+    return S_OK;
 }
 
 STDMETHODIMP CEVRAllocatorPresenter::SetBorderColor(COLORREF Clr)
@@ -1456,6 +1458,108 @@ STDMETHODIMP CEVRAllocatorPresenter::GetFullscreen(BOOL* pfFullscreen)
     return S_OK;
 }
 
+// IMFVideoMixerBitmap
+STDMETHODIMP CEVRAllocatorPresenter::ClearAlphaBitmap()
+{
+    CAutoLock cRenderLock(&m_RenderLock);
+    m_bAlphaBitmapEnable = false;
+
+    return S_OK;
+}
+
+STDMETHODIMP CEVRAllocatorPresenter::GetAlphaBitmapParameters(MFVideoAlphaBitmapParams *pBmpParms)
+{
+    CheckPointer(pBmpParms, E_POINTER);
+    CAutoLock cRenderLock(&m_RenderLock);
+
+    if (m_bAlphaBitmapEnable && m_pAlphaBitmapTexture) {
+        *pBmpParms = m_AlphaBitmapParams; // formal implementation, don't believe it
+        return S_OK;
+    } else {
+        return MF_E_NOT_INITIALIZED;
+    }
+}
+
+STDMETHODIMP CEVRAllocatorPresenter::SetAlphaBitmap(const MFVideoAlphaBitmap *pBmpParms)
+{
+    CheckPointer(pBmpParms, E_POINTER);
+    CAutoLock cRenderLock(&m_RenderLock);
+
+    CheckPointer(m_pD3DDevEx, E_ABORT);
+    HRESULT hr = S_OK;
+
+    if (pBmpParms->GetBitmapFromDC && pBmpParms->bitmap.hdc) {
+        HBITMAP hBitmap = (HBITMAP)GetCurrentObject(pBmpParms->bitmap.hdc, OBJ_BITMAP);
+        if (!hBitmap) {
+            return E_INVALIDARG;
+        }
+        DIBSECTION info = { 0 };
+        if (!::GetObjectW(hBitmap, sizeof(DIBSECTION), &info)) {
+            return E_INVALIDARG;
+        }
+        BITMAP& bm = info.dsBm;
+        if (!bm.bmWidth || !bm.bmHeight || bm.bmBitsPixel != 32 || !bm.bmBits) {
+            return E_INVALIDARG;
+        }
+
+        if (m_pAlphaBitmapTexture) {
+            D3DSURFACE_DESC desc = {};
+            m_pAlphaBitmapTexture->GetLevelDesc(0, &desc);
+            if (bm.bmWidth != desc.Width || bm.bmHeight != desc.Height) {
+                m_pAlphaBitmapTexture.Release();
+            }
+        }
+
+        if (!m_pAlphaBitmapTexture) {
+            hr = m_pD3DDevEx->CreateTexture(bm.bmWidth, bm.bmHeight, 1, D3DUSAGE_DYNAMIC, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &m_pAlphaBitmapTexture, nullptr);
+        }
+
+        if (SUCCEEDED(hr)) {
+            CComPtr<IDirect3DSurface9> pSurface;
+            hr = m_pAlphaBitmapTexture->GetSurfaceLevel(0, &pSurface);
+            if (SUCCEEDED(hr)) {
+                D3DLOCKED_RECT lr;
+                hr = pSurface->LockRect(&lr, nullptr, D3DLOCK_DISCARD);
+                if (S_OK == hr) {
+                    if (bm.bmWidthBytes == lr.Pitch) {
+                        memcpy(lr.pBits, bm.bmBits, bm.bmWidthBytes * bm.bmHeight);
+                    }
+                    else {
+                        LONG linesize = std::min(bm.bmWidthBytes, (LONG)lr.Pitch);
+                        BYTE* src = (BYTE*)bm.bmBits;
+                        BYTE* dst = (BYTE*)lr.pBits;
+                        for (LONG y = 0; y < bm.bmHeight; ++y) {
+                            memcpy(dst, src, linesize);
+                            src += bm.bmWidthBytes;
+                            dst += lr.Pitch;
+                        }
+                    }
+                    hr = pSurface->UnlockRect();
+                }
+            }
+        }
+    } else {
+        return E_INVALIDARG;
+    }
+
+    m_bAlphaBitmapEnable = SUCCEEDED(hr) && m_pAlphaBitmapTexture;
+
+    if (m_bAlphaBitmapEnable) {
+        hr = UpdateAlphaBitmapParameters(&pBmpParms->params);
+    }
+
+    return hr;
+}
+
+STDMETHODIMP CEVRAllocatorPresenter::UpdateAlphaBitmapParameters(const MFVideoAlphaBitmapParams *pBmpParms)
+{
+    CheckPointer(pBmpParms, E_POINTER);
+    CAutoLock cRenderLock(&m_RenderLock);
+
+    m_AlphaBitmapParams = *pBmpParms; // formal implementation, don't believe it
+
+    return S_OK;
+}
 
 // IEVRTrustedVideoPlugin
 STDMETHODIMP CEVRAllocatorPresenter::IsInTrustedVideoMode(BOOL* pYes)

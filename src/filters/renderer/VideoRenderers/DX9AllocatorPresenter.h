@@ -22,6 +22,7 @@
 #pragma once
 
 #include "DX9RenderingEngine.h"
+#include <evr9.h>
 
 #define VMRBITMAP_UPDATE    0x80000000
 #define NB_JITTER           126
@@ -94,6 +95,10 @@ namespace DSObjects
         CComPtr<IDirect3DSurface9>      m_pOSDSurface;
         CComPtr<ID3DXLine>              m_pLine;
         CComPtr<ID3DXFont>              m_pFont;
+        bool                            m_bAlphaBitmapEnable = false;
+        CComPtr<IDirect3DTexture9>      m_pAlphaBitmapTexture;
+        MFVideoAlphaBitmapParams        m_AlphaBitmapParams = {};
+
         CComPtr<ID3DXSprite>            m_pSprite;
 
         bool SettingsNeedResetDevice(CRenderersSettings& r);

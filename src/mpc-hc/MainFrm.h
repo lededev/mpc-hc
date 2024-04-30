@@ -286,6 +286,7 @@ private:
     CComPtr<IVMRMixerControl9> m_pVMRMC;
     CComPtr<IMFVideoDisplayControl> m_pMFVDC;
     CComPtr<IMFVideoProcessor> m_pMFVP;
+    CComPtr<IMFVideoMixerBitmap>    m_pMFVMB;
     CComPtr<IVMRWindowlessControl9> m_pVMRWC;
 
     CComPtr<ISubPicAllocatorPresenter> m_pCAP;

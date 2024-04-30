@@ -938,6 +938,10 @@ HRESULT CFGManager::Connect(IPin* pPinOut, IPin* pPinIn, bool bContinueRender)
                         m_pUnks.AddTail(pMB);
                     }
 
+                    if (CComQIPtr<IMFVideoMixerBitmap> pMFVMB = pBF) {
+                        m_pUnks.AddTail(pMFVMB);
+                    }
+
                     if (CComQIPtr<IMFGetService, &__uuidof(IMFGetService)> pMFGS = pBF) {
                         CComPtr<IMFVideoDisplayControl> pMFVDC;
                         CComPtr<IMFVideoMixerBitmap>    pMFMB;

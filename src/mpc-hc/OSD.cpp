@@ -80,14 +80,14 @@ COSD::COSD(CMainFrame* pMainFrame)
         m_colors[OSD_DEBUGCLR] = RGB(128, 136, 144);
     }
 
-    m_penBorder.CreatePen(PS_SOLID, 1, OSD_COLOR_BORDER);
-    m_brushCursor.CreateSolidBrush(OSD_COLOR_CURSOR);
-    m_brushBack.CreateSolidBrush(OSD_COLOR_BACKGROUND);
-    m_brushBar.CreateSolidBrush (OSD_COLOR_BAR);
-    m_brushBar2.CreateSolidBrush (OSD_COLOR_BAR2);
-    m_brushChapter.CreateSolidBrush(OSD_COLOR_CURSOR);
-    m_debugBrushBack.CreateSolidBrush(OSD_COLOR_DEBUGCLR);
-    m_debugPenBorder.CreatePen(PS_SOLID, 1, OSD_COLOR_BORDER);
+    m_penBorder.CreatePen(PS_SOLID, 1, m_colors[OSD_BORDER]);
+    m_brushCursor.CreateSolidBrush(m_colors[OSD_CURSOR]);
+    m_brushBack.CreateSolidBrush(m_colors[OSD_BACKGROUND]);
+    m_brushBar.CreateSolidBrush (m_colors[OSD_BAR]);
+    m_brushBar2.CreateSolidBrush (m_colors[OSD_BAR]);
+    m_brushChapter.CreateSolidBrush(m_colors[OSD_CURSOR]);
+    m_debugBrushBack.CreateSolidBrush(m_colors[OSD_DEBUGCLR]);
+    m_debugPenBorder.CreatePen(PS_SOLID, 1, m_colors[OSD_BORDER]);
 
     ZeroMemory(&m_BitmapInfo, sizeof(m_BitmapInfo));
 }
@@ -198,20 +198,19 @@ void COSD::UpdateBitmap()
 
         hbmpRender = CreateDIBSection(m_MemDC, &bmi, DIB_RGB_COLORS, nullptr, nullptr, 0);
         m_MemDC.SelectObject(hbmpRender);
-
         if (::GetObjectW(hbmpRender, sizeof(BITMAP), &m_BitmapInfo) != 0) {
             if (m_pMFVMB) {
                 ZeroMemory(&m_MFVAlphaBitmap, sizeof(m_MFVAlphaBitmap));
                 m_MFVAlphaBitmap.GetBitmapFromDC  = TRUE;
                 m_MFVAlphaBitmap.bitmap.hdc       = m_MemDC;
                 m_MFVAlphaBitmap.params.dwFlags   = MFVideoAlphaBitmap_SrcColorKey;
-                m_MFVAlphaBitmap.params.clrSrcKey = OSD_COLOR_TRANSPARENT;
+                m_MFVAlphaBitmap.params.clrSrcKey = m_colors[OSD_TRANSPARENT];
                 m_MFVAlphaBitmap.params.rcSrc     = m_rectWnd;
                 m_MFVAlphaBitmap.params.nrcDest   = { 0, 0, 1, 1 };
                 m_MFVAlphaBitmap.params.fAlpha    = 1.0;
             }
 
-            m_MemDC.SetTextColor(OSD_COLOR_TEXT);
+            m_MemDC.SetTextColor(m_colors[OSD_TEXT]);
             m_MemDC.SetBkMode(TRANSPARENT);
         }
 
@@ -233,7 +232,7 @@ void COSD::Reset()
     CalcFlybar();
 }
 
-void COSD::Start(CWnd* pWnd, IMFVideoMixerBitmap* pMFVMB, bool bShowSeekBar)
+void COSD::Start(CWnd* pWnd, CComPtr<IMFVideoMixerBitmap> pMFVMB, bool bShowSeekBar)
 {
     m_pMFVMB       = pMFVMB;
     m_pMVTO        = nullptr;
@@ -336,6 +335,7 @@ void COSD::CalcSeekbar()
 
 void COSD::CalcFlybar()
 {
+    return; //we don't support flybar--this should prevent mouse from finding a flybar rect
     if (m_pWnd) {
         m_pWnd->GetClientRect(&m_rectWnd);
 
@@ -399,7 +399,7 @@ void COSD::DrawSeekbar()
         }
 
         m_MemDC.SelectObject(m_SeekbarFont);
-        m_MemDC.SetTextColor(OSD_COLOR_CURSOR);
+        m_MemDC.SetTextColor(m_colors[OSD_CURSOR]);
         m_MemDC.DrawText(text, &m_rectPosText, DT_RIGHT | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX);
     }
 
