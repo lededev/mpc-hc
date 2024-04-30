@@ -1133,58 +1133,54 @@ void COSD::GradientFill(CDC* pDc, CRect* rc)
 {
     const CAppSettings& s = AfxGetAppSettings();
 
-    int R, G, B, R1, G1, B1, R_, G_, B_, R1_, G1_, B1_;
-    /*
-    R   = GetRValue(s.clrGrad1ABGR);
-    G   = GetGValue(s.clrGrad1ABGR);
-    B   = GetBValue(s.clrGrad1ABGR);
-    R1  = GetRValue(s.clrGrad2ABGR);
-    G1  = GetGValue(s.clrGrad2ABGR);
-    B1  = GetBValue(s.clrGrad2ABGR);
-    */
-    R1 = R = GetRValue(m_colors[OSD_BACKGROUND]);
-    G1 = G = GetGValue(m_colors[OSD_BACKGROUND]);
-    B1 = B = GetBValue(m_colors[OSD_BACKGROUND]);
+    COLORREF osdback   = m_colors[OSD_BACKGROUND];
+    COLORREF osdborder = m_colors[OSD_BORDER];
+    COLOR16 R, G, B, R1, G1, B1;
+    R = GetRValue(osdback);
+    G = GetGValue(osdback);
+    B = GetBValue(osdback);
+    R1 = GetRValue(osdborder);
+    G1 = GetGValue(osdborder);
+    B1 = GetBValue(osdborder);
+    R <<= 8;
+    G <<= 8;
+    B <<= 8;
+    R1 <<= 8;
+    G1 <<= 8;
+    B1 <<= 8;
+    COLOR16 alpha = (COLOR16)(s.nOSDTransparent << 8);
 
-    R_  = std::min(R + 32, 255);
-    R1_ = std::min(R1 + 32, 255);
-    G_  = std::min(G + 32, 255);
-    G1_ = std::min(G1 + 32, 255);
-    B_  = std::min(B + 32, 255);
-    B1_ = std::min(B1 + 32, 255);
-
-    int nOSDTransparent    = s.nOSDTransparent;
-    int nOSDBorder = 1;
+    int bordersize = 1;
 
     GRADIENT_RECT gr = {0, 1};
     TRIVERTEX tv[2] = {
-        {rc->left, rc->top, R * 256, G * 256, B * 256, nOSDTransparent * 256},
-        {rc->right, rc->bottom, R1 * 256, G1 * 256, B1 * 256, nOSDTransparent * 256},
+        {rc->left, rc->top, R, G, B, alpha},
+        {rc->right, rc->bottom, R, G, B, alpha},
     };
     pDc->GradientFill(tv, 2, &gr, 1, GRADIENT_FILL_RECT_V);
 
-    if (nOSDBorder > 0) {
+    if (bordersize > 0) {
         TRIVERTEX tv2[2] = {
-            {rc->left, rc->top, R_ * 256, G_ * 256, B_ * 256, nOSDTransparent * 256},
-            {rc->left + nOSDBorder, rc->bottom, R1_ * 256, G1_ * 256, B1_ * 256, nOSDTransparent * 256},
+            {rc->left, rc->top, R1, G1, B1, alpha},
+            {rc->left + bordersize, rc->bottom, R1, G1, B1, alpha},
         };
         pDc->GradientFill(tv2, 2, &gr, 1, GRADIENT_FILL_RECT_V);
 
         TRIVERTEX tv3[2] = {
-            {rc->right, rc->top, R_ * 256, G_ * 256, B_ * 256, nOSDTransparent * 256},
-            {rc->right - nOSDBorder, rc->bottom, R1_ * 256, G1_ * 256, B1_ * 256, nOSDTransparent * 256},
+            {rc->right, rc->top, R1, G1, B1, alpha},
+            {rc->right - bordersize, rc->bottom, R1, G1, B1, alpha},
         };
         pDc->GradientFill(tv3, 2, &gr, 1, GRADIENT_FILL_RECT_V);
 
         TRIVERTEX tv4[2] = {
-            {rc->left, rc->top, R_ * 256, G_ * 256, B_ * 256, nOSDTransparent * 256},
-            {rc->right, rc->top + nOSDBorder, R_ * 256, G_ * 256, B_ * 256, nOSDTransparent * 256},
+            {rc->left, rc->top, R1, G1, B1, alpha},
+            {rc->right, rc->top + bordersize, R1, G1, B1, alpha},
         };
         pDc->GradientFill(tv4, 2, &gr, 1, GRADIENT_FILL_RECT_V);
 
         TRIVERTEX tv5[2] = {
-            {rc->left, rc->bottom, R1_ * 256, G1_ * 256, B1_ * 256, nOSDTransparent * 256},
-            {rc->right, rc->bottom - nOSDBorder, R1_ * 256, G1_ * 256, B1_ * 256, nOSDTransparent * 256},
+            {rc->left, rc->bottom, R1, G1, B1, alpha},
+            {rc->right, rc->bottom - bordersize, R1, G1, B1, alpha},
         };
         pDc->GradientFill(tv5, 2, &gr, 1, GRADIENT_FILL_RECT_V);
     }
