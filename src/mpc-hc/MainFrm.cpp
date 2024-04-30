@@ -18652,9 +18652,6 @@ void CMainFrame::CloseMedia(bool bNextIsQueued/* = false*/)
     if (GetLoadState() == MLS::LOADING) {
         TRACE(_T("Media is still loading. Aborting graph.\n"));
 
-        // should be possible only in graph thread
-        ASSERT(m_bOpenedThroughThread);
-
         // tell OpenMediaPrivate() that we want to abort
         m_fOpeningAborted = true;
 
@@ -18670,23 +18667,29 @@ void CMainFrame::CloseMedia(bool bNextIsQueued/* = false*/)
             m_pGB->Abort(); // TODO: lock on graph objects somehow, this is not thread safe
         }
 
-        BeginWaitCursor();
-        if (WaitForSingleObject(m_evOpenPrivateFinished, 5000) == WAIT_TIMEOUT) { // TODO: it's really dangerous, decide if we should do it at all
-            // graph thread is taking too long to respond, we take extreme measures and terminate it
-            MessageBeep(MB_ICONEXCLAMATION);
-            ASSERT(FALSE);
-            ENSURE(TerminateThread(m_pGraphThread->m_hThread, DWORD_ERROR));
-            // then we recreate graph thread
-            bGraphTerminated = true;
-            CWinThread* newthread = AfxBeginThread(RUNTIME_CLASS(CGraphThread));
-            if (newthread) {
-                m_pGraphThread = (CGraphThread*)newthread;
-                m_pGraphThread->SetMainFrame(this);
-            } else {
-                m_pGraphThread = nullptr;
+        if (m_bOpenedThroughThread) {
+            BeginWaitCursor();
+            if (WaitForSingleObject(m_evOpenPrivateFinished, 5000) == WAIT_TIMEOUT) { // TODO: it's really dangerous, decide if we should do it at all
+                // graph thread is taking too long to respond, we take extreme measures and terminate it
+                MessageBeep(MB_ICONEXCLAMATION);
+                ASSERT(FALSE);
+                ENSURE(TerminateThread(m_pGraphThread->m_hThread, DWORD_ERROR));
+                // then we recreate graph thread
+                bGraphTerminated = true;
+                CWinThread* newthread = AfxBeginThread(RUNTIME_CLASS(CGraphThread));
+                if (newthread) {
+                    m_pGraphThread = (CGraphThread*)newthread;
+                    m_pGraphThread->SetMainFrame(this);
+                } else {
+                    m_pGraphThread = nullptr;
+                }
             }
+            EndWaitCursor();
+        } else {
+#ifndef DEBUG
+            exit(1);
+#endif
         }
-        EndWaitCursor();
 
         MSG msg;
         // purge possible queued OnFilePostOpenmedia()
