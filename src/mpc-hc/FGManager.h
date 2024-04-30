@@ -54,6 +54,8 @@ private:
     CComPtr<IUnknown> m_pUnkInner;
     DWORD m_dwRegister;
 
+    bool m_aborted;
+
     CStreamPath m_streampath;
     CAutoPtrArray<CStreamDeadEnd> m_deadends;
 

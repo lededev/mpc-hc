@@ -66,6 +66,7 @@ CFGManager::CFGManager(LPCTSTR pName, LPUNKNOWN pUnk, HWND hWnd, bool IsPreview)
     , m_transform()
     , m_override()
     , m_deadends()
+    , m_aborted(false)
 {
     m_pUnkInner.CoCreateInstance(CLSID_FilterGraph, GetOwner());
     m_pFM.CoCreateInstance(CLSID_FilterMapper2);
@@ -607,6 +608,10 @@ HRESULT CFGManager::Connect(IPin* pPinOut, IPin* pPinIn, bool bContinueRender)
 
     CheckPointer(pPinOut, E_POINTER);
 
+    if (m_aborted) {
+        return VFW_E_CANNOT_RENDER;
+    }
+
     HRESULT hr;
 
     if (S_OK != IsPinDirection(pPinOut, PINDIR_OUTPUT)
@@ -774,6 +779,10 @@ HRESULT CFGManager::Connect(IPin* pPinOut, IPin* pPinIn, bool bContinueRender)
 
         pos = fl.GetHeadPosition();
         while (pos) {
+            if (m_aborted) {
+                return VFW_E_CANNOT_RENDER;
+            }
+
             CFGFilter* pFGF = fl.GetNext(pos);
 
             // avoid pointless connection attempts
@@ -1107,6 +1116,8 @@ STDMETHODIMP CFGManager::Abort()
     // FIXME: this can hang
     //CAutoLock cAutoLock(this);
 
+    m_aborted = true;
+
     return CComQIPtr<IFilterGraph2>(m_pUnkInner)->Abort();
 }
 
@@ -1222,6 +1233,10 @@ STDMETHODIMP CFGManager::ConnectFilter(IBaseFilter* pBF, IPin* pPinIn)
     CAutoLock cAutoLock(this);
 
     CheckPointer(pBF, E_POINTER);
+
+    if (m_aborted) {
+        return VFW_E_CANNOT_RENDER;
+    }
 
     if (pPinIn && S_OK != IsPinDirection(pPinIn, PINDIR_INPUT)) {
         return VFW_E_INVALID_DIRECTION;
