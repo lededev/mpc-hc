@@ -18673,16 +18673,24 @@ void CMainFrame::CloseMedia(bool bNextIsQueued/* = false*/)
                 // graph thread is taking too long to respond, we take extreme measures and terminate it
                 MessageBeep(MB_ICONEXCLAMATION);
                 ASSERT(FALSE);
-                ENSURE(TerminateThread(m_pGraphThread->m_hThread, DWORD_ERROR));
-                // then we recreate graph thread
-                bGraphTerminated = true;
-                CWinThread* newthread = AfxBeginThread(RUNTIME_CLASS(CGraphThread));
-                if (newthread) {
-                    m_pGraphThread = (CGraphThread*)newthread;
-                    m_pGraphThread->SetMainFrame(this);
+#ifndef DEBUG
+                if (bNextIsQueued) {
+#endif
+                    ENSURE(TerminateThread(m_pGraphThread->m_hThread, DWORD_ERROR));
+                    // then we recreate graph thread
+                    bGraphTerminated = true;
+                    CWinThread* newthread = AfxBeginThread(RUNTIME_CLASS(CGraphThread));
+                    if (newthread) {
+                        m_pGraphThread = (CGraphThread*)newthread;
+                        m_pGraphThread->SetMainFrame(this);
+                    } else {
+                        m_pGraphThread = nullptr;
+                    }
+#ifndef DEBUG
                 } else {
-                    m_pGraphThread = nullptr;
+                    exit(1);
                 }
+#endif
             }
             EndWaitCursor();
         } else {
