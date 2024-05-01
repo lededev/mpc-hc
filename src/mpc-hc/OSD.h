@@ -218,6 +218,7 @@ private:
     void DrawWnd();
 
     void GradientFill(CDC* pDc, CRect* rc);
+    void SimpleFill(CDC* pDc, CRect* rc);
 
     void CreateFontInternal();
 

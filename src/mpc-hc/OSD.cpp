@@ -60,7 +60,7 @@ COSD::COSD(CMainFrame* pMainFrame)
     m_colors[OSD_TRANSPARENT] = RGB(0, 0, 0);
     if (AppIsThemeLoaded()) {
         m_colors[OSD_BACKGROUND] = CMPCTheme::ContentBGColor;
-        m_colors[OSD_BORDER] = CMPCTheme::WindowBorderColorDim;
+        m_colors[OSD_BORDER] = CMPCTheme::EditBorderColor;
         m_colors[OSD_TEXT] = CMPCTheme::TextFGColor;
         m_colors[OSD_BAR] = CMPCTheme::ScrollProgressColor;
         m_colors[OSD_CURSOR] = CMPCTheme::ScrollThumbDragColor;
@@ -468,7 +468,7 @@ void COSD::DrawMessage()
         //m_MemDC.EndPath();
         //m_MemDC.SelectClipPath(RGN_COPY);
 
-        GradientFill(&m_MemDC, &rectMessages);
+        SimpleFill(&m_MemDC, &rectMessages);
 
         UINT uFormat = DT_LEFT|DT_VCENTER|DT_NOPREFIX;
 
@@ -1127,6 +1127,13 @@ bool COSD::UpdateButtonImages()
     }
     */
     return false;
+}
+
+void COSD::SimpleFill(CDC* pDc, CRect* rc)
+{
+    pDc->SelectObject(m_brushBack);
+    pDc->SelectObject(m_penBorder);
+    pDc->Rectangle(rc);
 }
 
 void COSD::GradientFill(CDC* pDc, CRect* rc)
