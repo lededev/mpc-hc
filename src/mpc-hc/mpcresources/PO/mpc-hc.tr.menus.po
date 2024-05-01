@@ -25,7 +25,7 @@ msgstr "&Dosya"
 
 msgctxt "ID_FILE_OPENQUICK"
 msgid "&Quick Open File..."
-msgstr "&Hızlı dosya aç..."
+msgstr "&Tez dosya aç..."
 
 msgctxt "ID_FILE_OPENMEDIA"
 msgid "&Open File/URL..."
@@ -289,7 +289,7 @@ msgstr "&Parlak (2,2 Gama)"
 
 msgctxt "ID_VIEW_CM_AMBIENTLIGHT_DIM"
 msgid "&Dim (2.35 Gamma)"
-msgstr "&Sönük (2,35 Gama)"
+msgstr "&Soluk (2,35 Gama)"
 
 msgctxt "ID_VIEW_CM_AMBIENTLIGHT_DARK"
 msgid "D&ark (2.4 Gamma)"
@@ -409,7 +409,7 @@ msgstr "&En boy oranı"
 
 msgctxt "ID_ASPECTRATIO_DAR"
 msgid "&Default (DAR)"
-msgstr "&Varsayılan (DAR)"
+msgstr "&Olağan (DAR)"
 
 msgctxt "ID_ASPECTRATIO_4_3"
 msgid "&4:3"
@@ -513,7 +513,7 @@ msgstr "&Üstte kal"
 
 msgctxt "ID_ONTOP_DEFAULT"
 msgid "&Default"
-msgstr "&Varsayılan"
+msgstr "&Olağan"
 
 msgctxt "ID_ONTOP_ALWAYS"
 msgid "&Always"
@@ -521,7 +521,7 @@ msgstr "&Her zaman"
 
 msgctxt "ID_ONTOP_WHILEPLAYING"
 msgid "While &Playing"
-msgstr "Medya &oynatılırken"
+msgstr "&Medya oynatılırken"
 
 msgctxt "ID_ONTOP_WHILEPLAYINGVIDEO"
 msgid "While Playing &Video"

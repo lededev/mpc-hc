@@ -3099,11 +3099,11 @@ msgstr "Pencere boyutu -"
 
 msgctxt "IDS_SEEKBAR_HOVER_PREVIEW"
 msgid "Video Preview"
-msgstr "Video önizlemesi"
+msgstr ""
 
 msgctxt "IDS_SEEKBAR_HOVER_TOOLTIP"
 msgid "Seek Time"
-msgstr "Süre"
+msgstr ""
 
 msgctxt "IDS_AG_VIDFRM_ZOOM1"
 msgid "Video Frame Zoom 1"

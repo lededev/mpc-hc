@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the MPC-HC package.
 # Translators:
 # MPC HC <adiposegithub@gmail.com>, 2020
-# Łukasz Janik, 2024
+# Krzysztof Marcinek, 2024
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: MPC-HC\n"
 "POT-Creation-Date: 2017-07-30 20:54:11+0000\n"
 "PO-Revision-Date: 2020-01-02 07:46+0000\n"
-"Last-Translator: Łukasz Janik, 2024\n"
+"Last-Translator: Krzysztof Marcinek, 2024\n"
 "Language-Team: Polish (https://app.transifex.com/mpchc/teams/106126/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,17 +24,17 @@ msgid ""
 "\n"
 "It is recommended that you close all other applications before continuing."
 msgstr ""
-"Zostanie zainstalowane [name] na Twoim komputerze.\n"
+"Spowoduje to zainstalowanie [name] na komputerze.\n"
 "\n"
-"Zaleca się zamknięcie wszystkich innych aplikacji przed kontynuowaniem."
+"Przed kontynuowaniem zaleca się zamknięcie wszystkich innych aplikacji."
 
 msgctxt "Messages_WinVersionTooLowError"
 msgid "[name] requires Windows Vista or newer to run."
-msgstr "[name] wymaga systemu Windows Vista lub nowszego do uruchomienia."
+msgstr "[name] wymaga do działania systemu Windows Vista lub nowszego."
 
 msgctxt "CustomMessages_comp_mpciconlib"
 msgid "Icon Library"
-msgstr "Ikony plików multimedialnych"
+msgstr "Biblioteka ikon"
 
 msgctxt "CustomMessages_comp_mpcresources"
 msgid "Translations"
@@ -46,7 +46,7 @@ msgid ""
 "\n"
 "If you plan on installing MPC-HC again then you do not have to delete them."
 msgstr ""
-"Czy chcesz usunąć ustawienia MPC-HC?\n"
+"Czy chcesz również usunąć ustawienia MPC-HC?\n"
 "\n"
 "Jeśli planujesz ponownie zainstalować MPC-HC, nie musisz ich usuwać."
 
@@ -56,13 +56,13 @@ msgid ""
 "\n"
 "Your CPU does not have those capabilities."
 msgstr ""
-"Ta kompilacja MPC-HC wymaga procesora z obsługą zestawu instrukcji SSE2.\n"
+"Ta kompilacja MPC-HC wymaga procesora z obsługą rozszerzeń SSE2.\n"
 "\n"
 "Twój procesor ich nie obsługuje."
 
 msgctxt "CustomMessages_run_DownloadToolbarImages"
 msgid "Visit our Wiki page to download toolbar images"
-msgstr "Odwiedź naszą stronę Wiki aby pobrać więcej skórek panelu sterowania."
+msgstr "Odwiedź naszą stronę Wiki, aby pobrać obrazy paska sterowania"
 
 msgctxt "CustomMessages_tsk_AllUsers"
 msgid "For all users"
@@ -90,4 +90,4 @@ msgstr "Instalacja niestandardowa"
 
 msgctxt "CustomMessages_ViewChangelog"
 msgid "View Changelog"
-msgstr "Pokaż zmiany"
+msgstr "Zobacz listę zmian"

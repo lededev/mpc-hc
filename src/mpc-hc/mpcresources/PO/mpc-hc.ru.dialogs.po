@@ -1883,7 +1883,7 @@ msgstr "Тип подсказки:"
 
 msgctxt "IDD_PPAGETHEME_IDC_STATIC7"
 msgid "Preview width (% of screen)"
-msgstr "Ширина предпросмотра (% от экрана)"
+msgstr "Ширина превью (% от экрана)"
 
 msgctxt "IDD_PPAGETHEME_IDC_CHECK2"
 msgid "Show chapter marks on seekbar"

@@ -5,15 +5,15 @@
 # MPC HC <adiposegithub@gmail.com>, 2020
 # Michał Trzebiatowski <michtrz@gmail.com>, 2020
 # Mirosław Żylewicz, 2021
-# Łukasz Janik, 2024
 # Krzysztof Marcinek, 2024
+# Łukasz Janik, 2024
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: MPC-HC\n"
 "POT-Creation-Date: 2024-03-27 16:45:29+0000\n"
 "PO-Revision-Date: 2020-01-02 07:46+0000\n"
-"Last-Translator: Krzysztof Marcinek, 2024\n"
+"Last-Translator: Łukasz Janik, 2024\n"
 "Language-Team: Polish (https://app.transifex.com/mpchc/teams/106126/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -305,7 +305,7 @@ msgstr "Priorytet procesu powyżej normalnego"
 
 msgctxt "IDD_PPAGEPLAYER_IDC_CHECK14"
 msgid "Enable cover-art support"
-msgstr "Włącz wsparcie dla okładek"
+msgstr "Włącz wsparcie okładek dla plików audio"
 
 msgctxt "IDD_PPAGEPLAYER_IDC_STATIC"
 msgid "History"
@@ -409,7 +409,7 @@ msgstr "Kontrola"
 
 msgctxt "IDD_PPAGEPLAYBACK_IDC_STATIC"
 msgid "Volume step:"
-msgstr "Krok głośności:"
+msgstr "Zmiana głośności o:"
 
 msgctxt "IDD_PPAGEPLAYBACK_IDC_STATIC"
 msgid "%"
@@ -417,7 +417,7 @@ msgstr "%"
 
 msgctxt "IDD_PPAGEPLAYBACK_IDC_STATIC"
 msgid "Speed step:"
-msgstr "Krok prędkości:"
+msgstr "Zmiana prędkości o:"
 
 msgctxt "IDD_PPAGEPLAYBACK_IDC_STATIC"
 msgid "Playback"
@@ -425,7 +425,7 @@ msgstr "Odtwarzanie"
 
 msgctxt "IDD_PPAGEPLAYBACK_IDC_RADIO1"
 msgid "Play"
-msgstr "Odtwarzaj"
+msgstr "Odtwórz"
 
 msgctxt "IDD_PPAGEPLAYBACK_IDC_RADIO2"
 msgid "Repeat forever"
@@ -501,7 +501,7 @@ msgstr "Autom. wczytuj pliki audio"
 
 msgctxt "IDD_PPAGESUBTITLES_IDC_CHECK3"
 msgid "Override placement"
-msgstr "Nadpisanie położenia"
+msgstr "Wymuś położenie"
 
 msgctxt "IDD_PPAGESUBTITLES_IDC_STATIC1"
 msgid "Horizontal:"
@@ -826,7 +826,7 @@ msgstr "OK"
 
 msgctxt "IDD_PNSPRESET_DLG_CAPTION"
 msgid "PnS Frame Adjust Presets"
-msgstr "Ust. wstępne regulacji klatek PnS"
+msgstr "Ustawienia wstępne regulacji ramki PnS"
 
 msgctxt "IDD_PNSPRESET_DLG_IDC_BUTTON2"
 msgid "New"
@@ -1199,7 +1199,7 @@ msgstr "Pełny ekran D3D"
 
 msgctxt "IDD_PPAGEOUTPUT_IDC_DSVMR9ALTERNATIVEVSYNC"
 msgid "Alternative VSync"
-msgstr "Alternatywna synch. pion."
+msgstr "Alternatywna synchronizacja pionowa"
 
 msgctxt "IDD_PPAGEOUTPUT_IDC_DSVMR9LOADMIXER"
 msgid "VMR-9 Mixer Mode"
@@ -1219,7 +1219,7 @@ msgstr "Nasłuchiwaj portu:"
 
 msgctxt "IDD_PPAGEWEBSERVER_IDC_STATIC1"
 msgid "Launch in web browser..."
-msgstr "Uruchom w przeglądarce Internetowej..."
+msgstr "Uruchom w przeglądarce WWW..."
 
 msgctxt "IDD_PPAGEWEBSERVER_IDC_CHECK3"
 msgid "Enable compression"
@@ -1327,7 +1327,7 @@ msgstr "Sprawdzaj co:"
 
 msgctxt "IDD_PPAGEMISC_IDC_STATIC6"
 msgid "day(s)"
-msgstr "dzień/dni"
+msgstr "dzień (dni)"
 
 msgctxt "IDD_PPAGEMISC_IDC_STATIC"
 msgid "Settings management"
@@ -1407,7 +1407,7 @@ msgstr "Cyfrowe"
 
 msgctxt "IDD_PPAGECAPTURE_IDC_STATIC"
 msgid "Analog settings"
-msgstr "Ustawienia urz. analog."
+msgstr "Ustawienia urządzenia analogowe"
 
 msgctxt "IDD_PPAGECAPTURE_IDC_STATIC1"
 msgid "Video"
@@ -1423,7 +1423,7 @@ msgstr "Kraj"
 
 msgctxt "IDD_PPAGECAPTURE_IDC_STATIC"
 msgid "Digital settings (BDA)"
-msgstr "Ustawienia urz. cyfr. (BDA)"
+msgstr "Ustawienia urządzenia cyfrowego (BDA)"
 
 msgctxt "IDD_PPAGECAPTURE_IDC_STATIC4"
 msgid "Network Provider"
@@ -1475,7 +1475,7 @@ msgstr "kolumn"
 
 msgctxt "IDD_PPAGESYNC_IDC_SYNCNEAREST"
 msgid "Present at nearest VSync"
-msgstr "Wyświetlanie przy najbliższej synch. pion."
+msgstr "Wyświetlanie przy najbliższej synchronizacji pionowej"
 
 msgctxt "IDD_PPAGESYNC_IDC_STATIC5"
 msgid "Target sync offset:"
@@ -1527,7 +1527,7 @@ msgstr "Wyświetlacz"
 
 msgctxt "IDD_PPAGEFULLSCREEN_IDC_CHECK2"
 msgid "Use autochange fullscreen monitor mode"
-msgstr "Używaj automatycznej zmiany trybu pracy wyświetlacza"
+msgstr "Używaj autom. zmiany trybu pracy wyświetlacza"
 
 msgctxt "IDD_PPAGEFULLSCREEN_IDC_BUTTON1"
 msgid "Add"
@@ -1551,7 +1551,7 @@ msgstr "Zastosuj domyślny tryb po opuszczeniu trybu pełnoekranowego"
 
 msgctxt "IDD_PPAGEFULLSCREEN_IDC_RESTORERESCHECK"
 msgid "Restore resolution on program exit"
-msgstr "Przywróć rozdzielczość po wyłączeniu programu"
+msgstr "Przywróć rozdzielczość po wyjściu z programu"
 
 msgctxt "IDD_PPAGEFULLSCREEN_IDC_STATIC"
 msgid "Delay"
@@ -1716,7 +1716,7 @@ msgstr "PS 3.0"
 
 msgctxt "IDD_PPAGEADVANCED_IDC_STATIC"
 msgid "Advanced Settings, do not edit unless you know what you are doing."
-msgstr "Ustawienia zaawansowane, nie edytuj, chyba że wiesz, co robisz."
+msgstr "Ustawienia zaawansowane; nie edytuj ich, chyba że wiesz, co robisz."
 
 msgctxt "IDD_PPAGEADVANCED_IDC_RADIO1"
 msgid "True"
@@ -1749,7 +1749,7 @@ msgstr "Tryb wyłączny"
 msgctxt "IDD_PPAGEAUDIORENDERER_IDC_CHECK4"
 msgid "Ignore system channel mixer (always ignored in exclusive WASAPI mode)"
 msgstr ""
-"Zignoruj mikser kanałów systemowych (zawsze ignorowany w wyłącznym trybie "
+"Zignoruj mikser kanałów systemowych (zawsze ignorowany w trybie wyłącznym "
 "WASAPI)"
 
 msgctxt "IDD_PPAGEAUDIORENDERER_IDC_CHECK3"
@@ -1856,11 +1856,11 @@ msgstr "Motyw"
 
 msgctxt "IDD_PPAGETHEME_IDC_CHECK1"
 msgid "Use Modern Theme"
-msgstr "Użyj nowoczesnego motywu"
+msgstr "Użyj nowego motywu"
 
 msgctxt "IDD_PPAGETHEME_IDC_STATIC2"
 msgid "Modern Theme Color:"
-msgstr "Kolor nowoczesnego motywu:"
+msgstr "Kolor motywu:"
 
 msgctxt "IDD_PPAGETHEME_IDC_STATIC3"
 msgid "Control buttons size:"
@@ -1884,7 +1884,7 @@ msgstr "Typ podglądu:"
 
 msgctxt "IDD_PPAGETHEME_IDC_STATIC7"
 msgid "Preview width (% of screen)"
-msgstr "Szerokość podglądu (% ekranu)"
+msgstr "Szer. podglądu (% ekranu)"
 
 msgctxt "IDD_PPAGETHEME_IDC_CHECK2"
 msgid "Show chapter marks on seekbar"
@@ -1900,19 +1900,19 @@ msgstr "Ścieżka językowa"
 
 msgctxt "IDD_PPAGETHEME_IDC_CHECK4"
 msgid "Video Info"
-msgstr "Informacje o wideo"
+msgstr "Informacje o obrazie"
 
 msgctxt "IDD_PPAGETHEME_IDC_CHECK12"
 msgid "Audio Info"
-msgstr "Informacje o audio"
+msgstr "informacje o dźwięku"
 
 msgctxt "IDD_PPAGETHEME_IDC_CHECK5"
 msgid "FPS"
-msgstr "kl/s"
+msgstr "Klatki na sekundę"
 
 msgctxt "IDD_PPAGETHEME_IDC_CHECK6"
 msgid "A-B Marks"
-msgstr "Znaczniki A-B"
+msgstr "Znaczniki powtarzania A-B"
 
 msgctxt "IDD_PPAGETHEME_IDC_STATIC21"
 msgid "Language"
@@ -1928,7 +1928,7 @@ msgstr "Informacje na ekranie (OSD)"
 
 msgctxt "IDD_PPAGETHEME_IDC_SHOW_OSD"
 msgid "Show OSD (requires restart)"
-msgstr "Pokazuj OSD (wymagany restart)"
+msgstr "Pokazuj informacje (wymaga restartu)"
 
 msgctxt "IDD_PPAGETHEME_IDC_STATIC6"
 msgid "Font:"
@@ -1948,7 +1948,7 @@ msgstr "Zachowanie okna"
 
 msgctxt "IDD_PPAGETHEME_IDC_CHECK7"
 msgid "Limit window proportions on resize"
-msgstr "Zachowaj proporcje okna przy zmianie rozmiaru"
+msgstr "Zablokuj proporcje okna"
 
 msgctxt "IDD_PPAGETHEME_IDC_CHECK9"
 msgid "Snap to desktop edges"
@@ -1956,7 +1956,7 @@ msgstr "Przyciągaj do krawędzi pulpitu"
 
 msgctxt "IDD_PPAGETHEME_IDC_CHECK10"
 msgid "Hide Windowed Controls"
-msgstr "Ukryj elementy sterujące w oknie"
+msgstr "Ukryj elem. sterujące w trybie okna"
 
 msgctxt "IDD_PPAGETHEME_IDC_STATIC"
 msgid "Windows Integration"
@@ -1964,11 +1964,11 @@ msgstr "Integracja z Windows"
 
 msgctxt "IDD_PPAGETHEME_IDC_CHECK_ENHANCED_TASKBAR"
 msgid "Use enhanced taskbar features"
-msgstr "Użyj zaawansowanych funkcji paska zadań"
+msgstr "Użyj ulepszonych funkcji paska zadań"
 
 msgctxt "IDD_PPAGETHEME_IDC_CHECK11"
 msgid "Control via Windows UI (SMTC)"
-msgstr "Steruj przez Windows UI (SMTC)"
+msgstr "Steruj przez interfejs Windowsa (SMTC)"
 
 msgctxt "IDD_RAR_ENTRY_SELECTOR_CAPTION"
 msgid "Select Media from RAR"

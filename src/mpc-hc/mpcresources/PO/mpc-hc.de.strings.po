@@ -771,7 +771,7 @@ msgstr "Programm::Webinterface"
 
 msgctxt "IDD_FILEPROPDETAILS"
 msgid "Details"
-msgstr "&Details"
+msgstr "Einzelheiten"
 
 msgctxt "IDD_FILEPROPCLIP"
 msgid "Clip"

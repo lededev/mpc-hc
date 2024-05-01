@@ -676,7 +676,7 @@ msgctxt "IDD_PPAGETWEAKS_IDC_CHECK6"
 msgid ""
 "Prevent minimizing the player when in fullscreen on a non default monitor"
 msgstr ""
-"Oynatıcının varsayılan olmayan monitörde tam ekrandayken simge durumuna "
+"Oynatıcının etkin olmayan monitörde tam ekrandayken simge durumuna "
 "getirilmesine engel ol"
 
 msgctxt "IDD_PPAGETWEAKS_IDC_CHECK7"
@@ -885,7 +885,7 @@ msgstr "Tümünü seç"
 
 msgctxt "IDD_PPAGEACCELTBL_IDC_BUTTON2"
 msgid "Reset Selected"
-msgstr "Seçimi sıfırla"
+msgstr "Seçileni sıfırla"
 
 msgctxt "IDD_MEDIATYPES_DLG_CAPTION"
 msgid "Warning"
@@ -977,7 +977,7 @@ msgstr "İptal"
 
 msgctxt "IDD_PPAGESUBSTYLE_IDC_STATIC"
 msgid "Font"
-msgstr "Yazı tipi"
+msgstr "Yazı"
 
 msgctxt "IDD_PPAGESUBSTYLE_IDC_BUTTON1"
 msgid "Font"
@@ -985,7 +985,7 @@ msgstr "Yazı tipi"
 
 msgctxt "IDD_PPAGESUBSTYLE_IDC_STATIC"
 msgid "Spacing"
-msgstr "Aralık mesafesi"
+msgstr "Aralık"
 
 msgctxt "IDD_PPAGESUBSTYLE_IDC_STATIC"
 msgid "Angle (z,°)"
@@ -1253,7 +1253,7 @@ msgstr "Göz at..."
 
 msgctxt "IDD_PPAGEWEBSERVER_IDC_BUTTON2"
 msgid "Deploy..."
-msgstr "Çıkart..."
+msgstr "Konuşlandır..."
 
 msgctxt "IDD_PPAGEWEBSERVER_IDC_STATIC"
 msgid "Default page:"
@@ -1385,7 +1385,7 @@ msgstr "Kaydet"
 
 msgctxt "IDD_TUNER_SCAN_IDC_STATIC"
 msgid "S"
-msgstr "Kuv."
+msgstr "Güç"
 
 msgctxt "IDD_TUNER_SCAN_IDC_STATIC"
 msgid "Q"

@@ -185,7 +185,7 @@ msgstr "自動調整(&F)"
 
 msgctxt "POPUP"
 msgid "R&enderer Settings"
-msgstr "レンダラの設定(&E)"
+msgstr "レンダラーの設定(&E)"
 
 msgctxt "ID_VIEW_TEARING_TEST"
 msgid "&Tearing Test"
@@ -361,11 +361,11 @@ msgstr "リセット(&E)"
 
 msgctxt "ID_VIEW_RESET_DEFAULT"
 msgid "Reset to &default renderer settings"
-msgstr "既定のレンダラの設定にリセット(&D)"
+msgstr "既定のレンダラーの設定にリセット(&D)"
 
 msgctxt "ID_VIEW_RESET_OPTIMAL"
 msgid "Reset to &optimal renderer settings"
-msgstr "最適なレンダラの設定にリセット(&O)"
+msgstr "最適なレンダラーの設定にリセット(&O)"
 
 msgctxt "POPUP"
 msgid "Video &Frame"
@@ -437,7 +437,7 @@ msgstr "正方形ピクセルを想定 (&SAR)"
 
 msgctxt "ID_VIEW_VF_COMPMONDESKARDIFF"
 msgid "&Correct Monitor/Desktop AR Diff"
-msgstr "モニタとデスクトップの縦横比の相違を補正(&C)"
+msgstr "モニターとデスクトップの縦横比の相違を補正(&C)"
 
 msgctxt "POPUP"
 msgid "P&nS Frame Adjust"
@@ -653,11 +653,11 @@ msgstr "再生速度 標準(&E)"
 
 msgctxt "ID_FILTERS"
 msgid "&Filters"
-msgstr "フィルタ(&F)"
+msgstr "フィルター(&F)"
 
 msgctxt "ID_SHADERS"
 msgid "S&haders"
-msgstr "シェーダ(&H)"
+msgstr "シェーダー(&H)"
 
 msgctxt "ID_AUDIOS"
 msgid "&Audio Track"
@@ -697,11 +697,11 @@ msgstr "何もしない(&T)"
 
 msgctxt "ID_AFTERPLAYBACK_PLAYNEXT"
 msgid "Play &next file in the folder"
-msgstr "フォルダ内を順次再生(&N)"
+msgstr "フォルダー内を順次再生(&N)"
 
 msgctxt "ID_AFTERPLAYBACK_MONITOROFF"
 msgid "Turn off the &monitor"
-msgstr "モニタの電源を切る(&M)"
+msgstr "モニターの電源を切る(&M)"
 
 msgctxt "ID_AFTERPLAYBACK_EXIT"
 msgid "&Exit"

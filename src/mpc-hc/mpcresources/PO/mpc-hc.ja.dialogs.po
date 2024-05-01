@@ -10,7 +10,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MPC-HC\n"
-"POT-Creation-Date: 2024-02-10 16:52:19+0000\n"
+"POT-Creation-Date: 2024-03-27 16:45:29+0000\n"
 "PO-Revision-Date: 2020-01-02 07:46+0000\n"
 "Last-Translator: ever_green, 2024\n"
 "Language-Team: Japanese (https://app.transifex.com/mpchc/teams/106126/ja/)\n"
@@ -66,7 +66,7 @@ msgstr "プレビュー"
 
 msgctxt "IDD_CAPTURE_DLG_IDC_STATIC"
 msgid "V/A Buffers:"
-msgstr "V/A バッファ:"
+msgstr "V/A バッファー:"
 
 msgctxt "IDD_CAPTURE_DLG_IDC_CHECK5"
 msgid "Audio to wav"
@@ -78,7 +78,7 @@ msgstr "開始"
 
 msgctxt "IDD_PPAGEAUDIOSWITCHER_IDC_CHECK2"
 msgid "Enable built-in audio switcher filter (requires restart)"
-msgstr "内蔵の音声切り替えフィルタを有効にする (再起動が必要)"
+msgstr "内蔵の音声切り替えフィルターを有効にする (再起動が必要)"
 
 msgctxt "IDD_PPAGEAUDIOSWITCHER_IDC_CHECK5"
 msgid "Normalize"
@@ -164,7 +164,7 @@ msgctxt "IDD_OPEN_DLG_IDC_STATIC"
 msgid ""
 "Type the address of a movie or audio file (on the Internet or your computer)"
 " and the player will open it for you."
-msgstr "インターネットやコンピュータにある再生したい動画やオーディオ ファイルのアドレスを入力してください。"
+msgstr "インターネットやコンピューターにある再生したい動画やオーディオ ファイルのアドレスを入力してください。"
 
 msgctxt "IDD_OPEN_DLG_IDC_STATIC"
 msgid "Open:"
@@ -477,7 +477,7 @@ msgstr "音声:"
 
 msgctxt "IDD_PPAGEPLAYBACK_IDC_CHECK4"
 msgid "Allow overriding external splitter choice"
-msgstr "外部スプリッタでの選択の上書きを許可する"
+msgstr "外部スプリッターでの選択の上書きを許可する"
 
 msgctxt "IDD_PPAGEPLAYBACK_IDC_STATIC"
 msgid "Open settings"
@@ -485,11 +485,11 @@ msgstr "開くの設定"
 
 msgctxt "IDD_PPAGEPLAYBACK_IDC_CHECK7"
 msgid "Use worker thread to construct the filter graph"
-msgstr "ワーカー スレッドを使用してフィルタ グラフを作成する"
+msgstr "ワーカー スレッドを使用してフィルター グラフを作成する"
 
 msgctxt "IDD_PPAGEPLAYBACK_IDC_CHECK6"
 msgid "Report pins which fail to render"
-msgstr "表示に失敗したピンを報告する"
+msgstr "レンダリングに失敗したピンを報告する"
 
 msgctxt "IDD_PPAGEPLAYBACK_IDC_CHECK2"
 msgid "Auto-load audio files"
@@ -529,7 +529,7 @@ msgstr "テクスチャの設定 (変更を有効にするにはビデオを開�
 
 msgctxt "IDD_PPAGESUBTITLES_IDC_STATIC"
 msgid "Sub pictures to buffer:"
-msgstr "先読みサブ ピクチャ数:"
+msgstr "先読みサブ ピクチャー数:"
 
 msgctxt "IDD_PPAGESUBTITLES_IDC_STATIC"
 msgid "Maximum texture resolution:"
@@ -557,11 +557,11 @@ msgstr "% でアニメーション化する"
 
 msgctxt "IDD_PPAGESUBTITLES_IDC_CHECK_ALLOW_DROPPING_SUBPIC"
 msgid "Allow dropping some subpictures if the queue is running late"
-msgstr "キューが遅れている場合に、サブピクチャの欠落を許可する"
+msgstr "キューが遅れている場合に、サブピクチャーの欠落を許可する"
 
 msgctxt "IDD_PPAGESUBTITLES_IDC_STATIC"
 msgid "Renderer Layout"
-msgstr "レンダラのレイアウト"
+msgstr "レンダラーのレイアウト"
 
 msgctxt "IDD_PPAGESUBTITLES_IDC_CHECK_SUB_AR_COMPENSATION"
 msgid "Apply aspect ratio compensation for anamorphic videos"
@@ -609,7 +609,7 @@ msgstr "既定のプログラムに設定(&D)"
 
 msgctxt "IDD_PPAGEFORMATS_IDC_STATIC"
 msgid "Explorer Context Menu"
-msgstr "エクスプローラのコンテキスト メニュー"
+msgstr "エクスプローラーのコンテキスト メニュー"
 
 msgctxt "IDD_PPAGEFORMATS_IDC_CHECK6"
 msgid "Directory"
@@ -649,7 +649,7 @@ msgstr "既定"
 
 msgctxt "IDD_PPAGETWEAKS_IDC_CHECK3"
 msgid "Auto-hide the mouse pointer during playback in windowed mode"
-msgstr "ウィンドウ モードで再生中にマウス ポインタを自動で隠す"
+msgstr "ウィンドウ モードで再生中にマウス ポインターを自動で隠す"
 
 msgctxt "IDD_PPAGETWEAKS_IDC_CHECK4"
 msgid "Display \"Now Playing\" information in Skype's mood message"
@@ -662,13 +662,13 @@ msgstr "Logitech LCD のサポートを有効にする (試験的)"
 msgctxt "IDD_PPAGETWEAKS_IDC_CHECK6"
 msgid ""
 "Prevent minimizing the player when in fullscreen on a non default monitor"
-msgstr "既定以外のモニタで全画面表示時にプレーヤーを最小化しないようにする"
+msgstr "既定以外のモニターで全画面表示時にプレーヤーを最小化しないようにする"
 
 msgctxt "IDD_PPAGETWEAKS_IDC_CHECK7"
 msgid ""
 "Open previous/next file in folder on \"Skip back/forward\" when there is "
 "only one item in playlist"
-msgstr "再生リストに項目が 1 つしかない場合、 「戻る/進む」 でフォルダ内の前/次のファイルを開く"
+msgstr "再生リストに項目が 1 つしかない場合、 「戻る/進む」 でフォルダー内の前/次のファイルを開く"
 
 msgctxt "IDD_PPAGETWEAKS_IDC_FASTSEEK_CHECK"
 msgid "Fast seek (on keyframe)"
@@ -676,7 +676,7 @@ msgstr "高速シーク (キーフレームに)"
 
 msgctxt "IDD_PPAGEEXTERNALFILTERS_IDC_BUTTON1"
 msgid "Add Filter..."
-msgstr "フィルタを追加..."
+msgstr "フィルターを追加..."
 
 msgctxt "IDD_PPAGEEXTERNALFILTERS_IDC_BUTTON2"
 msgid "Remove"
@@ -879,11 +879,12 @@ msgid ""
 "MPC-HC could not render some of the pins in the graph, you may not have the "
 "needed codecs or filters installed on the system."
 msgstr ""
-"MPC-HC は、グラフのピンの一部を表示できませんでした。必要なコーデックまたはフィルタがシステムにインストールされていない可能性があります。"
+"MPC-HC "
+"は、グラフの一部のピンをレンダリングできませんでした。必要なコーデックまたはフィルターがシステムにインストールされていない可能性があります。"
 
 msgctxt "IDD_MEDIATYPES_DLG_IDC_STATIC2"
 msgid "The following pin(s) failed to find a connectable filter:"
-msgstr "次のピンが接続可能なフィルタを見つけられませんでした:"
+msgstr "次のピンが接続可能なフィルターを見つけられませんでした:"
 
 msgctxt "IDD_MEDIATYPES_DLG_IDOK"
 msgid "Close"
@@ -943,7 +944,7 @@ msgstr "ピクセル"
 
 msgctxt "IDD_ADDREGFILTER_CAPTION"
 msgid "Select Filter"
-msgstr "フィルタを選択"
+msgstr "フィルターを選択"
 
 msgctxt "IDD_ADDREGFILTER_IDC_BUTTON1"
 msgid "Browse..."
@@ -1081,11 +1082,11 @@ msgstr "スタンドアロン版や代替フィルタを使用する場合は、
 
 msgctxt "IDD_PPAGEINTERNALFILTERS_IDC_STATIC"
 msgid "Source Filters"
-msgstr "ソース フィルタ"
+msgstr "ソース フィルター"
 
 msgctxt "IDD_PPAGEINTERNALFILTERS_IDC_STATIC"
 msgid "Transform Filters"
-msgstr "変換フィルタ"
+msgstr "変換フィルター"
 
 msgctxt "IDD_PPAGEINTERNALFILTERS_IDC_STATIC"
 msgid "Internal LAV Filters settings"
@@ -1093,15 +1094,15 @@ msgstr "内部 LAV Filters の設定"
 
 msgctxt "IDD_PPAGEINTERNALFILTERS_IDC_SPLITTER_CONF"
 msgid "Splitter"
-msgstr "スプリッタ"
+msgstr "スプリッター"
 
 msgctxt "IDD_PPAGEINTERNALFILTERS_IDC_VIDEO_DEC_CONF"
 msgid "Video decoder"
-msgstr "ビデオ デコーダ"
+msgstr "ビデオ デコーダー"
 
 msgctxt "IDD_PPAGEINTERNALFILTERS_IDC_AUDIO_DEC_CONF"
 msgid "Audio decoder"
-msgstr "オーディオ デコーダ"
+msgstr "オーディオ デコーダー"
 
 msgctxt "IDD_PPAGELOGO_IDC_RADIO1"
 msgid "Internal:"
@@ -1117,7 +1118,7 @@ msgstr "参照..."
 
 msgctxt "IDD_PPAGELOGO_IDC_CHECK1"
 msgid "Apply Monitor Color Profile"
-msgstr "モニタ カラー プロファイルを適用する"
+msgstr "モニター カラー プロファイルを適用する"
 
 msgctxt "IDD_PPAGEOUTPUT_IDC_STATIC"
 msgid "DirectShow Video"
@@ -1141,7 +1142,7 @@ msgstr "スクリーンショット"
 
 msgctxt "IDD_PPAGEOUTPUT_IDC_STATIC"
 msgid "Shaders"
-msgstr "シェーダ"
+msgstr "シェーダー"
 
 msgctxt "IDD_PPAGEOUTPUT_IDC_STATIC"
 msgid "Rotation"
@@ -1149,7 +1150,7 @@ msgstr "回転"
 
 msgctxt "IDD_PPAGEOUTPUT_IDC_STATIC"
 msgid "Audio Renderer"
-msgstr "オーディオ レンダラ"
+msgstr "オーディオ レンダラー"
 
 msgctxt "IDD_PPAGEOUTPUT_IDC_BUTTON2"
 msgid "Settings"
@@ -1157,7 +1158,7 @@ msgstr "設定"
 
 msgctxt "IDD_PPAGEOUTPUT_IDC_STATIC"
 msgid "Subtitle Renderer"
-msgstr "字幕レンダラ"
+msgstr "字幕レンダラー"
 
 msgctxt "IDD_PPAGEOUTPUT_IDC_STATIC"
 msgid "VMR-9 (renderless) and EVR (CP) settings"
@@ -1169,11 +1170,11 @@ msgstr "サーフェス:"
 
 msgctxt "IDD_PPAGEOUTPUT_IDC_STATIC"
 msgid "Resizer:"
-msgstr "リサイザ:"
+msgstr "リサイザー:"
 
 msgctxt "IDD_PPAGEOUTPUT_IDC_D3D9DEVICE"
 msgid "Select D3D9 Render Device"
-msgstr "D3D9 レンダラ デバイスを選択する"
+msgstr "D3D9 レンダラー デバイスを選択する"
 
 msgctxt "IDD_PPAGEOUTPUT_IDC_RESETDEVICE"
 msgid "Reinitialize when changing display"
@@ -1189,15 +1190,15 @@ msgstr "代替の垂直同期"
 
 msgctxt "IDD_PPAGEOUTPUT_IDC_DSVMR9LOADMIXER"
 msgid "VMR-9 Mixer Mode"
-msgstr "VMR-9 ミキサ モード"
+msgstr "VMR-9 ミキサー モード"
 
 msgctxt "IDD_PPAGEOUTPUT_IDC_EVR_BUFFERS_TXT"
 msgid "EVR Buffers:"
-msgstr "EVR バッファ:"
+msgstr "EVR バッファー:"
 
 msgctxt "IDD_PPAGEOUTPUT_IDC_CACHESHADERS"
 msgid "Cache compiled Shaders"
-msgstr "コンパイルされたシェーダをキャッシュする"
+msgstr "コンパイルされたシェーダーをキャッシュする"
 
 msgctxt "IDD_PPAGEWEBSERVER_IDC_CHECK1"
 msgid "Listen on port:"
@@ -1205,7 +1206,7 @@ msgstr "待機するポート:"
 
 msgctxt "IDD_PPAGEWEBSERVER_IDC_STATIC1"
 msgid "Launch in web browser..."
-msgstr "ウェブ ブラウザで開く..."
+msgstr "ウェブ ブラウザーで開く..."
 
 msgctxt "IDD_PPAGEWEBSERVER_IDC_CHECK3"
 msgid "Enable compression"
@@ -1241,7 +1242,7 @@ msgstr "既定のページ:"
 
 msgctxt "IDD_PPAGEWEBSERVER_IDC_STATIC"
 msgid "CGI handlers: (.ext1=path1;.ext2=path2;...)"
-msgstr "CGI ハンドラ: (拡張子1=パス1; 拡張子2=パス2;...)"
+msgstr "CGI ハンドラー: (拡張子1=パス1; 拡張子2=パス2;...)"
 
 msgctxt "IDD_SUBTITLEDL_DLG_CAPTION"
 msgid "Download subtitles"
@@ -1413,7 +1414,7 @@ msgstr "デジタルの設定 (BDA)"
 
 msgctxt "IDD_PPAGECAPTURE_IDC_STATIC4"
 msgid "Network Provider"
-msgstr "ネットワーク プロバイダ"
+msgstr "ネットワーク プロバイダー"
 
 msgctxt "IDD_PPAGECAPTURE_IDC_STATIC5"
 msgid "Tuner"
@@ -1425,15 +1426,15 @@ msgstr "受信機"
 
 msgctxt "IDD_PPAGECAPTURE_IDC_PPAGECAPTURE_ST10"
 msgid "Channel switching approach:"
-msgstr "チャネル スイッチング アプローチ:"
+msgstr "チャンネル スイッチング アプローチ:"
 
 msgctxt "IDD_PPAGECAPTURE_IDC_PPAGECAPTURE_ST11"
 msgid "Rebuild filter graph"
-msgstr "フィルタ グラフを再構築"
+msgstr "フィルター グラフを再構築"
 
 msgctxt "IDD_PPAGECAPTURE_IDC_PPAGECAPTURE_ST12"
 msgid "Stop filter graph"
-msgstr "フィルタ グラフを停止"
+msgstr "フィルター グラフを停止"
 
 msgctxt "IDD_PPAGESYNC_IDC_SYNCVIDEO"
 msgid "Sync video to display"
@@ -1509,11 +1510,11 @@ msgstr "再生終了時に全画面表示を解除する"
 
 msgctxt "IDD_PPAGEFULLSCREEN_IDC_STATIC"
 msgid "Fullscreen monitor"
-msgstr "全画面表示モニタ"
+msgstr "全画面表示モニター"
 
 msgctxt "IDD_PPAGEFULLSCREEN_IDC_CHECK2"
 msgid "Use autochange fullscreen monitor mode"
-msgstr "全画面表示モニタ モードの自動変更を使用する"
+msgstr "全画面表示モニター モードの自動変更を使用する"
 
 msgctxt "IDD_PPAGEFULLSCREEN_IDC_BUTTON1"
 msgid "Add"
@@ -1533,7 +1534,7 @@ msgstr "下へ"
 
 msgctxt "IDD_PPAGEFULLSCREEN_IDC_CHECK3"
 msgid "Apply default monitor mode on fullscreen exit"
-msgstr "全画面表示終了時に既定のモニタ モードを適用する"
+msgstr "全画面表示終了時に既定のモニター モードを適用する"
 
 msgctxt "IDD_PPAGEFULLSCREEN_IDC_RESTORERESCHECK"
 msgid "Restore resolution on program exit"
@@ -1569,7 +1570,7 @@ msgstr "埋め込まれた字幕を無視する"
 
 msgctxt "IDD_PPAGESUBMISC_IDC_STATIC"
 msgid "Autoload paths"
-msgstr "字幕ファイルの自動読み込みパス"
+msgstr "自動読み込みパス"
 
 msgctxt "IDD_PPAGESUBMISC_IDC_BUTTON1"
 msgid "Reset"
@@ -1586,7 +1587,7 @@ msgstr "ローカルで見つからない場合は、字幕を自動的に検索
 msgctxt "IDD_PPAGESUBMISC_IDC_CHECK5"
 msgid ""
 "Prefer subtitles for hearing impaired (when indicated by subtitles provider)"
-msgstr "聴覚障害者用の字幕を優先する (字幕プロバイダによって示された場合)"
+msgstr "聴覚障害者用の字幕を優先する (字幕プロバイダーによって示された場合)"
 
 msgctxt "IDD_PPAGESUBMISC_IDC_STATIC1"
 msgid "Ignore files containing any of the following word(s):"
@@ -1599,7 +1600,7 @@ msgstr "言語の優先順位:"
 msgctxt "IDD_PPAGESUBMISC_IDC_CHECK_AUTOSAVE_ONLINE_SUBTITLE"
 msgid ""
 "Automatically save downloaded subtitles to the first autoload path folder"
-msgstr "ダウンロードした字幕を最初の自動読み込みパス フォルダに自動的に保存する"
+msgstr "ダウンロードした字幕を最初の自動読み込みパス フォルダーに自動的に保存する"
 
 msgctxt "IDD_UPDATE_DIALOG_CAPTION"
 msgid "Update Checker"
@@ -1621,11 +1622,11 @@ msgctxt "IDD_PPAGESHADERS_IDC_STATIC"
 msgid ""
 "Shaders contain special effects which can be added to the video rendering "
 "process."
-msgstr "シェーダには、ビデオ レンダリング プロセスに追加できる特殊効果が含まれています。"
+msgstr "シェーダーには、ビデオ レンダリング プロセスに追加できる特殊効果が含まれています。"
 
 msgctxt "IDD_PPAGESHADERS_IDC_BUTTON12"
 msgid "Add shader file"
-msgstr "シェーダ ファイルを追加"
+msgstr "シェーダー ファイルを追加"
 
 msgctxt "IDD_PPAGESHADERS_IDC_BUTTON13"
 msgid "Remove"
@@ -1633,15 +1634,15 @@ msgstr "消去"
 
 msgctxt "IDD_PPAGESHADERS_IDC_BUTTON1"
 msgid "Add to pre-resize"
-msgstr "リサイズ前のシェーダに追加"
+msgstr "リサイズ前のシェーダーに追加"
 
 msgctxt "IDD_PPAGESHADERS_IDC_BUTTON2"
 msgid "Add to post-resize"
-msgstr "リサイズ後のシェーダに追加"
+msgstr "リサイズ後のシェーダーに追加"
 
 msgctxt "IDD_PPAGESHADERS_IDC_STATIC"
 msgid "Shader presets"
-msgstr "シェーダ プリセット"
+msgstr "シェーダー プリセット"
 
 msgctxt "IDD_PPAGESHADERS_IDC_BUTTON3"
 msgid "Load"
@@ -1657,21 +1658,21 @@ msgstr "削除"
 
 msgctxt "IDD_PPAGESHADERS_IDC_STATIC"
 msgid "Active pre-resize shaders"
-msgstr "アクティブなリサイズ前のシェーダ"
+msgstr "アクティブなリサイズ前のシェーダー"
 
 msgctxt "IDD_PPAGESHADERS_IDC_STATIC"
 msgid "Active post-resize shaders"
-msgstr "アクティブなリサイズ後のシェーダ"
+msgstr "アクティブなリサイズ後のシェーダー"
 
 msgctxt "IDD_PPAGESHADERS_IDC_STATIC5"
 msgid ""
 "MPC-VR does not support pre-resize shaders. It will run them after resize, "
 "before the post-resize shaders."
-msgstr "MPC-VR は、リサイズ前のシェーダをサポートしていません。 リサイズ後、リサイズ後のシェーダの前に実行されます。"
+msgstr "MPC-VR は、リサイズ前のシェーダーをサポートしていません。 リサイズ後、リサイズ後のシェーダーの前に実行されます。"
 
 msgctxt "IDD_DEBUGSHADERS_DLG_CAPTION"
 msgid "Debug Shaders"
-msgstr "シェーダ デバッガ"
+msgstr "シェーダー デバッガー"
 
 msgctxt "IDD_DEBUGSHADERS_DLG_IDC_STATIC"
 msgid "Debug Information"
@@ -1711,7 +1712,7 @@ msgstr "既定"
 
 msgctxt "IDD_PPAGEAUDIORENDERER_IDC_CHECK5"
 msgid "SaneAR Audio Renderer Enabled"
-msgstr "SaneAR オーディオ レンダラが有効"
+msgstr "SaneAR オーディオ レンダラーが有効"
 
 msgctxt "IDD_PPAGEAUDIORENDERER_IDC_STATIC5"
 msgid "Device"
@@ -1762,7 +1763,7 @@ msgstr ""
 
 msgctxt "IDD_PPAGEAUDIORENDERER_IDC_BUTTON3"
 msgid "MPC Audio Renderer Settings"
-msgstr "MPC オーディオ レンダラの設定"
+msgstr "MPC オーディオ レンダラーの設定"
 
 msgctxt "IDD_SAVEIMAGEDIALOGTEMPL_IDC_STATIC"
 msgid "JPEG quality:"
@@ -1876,7 +1877,7 @@ msgstr "ビデオ情報"
 
 msgctxt "IDD_PPAGETHEME_IDC_CHECK12"
 msgid "Audio Info"
-msgstr ""
+msgstr "オーディオ情報"
 
 msgctxt "IDD_PPAGETHEME_IDC_CHECK5"
 msgid "FPS"
@@ -1944,12 +1945,12 @@ msgstr "Windows UI (SMTC) による制御"
 
 msgctxt "IDD_RAR_ENTRY_SELECTOR_CAPTION"
 msgid "Select Media from RAR"
-msgstr ""
+msgstr "RAR からメディアを選択する"
 
 msgctxt "IDD_RAR_ENTRY_SELECTOR_IDOK"
 msgid "Select"
-msgstr ""
+msgstr "選択"
 
 msgctxt "IDD_RAR_ENTRY_SELECTOR_IDCANCEL"
 msgid "Cancel"
-msgstr ""
+msgstr "キャンセル"
