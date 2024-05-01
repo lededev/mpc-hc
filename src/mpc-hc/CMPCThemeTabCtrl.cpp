@@ -88,7 +88,7 @@ void CMPCThemeTabCtrl::doDrawItem(int nItem, CRect rText, bool isSelected, CDC* 
         ::GetCursorPos(&ptCursor);
         ScreenToClient(&ptCursor);
 
-        UINT textFormat = DT_VCENTER | DT_SINGLELINE | DT_END_ELLIPSIS | DT_NOPREFIX;
+        UINT textFormat = DT_VCENTER | DT_SINGLELINE | DT_END_ELLIPSIS;
         textFormat |= DT_LEFT;
         rText.left += 6;
 
