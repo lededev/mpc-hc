@@ -62,8 +62,8 @@ COSD::COSD(CMainFrame* pMainFrame)
         m_colors[OSD_BACKGROUND] = CMPCTheme::ContentBGColor;
         m_colors[OSD_BORDER] = CMPCTheme::WindowBorderColorDim;
         m_colors[OSD_TEXT] = CMPCTheme::TextFGColor;
-        m_colors[OSD_BAR] = CMPCTheme::ScrollBGColor;
-        m_colors[OSD_CURSOR] = CMPCTheme::ScrollThumbColor;
+        m_colors[OSD_BAR] = CMPCTheme::ScrollProgressColor;
+        m_colors[OSD_CURSOR] = CMPCTheme::ScrollThumbDragColor;
         m_colors[OSD_DEBUGCLR] = CMPCTheme::DebugColorRed;
 
         for (int a = OSD_TRANSPARENT + 1; a < std::size(m_colors); a++) {
@@ -305,8 +305,8 @@ void COSD::CalcSeekbar()
 
         m_pWnd->GetClientRect(&m_rectWnd);
 
-        m_rectSeekBar.left   = m_rectWnd.left    + hor8;
-        m_rectSeekBar.right  = m_rectWnd.right   - hor8;
+        m_rectSeekBar.left   = m_rectWnd.left;
+        m_rectSeekBar.right  = m_rectWnd.right;
         m_rectSeekBar.top    = m_rectWnd.bottom  - SeekBarHeight;
         m_rectSeekBar.bottom = m_rectSeekBar.top + SeekBarHeight;
 
@@ -399,7 +399,7 @@ void COSD::DrawSeekbar()
         }
 
         m_MemDC.SelectObject(m_SeekbarFont);
-        m_MemDC.SetTextColor(m_colors[OSD_CURSOR]);
+        m_MemDC.SetTextColor(m_colors[OSD_TEXT]);
         m_MemDC.DrawText(text, &m_rectPosText, DT_RIGHT | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX);
     }
 
