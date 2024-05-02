@@ -72,6 +72,8 @@ BOOL CPPageFileInfoSheet::OnInitDialog()
     CRect r;
     GetDlgItem(ID_APPLY_NOW)->GetWindowRect(&r);
     ScreenToClient(r);
+    RemoveAnchor(IDOK); //otherwise it crashes when we add it later
+    AddAnchor(IDOK, BOTTOM_LEFT);
     GetDlgItem(IDOK)->MoveWindow(r);
 
     r.MoveToX(5);
@@ -83,6 +85,8 @@ BOOL CPPageFileInfoSheet::OnInitDialog()
     GetTabControl()->SetFocus();
 
     CMPCThemeUtil::enableWindows10DarkFrame(this);
+
+    AddAnchor(IDC_BUTTON_MI, BOTTOM_LEFT);
 
     return FALSE;  // return TRUE unless you set the focus to a control
 }

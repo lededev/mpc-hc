@@ -22,12 +22,12 @@
 
 #include <future>
 #include "mpc-hc_config.h"
-#include "CMPCThemePropertyPage.h"
+#include "CMPCThemeResizablePropertyPage.h"
 #include "CMPCThemeEdit.h"
 
 // CPPageFileMediaInfo dialog
 
-class CPPageFileMediaInfo : public CMPCThemePropertyPage
+class CPPageFileMediaInfo : public CMPCThemeResizablePropertyPage
 {
     DECLARE_DYNAMIC(CPPageFileMediaInfo)
 

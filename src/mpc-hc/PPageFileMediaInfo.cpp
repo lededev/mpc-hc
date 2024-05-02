@@ -35,9 +35,9 @@ using namespace MediaInfoDLL;
 
 // CPPageFileMediaInfo dialog
 
-IMPLEMENT_DYNAMIC(CPPageFileMediaInfo, CMPCThemePropertyPage)
+IMPLEMENT_DYNAMIC(CPPageFileMediaInfo, CMPCThemeResizablePropertyPage)
 CPPageFileMediaInfo::CPPageFileMediaInfo(CString path, IFileSourceFilter* pFSF, IDvdInfo2* pDVDI, CMainFrame* pMainFrame)
-    : CMPCThemePropertyPage(CPPageFileMediaInfo::IDD, CPPageFileMediaInfo::IDD)
+    : CMPCThemeResizablePropertyPage(CPPageFileMediaInfo::IDD, CPPageFileMediaInfo::IDD)
     , m_fn(path)
     , m_path(path)
     , m_bSyncAnalysis(false)
@@ -174,7 +174,7 @@ BOOL CPPageFileMediaInfo::PreTranslateMessage(MSG* pMsg)
     return __super::PreTranslateMessage(pMsg);
 }
 
-BEGIN_MESSAGE_MAP(CPPageFileMediaInfo, CMPCThemePropertyPage)
+BEGIN_MESSAGE_MAP(CPPageFileMediaInfo, CMPCThemeResizablePropertyPage)
     ON_WM_SHOWWINDOW()
     ON_WM_DESTROY()
     ON_MESSAGE_VOID(WM_MEDIAINFO_READY, OnMediaInfoReady)
@@ -221,6 +221,8 @@ BOOL CPPageFileMediaInfo::OnInitDialog()
             PostMessage(WM_MEDIAINFO_READY); // then notify the window that MediaInfo analysis finished
         });
     }
+
+    AddAnchor(IDC_MIEDIT, TOP_LEFT, BOTTOM_RIGHT);
 
     return TRUE;  // return TRUE unless you set the focus to a control
     // EXCEPTION: OCX Property Pages should return FALSE
