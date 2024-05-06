@@ -18694,6 +18694,9 @@ void CMainFrame::CloseMedia(bool bNextIsQueued/* = false*/)
                     }
 #ifndef DEBUG
                 } else {
+                    if (CrashReporter::IsEnabled()) {
+                        CrashReporter::Disable();
+                    }
                     exit(1);
                 }
 #endif
@@ -18701,6 +18704,9 @@ void CMainFrame::CloseMedia(bool bNextIsQueued/* = false*/)
             EndWaitCursor();
         } else {
 #ifndef DEBUG
+            if (CrashReporter::IsEnabled()) {
+                CrashReporter::Disable();
+            }
             exit(1);
 #endif
         }
