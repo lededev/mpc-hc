@@ -159,6 +159,11 @@ void CPlayerBar::SaveState()
 {
     CWnd* parent = GetParent();
     if (!parent) return;
+    if (nullptr == DYNAMIC_DOWNCAST(CDockBar, parent)) {
+        //the logic below only works if we have a dockbar parent (including floating).
+        //see CMiniDockFrameWnd::Create(); initially parent is set to parent frame which makes GetDlgCtrlID() meaningless to us
+        return;
+    }
 
     CWinApp* pApp = AfxGetApp();
 
