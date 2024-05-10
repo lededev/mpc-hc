@@ -1317,6 +1317,10 @@ msgctxt "IDS_PLAYLIST_TOGGLE_SHUFFLE"
 msgid "Toggle Playlist Shuffle"
 msgstr ""
 
+msgctxt "IDS_AUDIOSHIFT_ONOFF"
+msgid "Toggle Audio Delay"
+msgstr ""
+
 msgctxt "IDS_AG_EDL_NEW_CLIP"
 msgid "EDL new clip"
 msgstr "Novo Clip EDL"
