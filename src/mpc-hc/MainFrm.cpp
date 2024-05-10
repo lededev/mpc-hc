@@ -18764,7 +18764,7 @@ void CMainFrame::CloseMedia(bool bNextIsQueued/* = false*/)
         DWORD dwWait;
         // We don't want to block messages processing completely so we stop waiting
         // on new message received from another thread or application.
-        while ((dwWait = MsgWaitForMultipleObjects(1, &handle, FALSE, INFINITE, QS_SENDMESSAGE)) != WAIT_OBJECT_0) {
+        while ((dwWait = MsgWaitForMultipleObjects(1, &handle, FALSE, 5000, QS_SENDMESSAGE)) != WAIT_OBJECT_0) {
             // If we haven't got the event we were waiting for, we ensure that we have got a new message instead
             if (dwWait == WAIT_OBJECT_0 + 1) {
                 // and we make sure it is handled before resuming waiting
@@ -18772,6 +18772,12 @@ void CMainFrame::CloseMedia(bool bNextIsQueued/* = false*/)
                 PeekMessage(&msg, nullptr, 0, 0, PM_NOREMOVE);
             } else {
                 ASSERT(FALSE);
+#ifndef DEBUG
+                if (CrashReporter::IsEnabled()) {
+                    CrashReporter::Disable();
+                }
+                exit(1);
+#endif
             }
         }
     } else {
