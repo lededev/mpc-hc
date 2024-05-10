@@ -2963,6 +2963,7 @@ BEGIN
     IDS_PPAGEADVANCED_CAPTURE_DEINTERLACE 
                             "Insert deinterlace filter (blend) in capture mode"
     IDS_PLAYLIST_TOGGLE_SHUFFLE "Toggle Playlist Shuffle"
+    IDS_AUDIOSHIFT_ONOFF    "Toggle Audio Delay"
 END
 
 STRINGTABLE

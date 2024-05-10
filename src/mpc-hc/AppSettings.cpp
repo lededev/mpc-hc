@@ -724,6 +724,8 @@ static constexpr wmcmd_base default_wmcmds[] = {
     { ID_EDL_SAVE,                          0, FVIRTKEY | FNOINVERT,                    IDS_AG_EDL_SAVE },
 
     { ID_PLAYLIST_TOGGLE_SHUFFLE,           0, FVIRTKEY | FNOINVERT,                    IDS_PLAYLIST_TOGGLE_SHUFFLE },
+
+    { ID_AUDIOSHIFT_ONOFF,                  0, FVIRTKEY | FNOINVERT,                    IDS_AUDIOSHIFT_ONOFF },
 };
 
 void CAppSettings::CreateCommands()
