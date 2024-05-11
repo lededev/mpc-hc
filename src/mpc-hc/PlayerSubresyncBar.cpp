@@ -947,7 +947,7 @@ void CPlayerSubresyncBar::OnRclickList(NMHDR* pNMHDR, LRESULT* pResult)
         CStringArray actors;
         CStringArray effects;
 
-        CMenu m;
+        CMPCThemeMenu m;
         m.CreatePopupMenu();
 
         if (m_mode == VOBSUB || m_mode == TEXTSUB) {
@@ -1072,6 +1072,9 @@ void CPlayerSubresyncBar::OnRclickList(NMHDR* pNMHDR, LRESULT* pResult)
         CPoint p = lpnmlv->ptAction;
         ::MapWindowPoints(pNMHDR->hwndFrom, HWND_DESKTOP, &p, 1);
 
+        if (AppNeedsThemedControls()) {
+            m.fulfillThemeReqs();
+        }
         UINT id = m.TrackPopupMenu(TPM_LEFTBUTTON | TPM_RETURNCMD, p.x, p.y, this);
 
         bool bNeedsUpdate = false;

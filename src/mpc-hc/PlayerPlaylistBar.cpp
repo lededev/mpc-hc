@@ -2252,8 +2252,11 @@ void CPlayerPlaylistBar::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
         m.fulfillThemeReqs();
     }
 
+    m_bHasActivePopup = true;
     //use mainframe as parent to take advantage of measure redirect (was 'this' but text was not printed)
+    //adipose: note this will bypass CPlayerBar::OnEnterMenuLoop, so we set m_bHasActivePopup directly here
     int nID = (int)m.TrackPopupMenu(TPM_LEFTBUTTON | TPM_RETURNCMD, point.x, point.y, m_pMainFrame);
+    m_bHasActivePopup = false;
     switch (nID) {
         case M_OPEN:
             m_pl.SetPos(pos);
