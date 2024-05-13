@@ -1004,7 +1004,7 @@ void COSD::DrawWnd()
     LONG bottomWindow = (LONG)m_MainWndRect.Height() - 20;
     LONG horizontalRoom = m_MainWndRect.Width() - rectText.Width() - 30;
 
-    if (bottomOSD > bottomWindow || horizontalRoom < 0) { //we will not show OSD if it is being cropped
+    if (bottomOSD > bottomWindow) { //we will not show OSD if it is being cropped vertically
         SetWindowPos(nullptr, 0,0,0,0, m_nDEFFLAGS | SWP_NOZORDER);
         return;
     }
