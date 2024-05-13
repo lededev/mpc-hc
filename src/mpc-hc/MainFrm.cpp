@@ -1235,6 +1235,8 @@ void CMainFrame::OnClose()
 
     m_controls.SaveState();
 
+    m_OSD.OnHide();
+
     ShowWindow(SW_HIDE);
 
     if (GetLoadState() == MLS::LOADED || GetLoadState() == MLS::LOADING) {
