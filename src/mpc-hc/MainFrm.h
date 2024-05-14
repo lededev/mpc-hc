@@ -656,6 +656,7 @@ public:
 
     CSize GetVideoSize() const;
     CSize GetVideoSizeWithRotation(bool forPreview = false) const;
+    void HidePlaylistFullScreen(bool force = false);
     void ToggleFullscreen(bool fToNearest, bool fSwitchScreenResWhenHasTo);
     void ToggleD3DFullscreen(bool fSwitchScreenResWhenHasTo);
     void MoveVideoWindow(bool fShowStats = false, bool bSetStoppedVideoRect = false);

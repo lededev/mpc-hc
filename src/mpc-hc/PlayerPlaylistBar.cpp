@@ -2444,6 +2444,7 @@ void CPlayerPlaylistBar::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
             break;
         case M_HIDEFULLSCREEN:
             s.bHidePlaylistFullScreen = !s.bHidePlaylistFullScreen;
+            m_pMainFrame->HidePlaylistFullScreen();
             break;
         default:
             break;
