@@ -559,7 +559,6 @@ void CPPageOutput::OnDSRendererChange()
             GetDlgItem(IDC_CACHESHADERS)->EnableWindow(TRUE);
             GetDlgItem(IDC_DX_SURFACE)->EnableWindow(TRUE);
             GetDlgItem(IDC_DX9RESIZER_COMBO)->EnableWindow(TRUE);
-            GetDlgItem(IDC_FULLSCREEN_MONITOR_CHECK)->EnableWindow(TRUE);
 
             if (m_iAPSurfaceUsage == VIDRNDT_AP_TEXTURE3D) {
                 m_iDSShaderSupport.SetIcon(m_tick);

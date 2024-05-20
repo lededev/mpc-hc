@@ -11700,7 +11700,7 @@ void CMainFrame::ToggleD3DFullscreen(bool fSwitchScreenResWhenHasTo)
     if (m_pMFVDC) {
         pD3DFS = m_pMFVDC;
     } else {
-        pD3DFS = m_pVMRWC;
+        ASSERT(false);
     }
 
     if (pD3DFS) {
@@ -11718,11 +11718,7 @@ void CMainFrame::ToggleD3DFullscreen(bool fSwitchScreenResWhenHasTo)
 
             // Assign the windowed video frame and pass it to the relevant classes.
             m_pVideoWnd = &m_wndView;
-            if (m_pMFVDC) {
-                m_pMFVDC->SetVideoWindow(m_pVideoWnd->m_hWnd);
-            } else {
-                m_pVMRWC->SetVideoClippingWindow(m_pVideoWnd->m_hWnd);
-            }
+            m_pMFVDC->SetVideoWindow(m_pVideoWnd->m_hWnd);
 
             if (s.autoChangeFSMode.bEnabled && s.autoChangeFSMode.bApplyDefaultModeAtFSExit && !s.autoChangeFSMode.modes.empty() && s.autoChangeFSMode.modes[0].bChecked) {
                 SetDispMode(s.strFullScreenMonitorID, s.autoChangeFSMode.modes[0].dm, s.fAudioTimeShift ? s.iAudioTimeShift : 0); // Restore default time shift
@@ -11755,11 +11751,7 @@ void CMainFrame::ToggleD3DFullscreen(bool fSwitchScreenResWhenHasTo)
 
             // Assign the windowed video frame and pass it to the relevant classes.
             m_pVideoWnd = m_pDedicatedFSVideoWnd;
-            if (m_pMFVDC) {
-                m_pMFVDC->SetVideoWindow(m_pVideoWnd->m_hWnd);
-            } else {
-                m_pVMRWC->SetVideoClippingWindow(m_pVideoWnd->m_hWnd);
-            }
+            m_pMFVDC->SetVideoWindow(m_pVideoWnd->m_hWnd);
             m_wndView.Invalidate();
 
             MoveVideoWindow();
