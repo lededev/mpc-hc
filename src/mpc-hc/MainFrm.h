@@ -368,6 +368,7 @@ private:
     void ZoomVideoWindow(double dScale = ZOOM_DEFAULT_LEVEL);
     double GetZoomAutoFitScale();
 
+    bool alwaysOnTopZOrderInitialized = false;
     void SetAlwaysOnTop(int iOnTop);
     bool WindowExpectedOnTop();
 

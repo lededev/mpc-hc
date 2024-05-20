@@ -16937,8 +16937,9 @@ void CMainFrame::SetAlwaysOnTop(int iOnTop)
         if (iOnTop == 0) {
             // We only want to disable "On Top" once so that
             // we don't interfere with other window manager
-            if (s.iOnTop) {
+            if (s.iOnTop || !alwaysOnTopZOrderInitialized) {
                 pInsertAfter = &wndNoTopMost;
+                alwaysOnTopZOrderInitialized = true;
             }
         } else if (iOnTop == 1) {
             pInsertAfter = &wndTopMost;
