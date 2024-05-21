@@ -1177,9 +1177,9 @@ public:
 
     CMPC_Lcd m_Lcd;
 
-    CWnd*       m_pVideoWnd;            // Current Video (main display screen or 2nd)
-    CWnd*       m_pOSDWnd;
-    CPreView    m_wndPreView;           // SeekPreview
+    CMouseWndWithArtView*  m_pVideoWnd;            // Current Video (main display screen or 2nd)
+    CWnd*                  m_pOSDWnd;
+    CPreView               m_wndPreView;           // SeekPreview
 
 
     void ReleasePreviewGraph();

@@ -7890,9 +7890,16 @@ void CMainFrame::OnViewZoomAutoFitLarger()
 }
 
 void CMainFrame::OnViewModifySize(UINT nID) {
-    if (m_fFullScreen || !m_pVideoWnd || IsZoomed() || IsIconic()) {
+    if (m_fFullScreen || !m_pVideoWnd || IsZoomed() || IsIconic() || GetLoadState() != MLS::LOADED) {
         return;
     }
+
+    enum resizeMethod {
+        autoChoose
+        , byHeight
+        , byWidth
+    } usedMethod;
+
     const CAppSettings& s = AfxGetAppSettings();
     MINMAXINFO mmi;
     CSize videoSize = GetVideoOrArtSize(mmi);
@@ -7902,48 +7909,80 @@ void CMainFrame::OnViewModifySize(UINT nID) {
 
     double videoRatio = double(videoSize.cy) / double(videoSize.cx);
 
-    CRect videoRect, workRect;
-    m_pVideoWnd->GetWindowRect(&videoRect);
+    CRect videoRect, workRect, maxRect;
+    videoRect = m_pVideoWnd->GetVideoRect();
     double videoRectRatio = double(videoRect.Height()) / double(videoRect.Width());
+    bool previouslyProportional = IsNearlyEqual(videoRectRatio, videoRatio, 0.01);
 
     GetWorkAreaRect(workRect);
+    maxRect = GetZoomWindowRect(CSize(INT_MAX, INT_MAX), true);
 
-    int newWidth = videoRect.Width();
-    int newHeight = videoRect.Height();
-    if (double(videoRect.Height()) / videoRect.Width() + 0.01f < videoRatio) { //wider than aspect ratio, so use height instead
-        int growPixels = int(.01f * workRect.Height());
-        newHeight = videoRect.Height() + growPixels * mult;
-        double newRatio = double(newHeight) / double(videoRect.Width());
-        if (s.fLimitWindowProportions || IsNearlyEqual(videoRectRatio, videoRatio, 0.01) || SGN(newRatio-videoRatio) != SGN(videoRectRatio-videoRatio)) {
-            newWidth = std::max(int(ceil(newHeight / videoRatio)), minWidth);
-            if (mult == 1) {
-                newWidth = std::max(newWidth, videoRect.Width());
-            }
-        }
-    } else {
-        int growPixels = int(.01f * workRect.Width());
-        newWidth = std::max(videoRect.Width() + growPixels * mult, minWidth);
-        double newRatio = double(videoRect.Height()) / double(newWidth);
-        if (s.fLimitWindowProportions || IsNearlyEqual(videoRectRatio, videoRatio, 0.01) || SGN(newRatio - videoRatio) != SGN(videoRectRatio - videoRatio)) {
-            newHeight = int(ceil(newWidth * videoRatio));
-            if (mult == 1) {
-                newHeight = std::max(newHeight, videoRect.Height());
-            }
-        }
-    }
-
-    CRect rect;
+    CRect rect, zoomRect;
     GetWindowRect(&rect);
+    CSize targetSize;
 
-    CSize cs = rect.Size() + CSize(newWidth - videoRect.Width(), newHeight - videoRect.Height());
+    auto calculateZoomWindowRect = [&](resizeMethod useMethod = autoChoose, CSize forceDimension = {0,0}) {
+        int newWidth = videoRect.Width();
+        int newHeight = videoRect.Height();
 
-    CRect newRect;
-    CRect work;
+        if (useMethod == autoChoose) {
+            if (double(videoRect.Height()) / videoRect.Width() + 0.01f < videoRatio) { //wider than aspect ratio, so use height instead
+                useMethod = byHeight;
+                int growPixels = int(.02f * workRect.Height());
+                newHeight = videoRect.Height() + growPixels * mult;
+            } else {
+                useMethod = byWidth;
+                int growPixels = int(.02f * workRect.Width());
+                newWidth = std::max(videoRect.Width() + growPixels * mult, minWidth);
+            }
+        } else if (useMethod == byHeight) {
+            newHeight = forceDimension.cy + videoRect.Height() - rect.Height();
+        } else {
+            newWidth = forceDimension.cx + videoRect.Width() - rect.Width();
+        }
+
+        if (useMethod == byHeight) {
+            double newRatio = double(newHeight) / double(videoRect.Width());
+            if (s.fLimitWindowProportions || previouslyProportional || SGN(newRatio - videoRatio) != SGN(videoRectRatio - videoRatio)) {
+                newWidth = std::max(int(ceil(newHeight / videoRatio)), minWidth);
+                if (mult == 1) {
+                    newWidth = std::max(newWidth, videoRect.Width());
+                }
+            }
+        } else {
+            double newRatio = double(videoRect.Height()) / double(newWidth);
+            if (s.fLimitWindowProportions || previouslyProportional || SGN(newRatio - videoRatio) != SGN(videoRectRatio - videoRatio)) {
+                newHeight = int(ceil(newWidth * videoRatio));
+                if (mult == 1) {
+                    newHeight = std::max(newHeight, videoRect.Height());
+                }
+            }
+        }
+        targetSize = rect.Size() + CSize(newWidth - videoRect.Width(), newHeight - videoRect.Height());
+        usedMethod = useMethod;
+        return GetZoomWindowRect(targetSize, true);
+    };
+
+    zoomRect = calculateZoomWindowRect();
+
+    CRect newRect, work;
+    newRect = CRect(rect.TopLeft(), targetSize); //this will be our default
+
     //if old rect was constrained to a single monitor, we zoom incrementally
-    if (GetWorkAreaRect(work) && work.PtInRect(rect.TopLeft()) && work.PtInRect(rect.BottomRight())) {
-        newRect = GetZoomWindowRect(cs, true);
-    } else {
-        newRect = CRect(rect.TopLeft(), cs);
+    if (GetWorkAreaRect(work) && work.PtInRect(rect.TopLeft()) && work.PtInRect(rect.BottomRight()-CSize(1,1))
+        && ((zoomRect.Height() != rect.Height() && usedMethod == byHeight) || (zoomRect.Width() != rect.Width() && usedMethod == byWidth))) {
+
+        if (zoomRect.Width() != targetSize.cx && zoomRect.Width() == maxRect.Width()) { //we appear to have been constrained by Screen Width
+            if (maxRect.Width() != rect.Width()) { //if it wasn't already filling the monitor horizonally, we will do that now
+                newRect = calculateZoomWindowRect(byWidth, maxRect.Size());
+            }
+        } else if (zoomRect.Height() != targetSize.cy && zoomRect.Height() == maxRect.Height()) { //we appear to have been constrained by Screen Height
+            if (maxRect.Height() != rect.Height()) { //if it wasn't already filling the monitor vertically, we will do that now
+                newRect = calculateZoomWindowRect(byHeight, maxRect.Size());
+            }
+        } else {
+            newRect = zoomRect;
+        }
     }
 
     MoveWindow(newRect);
