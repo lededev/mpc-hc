@@ -258,6 +258,8 @@
 #define IDS_RS_LAST_OPEN_DIR                _T("LastOpenDir")
 #define IDS_RS_ASSOCIATED_WITH_ICON         _T("AssociatedWithIcon")
 #define IDS_RS_ICON_LIB_VERSION             _T("IconLibVersion")
+#define IDS_RS_OSD_TRANSPARENCY             _T("OSDTransparency")
+#define IDS_RS_OSD_BORDER                   _T("OSDBorder")
 
 #define IDS_RS_HIDE_FULLSCREEN_CONTROLS        _T("HideFullscreenControls")
 #define IDS_RS_HIDE_FULLSCREEN_CONTROLS_POLICY _T("HideFullscreenControlsPolicy")

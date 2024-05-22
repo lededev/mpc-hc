@@ -55,7 +55,8 @@ CAppSettings::CAppSettings()
     , fTrayIcon(false)
     , fShowOSD(true)
     , fShowCurrentTimeInOSD(false)
-    , nOSDTransparent(0)
+    , nOSDTransparency(0)
+    , nOSDBorder(1)
     , fLimitWindowProportions(false)
     , fSnapToDesktopEdges(false)
     , fHideCDROMsSubMenu(false)
@@ -1042,7 +1043,6 @@ void CAppSettings::SaveSettings(bool write_full_history /* = false */)
     // Last Open Dir
     //pApp->WriteProfileString(IDS_R_SETTINGS, IDS_RS_LAST_OPEN_DIR, strLastOpenDir);
 
-    // CASIMIR666 : new settings
     pApp->WriteProfileInt(IDS_R_SETTINGS, IDS_RS_D3DFULLSCREEN, fD3DFullscreen);
 
     pApp->WriteProfileInt(IDS_R_SETTINGS, IDS_RS_COLOR_BRIGHTNESS, iBrightness);
@@ -1052,12 +1052,14 @@ void CAppSettings::SaveSettings(bool write_full_history /* = false */)
 
     pApp->WriteProfileInt(IDS_R_SETTINGS, IDS_RS_SHOWOSD, fShowOSD);
     pApp->WriteProfileInt(IDS_R_SETTINGS, IDS_RS_SHOW_CURRENT_TIME_OSD, fShowCurrentTimeInOSD);
+    pApp->WriteProfileInt(IDS_R_SETTINGS, IDS_RS_OSD_TRANSPARENCY, nOSDTransparency);
+    pApp->WriteProfileInt(IDS_R_SETTINGS, IDS_RS_OSD_BORDER, nOSDBorder);
+
     pApp->WriteProfileInt(IDS_R_SETTINGS, IDS_RS_ENABLEEDLEDITOR, fEnableEDLEditor);
     pApp->WriteProfileInt(IDS_R_SETTINGS, IDS_RS_LANGUAGE, language);
     pApp->WriteProfileInt(IDS_R_SETTINGS, IDS_RS_FASTSEEK, bFastSeek);
     pApp->WriteProfileInt(IDS_R_SETTINGS, IDS_RS_FASTSEEK_METHOD, eFastSeekMethod);
     pApp->WriteProfileInt(IDS_R_SETTINGS, IDS_RS_SHOW_CHAPTERS, fShowChapters);
-
 
     pApp->WriteProfileInt(IDS_R_SETTINGS, IDS_RS_LCD_SUPPORT, fLCDSupport);
 
@@ -2008,7 +2010,6 @@ void CAppSettings::LoadSettings()
         }
     }
 
-    // CASIMIR666 : new settings
     fD3DFullscreen        = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_D3DFULLSCREEN, FALSE);
 
     iBrightness           = pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_COLOR_BRIGHTNESS, 0);
@@ -2018,6 +2019,9 @@ void CAppSettings::LoadSettings()
 
     fShowOSD              = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_SHOWOSD, TRUE);
     fShowCurrentTimeInOSD = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_SHOW_CURRENT_TIME_OSD, FALSE);
+
+    nOSDTransparency      = pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_OSD_TRANSPARENCY, 0);
+    nOSDBorder            = pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_OSD_BORDER, 1);
 
     fEnableEDLEditor      = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_ENABLEEDLEDITOR, FALSE);
     bFastSeek             = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_FASTSEEK, TRUE);

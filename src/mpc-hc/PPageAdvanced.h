@@ -195,6 +195,8 @@ private:
         BLOCK_VSFILTER,
         BLOCK_RDP,
         LOOP_FOLDER_NEXT_FILE,
+        OSD_TRANSPARENCY,
+        OSD_BORDER,
         USE_YDL,
         YDL_MAX_HEIGHT,
         YDL_VIDEO_FORMAT,

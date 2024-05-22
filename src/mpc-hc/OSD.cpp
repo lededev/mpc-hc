@@ -123,7 +123,7 @@ HRESULT COSD::Create(CWnd* pWnd)
     }
 
     const CAppSettings& s = AfxGetAppSettings();
-    SetLayeredWindowAttributes(RGB(255, 0, 255), 255 - s.nOSDTransparent, LWA_ALPHA | LWA_COLORKEY);
+    SetLayeredWindowAttributes(RGB(255, 0, 255), 255 - s.nOSDTransparency, LWA_ALPHA | LWA_COLORKEY);
     if (s.fShowOSD) {
         Start(pWnd);
     }
@@ -1162,9 +1162,9 @@ void COSD::GradientFill(CDC* pDc, CRect* rc)
     R1 <<= 8;
     G1 <<= 8;
     B1 <<= 8;
-    COLOR16 alpha = (COLOR16)(s.nOSDTransparent << 8);
+    COLOR16 alpha = (COLOR16)(s.nOSDTransparency << 8);
 
-    int bordersize = 1;
+    int bordersize = s.nOSDBorder;
 
     GRADIENT_RECT gr = {0, 1};
     TRIVERTEX tv[2] = {

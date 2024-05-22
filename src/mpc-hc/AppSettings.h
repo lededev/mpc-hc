@@ -584,7 +584,8 @@ public:
     bool            fTrayIcon;
     bool            fShowOSD;
     bool            fShowCurrentTimeInOSD;
-    int             nOSDTransparent;
+    int             nOSDTransparency;
+    int             nOSDBorder;
 
     bool            fLimitWindowProportions;
     bool            fSnapToDesktopEdges;
