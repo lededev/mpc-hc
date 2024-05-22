@@ -941,6 +941,7 @@ bool COSD::NeedsHiding()
     if (!SysVersion::IsWin8orLater()) { //we have a WS_POPUP topmost window, special behavior required
         return m_pMainFrame->IsIconic() || !m_pMainFrame->IsWindowVisible();
     }
+    return false;
 }
 
 void COSD::DrawWnd()
