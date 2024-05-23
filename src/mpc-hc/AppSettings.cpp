@@ -55,7 +55,7 @@ CAppSettings::CAppSettings()
     , fTrayIcon(false)
     , fShowOSD(true)
     , fShowCurrentTimeInOSD(false)
-    , nOSDTransparency(0)
+    , nOSDTransparency(64)
     , nOSDBorder(1)
     , fLimitWindowProportions(false)
     , fSnapToDesktopEdges(false)
@@ -2020,7 +2020,7 @@ void CAppSettings::LoadSettings()
     fShowOSD              = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_SHOWOSD, TRUE);
     fShowCurrentTimeInOSD = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_SHOW_CURRENT_TIME_OSD, FALSE);
 
-    nOSDTransparency      = pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_OSD_TRANSPARENCY, 0);
+    nOSDTransparency      = pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_OSD_TRANSPARENCY, 64);
     nOSDBorder            = pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_OSD_BORDER, 1);
 
     fEnableEDLEditor      = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_ENABLEEDLEDITOR, FALSE);
