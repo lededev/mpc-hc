@@ -18524,7 +18524,7 @@ void CMainFrame::OpenMedia(CAutoPtr<OpenMediaData> pOMD)
     // use the graph thread only for some media types
     bool bDirectShow = pFileData && !pFileData->fns.IsEmpty() && s.m_Formats.GetEngine(pFileData->fns.GetHead()) == DirectShow;
     bool bUseThread = m_pGraphThread && s.fEnableWorkerThreadForOpening && (bDirectShow || !pFileData) && (s.iDefaultCaptureDevice == 1 || !pDeviceData);
-
+    bool wasMaximized = IsZoomed();
     // create d3dfs window if launching in fullscreen and d3dfs is enabled
     if (s.IsD3DFullscreen() && m_fStartInD3DFullscreen) {
         CreateFullScreenWindow();
@@ -18540,7 +18540,8 @@ void CMainFrame::OpenMedia(CAutoPtr<OpenMediaData> pOMD)
 
     // activate auto-fit logic upon exiting fullscreen if
     // we are opening new media in fullscreen mode
-    if ((IsFullScreenMode()) && s.fRememberZoomLevel) {
+    // adipose: unless we were previously maximized
+    if ((IsFullScreenMode()) && s.fRememberZoomLevel && !wasMaximized) {
         m_fFirstFSAfterLaunchOnFS = true;
     }
 
