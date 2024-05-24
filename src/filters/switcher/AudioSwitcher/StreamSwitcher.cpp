@@ -853,7 +853,12 @@ STDMETHODIMP CStreamSwitcherInputPin::Receive(IMediaSample* pSample)
 
     ALLOCATOR_PROPERTIES props, actual;
     m_pAllocator->GetProperties(&props);
-    pOut->CurrentAllocator()->GetProperties(&actual);
+    IMemAllocator* cur_alloc = pOut->CurrentAllocator();
+    if (!cur_alloc) {
+        ASSERT(false);
+        return E_FAIL;
+    }
+    cur_alloc->GetProperties(&actual);
 
     REFERENCE_TIME rtStart = 0, rtStop = 0;
     if (S_OK == pSample->GetTime(&rtStart, &rtStop)) {
