@@ -2887,6 +2887,7 @@ BEGIN
     IDS_INTERNAL_LAVF       "Uses LAV Filters"
     IDS_INTERNAL_LAVF_WMV   "Uses LAV Filters. Disabled by default since Microsoft filters are usually more stable for those formats.\nIf you choose to use the internal filters, enable them for both source and decoding to have a better playback experience."
     IDS_AG_OPEN_FILE_LOCATION "Open File Location"
+    IDS_AG_OPENDIRECTORY    "Open Directory"
 END
 
 STRINGTABLE

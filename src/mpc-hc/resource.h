@@ -511,6 +511,7 @@
 #define IDS_INTERNAL_LAVF               14004
 #define IDS_INTERNAL_LAVF_WMV           14005
 #define IDS_AG_OPEN_FILE_LOCATION       14006
+#define IDS_AG_OPENDIRECTORY            14007
 #define IDS_PLAYLIST_OPEN               14114
 #define IDS_PLAYLIST_ADD                14115
 #define IDS_PLAYLIST_REMOVE             14116

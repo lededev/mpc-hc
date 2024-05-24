@@ -1042,6 +1042,10 @@ msgctxt "IDS_AG_OPEN_FILE_LOCATION"
 msgid "Open File Location"
 msgstr ""
 
+msgctxt "IDS_AG_OPENDIRECTORY"
+msgid "Open Directory"
+msgstr ""
+
 msgctxt "IDS_AG_TOGGLE_NAVIGATION"
 msgid "Toggle Navigation Bar"
 msgstr "تبديل شريط التنقل"

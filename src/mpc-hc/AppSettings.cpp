@@ -524,6 +524,7 @@ static constexpr wmcmd_base default_wmcmds[] = {
     { ID_FILE_OPENMEDIA,                  'O', FVIRTKEY | FCONTROL | FNOINVERT,         IDS_AG_OPEN_FILE },
     { ID_FILE_OPENDVDBD,                  'D', FVIRTKEY | FCONTROL | FNOINVERT,         IDS_AG_OPEN_DVD },
     { ID_FILE_OPENDEVICE,                 'V', FVIRTKEY | FCONTROL | FNOINVERT,         IDS_AG_OPEN_DEVICE },
+    { ID_FILE_OPENDIRECTORY,                0, FVIRTKEY | FNOINVERT,                    IDS_AG_OPENDIRECTORY },
     { ID_FILE_REOPEN,                     'E', FVIRTKEY | FCONTROL | FNOINVERT,         IDS_AG_REOPEN },
     { ID_FILE_RECYCLE,              VK_DELETE, FVIRTKEY | FNOINVERT,                    IDS_FILE_RECYCLE },
 
