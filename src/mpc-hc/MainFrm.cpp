@@ -109,6 +109,9 @@
 #include "RarEntrySelectorDialog.h"
 #include "FileHandle.h"
 
+#include "stb/stb_image.h"
+#include "stb/stb_image_resize2.h"
+
 #include <dwmapi.h>
 #undef SubclassWindow
 
@@ -5899,6 +5902,11 @@ void CMainFrame::SaveThumbnails(LPCTSTR fn)
     }
 
     // Draw the thumbnails
+    std::unique_ptr<BYTE[]> thumb(new(std::nothrow) BYTE[szThumbnail.cx * szThumbnail.cy * 4]);
+    if (!thumb) {
+        return;
+    }
+
     int pics = cols * rows;
     REFERENCE_TIME rtInterval = rtDur / (pics + 1LL);
     for (int i = 1; i <= pics; i++) {
@@ -6003,46 +6011,21 @@ void CMainFrame::SaveThumbnails(LPCTSTR fn)
         int sh = abs(bi->bmiHeader.biHeight);
         int sp = sw * 4;
         const BYTE* src = pData + sizeof(bi->bmiHeader);
-        if (bi->bmiHeader.biHeight >= 0) {
-            src += sp * (sh - 1);
-            sp = -sp;
-        }
 
-        int dp = spd.pitch;
+        stbir_resize(src, sw, sh, sp, thumb.get(), szThumbnail.cx, szThumbnail.cy, szThumbnail.cx * 4, STBIR_RGBA_PM, STBIR_TYPE_UINT8, STBIR_EDGE_CLAMP, STBIR_FILTER_DEFAULT);
+
         BYTE* dst = spd.bits + spd.pitch * r.top + r.left * 4;
 
-        for (DWORD h = szThumbnail.cy, y = 0, yd = (sh << 8) / h; h > 0; y += yd, h--) {
-            DWORD yf = y & 0xff;
-            DWORD yi = y >> 8;
-
-            DWORD* s0 = (DWORD*)(src + (int)yi * sp);
-            DWORD* s1 = (DWORD*)(src + (int)yi * sp + sp);
-            DWORD* d = (DWORD*)dst;
-
-            for (DWORD w = szThumbnail.cx, x = 0, xd = (sw << 8) / w; w > 0; x += xd, w--) {
-                DWORD xf = x & 0xff;
-                DWORD xi = x >> 8;
-
-                DWORD c0 = s0[xi];
-                DWORD c1 = s0[xi + 1];
-                DWORD c2 = s1[xi];
-                DWORD c3 = s1[xi + 1];
-
-                c0 = ((c0 & 0xff00ff) + ((((c1 & 0xff00ff) - (c0 & 0xff00ff)) * xf) >> 8)) & 0xff00ff
-                     | ((c0 & 0x00ff00) + ((((c1 & 0x00ff00) - (c0 & 0x00ff00)) * xf) >> 8)) & 0x00ff00;
-
-                c2 = ((c2 & 0xff00ff) + ((((c3 & 0xff00ff) - (c2 & 0xff00ff)) * xf) >> 8)) & 0xff00ff
-                     | ((c2 & 0x00ff00) + ((((c3 & 0x00ff00) - (c2 & 0x00ff00)) * xf) >> 8)) & 0x00ff00;
-
-                c0 = ((c0 & 0xff00ff) + ((((c2 & 0xff00ff) - (c0 & 0xff00ff)) * yf) >> 8)) & 0xff00ff
-                     | ((c0 & 0x00ff00) + ((((c2 & 0x00ff00) - (c0 & 0x00ff00)) * yf) >> 8)) & 0x00ff00;
-
-                *d++ = c0;
-            }
-
-            dst += dp;
+        const BYTE* tsrc = thumb.get();
+        int tsrcPitch = szThumbnail.cx * 4;
+        if (bi->bmiHeader.biHeight >= 0) {
+            tsrc += tsrcPitch * (szThumbnail.cy - 1);
+            tsrcPitch = -tsrcPitch;
         }
-
+        for (int y = 0; y < szThumbnail.cy; y++, dst += spd.pitch, tsrc += tsrcPitch) {
+            memcpy(dst, tsrc, abs(tsrcPitch));
+        }
+        
         rts.Render(spd, 10000, 25, bbox); // Draw the thumbnail time
 
         delete [] pData;
