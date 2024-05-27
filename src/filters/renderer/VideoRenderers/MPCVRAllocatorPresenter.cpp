@@ -30,8 +30,19 @@
 #include "IPinHook.h"
 #include "Utils.h"
 #include <mfapi.h>
+#include "../DSUtil/PathUtils.h"
+#include "../DSUtil/FileVersionInfo.h"
 
 using namespace DSObjects;
+#define MPCVR_LIB_DIR L"MPCVR\\"
+#ifndef _WIN64
+#define MPCVR_LIB_FILENAME L"MpcVideoRenderer.ax"
+#else
+#define MPCVR_LIB_FILENAME L"MpcVideoRenderer64.ax"
+#endif
+
+#define MPCVR_FILTERS_VERSION(major, minor, rev, commit) ((QWORD)(major) << 48 | (QWORD)(minor) << 32 | (QWORD)(rev) << 16 | (QWORD)(commit))
+
 
 //
 // CMPCVRAllocatorPresenter
@@ -220,6 +231,31 @@ HRESULT CMPCVRAllocatorPresenter::Render11(
 	return RenderEx3(rtStart, rtStop, atpf, croppedVideoRect, originalVideoRect, viewportRect, videoStretchFactor, xOffsetInPixels, flags);
 }
 
+CStringW GetInternalLibraryPath() {
+    CString filterPath = PathUtils::CombinePaths(PathUtils::GetProgramPath(), MPCVR_LIB_DIR);
+    filterPath = PathUtils::CombinePaths(filterPath, MPCVR_LIB_FILENAME);
+    return filterPath;
+}
+
+bool CMPCVRAllocatorPresenter::CheckVersion(CString filterPath) {
+    QWORD fversion = FileVersionInfo::GetFileVersionNum(filterPath);
+    return fversion >= MPCVR_FILTERS_VERSION(0, 7, 0, 0);
+}
+
+bool CMPCVRAllocatorPresenter::HasInternalMPCVRFilter() {
+    CStringW lPath = GetInternalLibraryPath();
+    return CheckVersion(lPath);
+}
+
+bool CMPCVRAllocatorPresenter::LoadInternalMPCVRFilter()
+{
+    if (HasInternalMPCVRFilter()) {
+        HRESULT hr = LoadExternalObject(GetInternalLibraryPath(), CLSID_MPCVR, IID_PPV_ARGS(&m_pMPCVR.p), GetOwner());
+        return SUCCEEDED(hr);
+    }
+    return false;
+}
+
 // ISubPicAllocatorPresenter
 
 STDMETHODIMP CMPCVRAllocatorPresenter::CreateRenderer(IUnknown** ppRenderer)
@@ -229,11 +265,14 @@ STDMETHODIMP CMPCVRAllocatorPresenter::CreateRenderer(IUnknown** ppRenderer)
     if (m_pMPCVR) {
         return E_UNEXPECTED;
     }
-    
-    HRESULT hr = m_pMPCVR.CoCreateInstance(CLSID_MPCVR, GetOwner());
-    if (FAILED(hr)) {
-        return hr;
+
+    if (IsCLSIDRegistered(CLSID_MPCVR) || !LoadInternalMPCVRFilter()) {
+        HRESULT hr = m_pMPCVR.CoCreateInstance(CLSID_MPCVR, GetOwner());
+        if (FAILED(hr)) {
+            return hr;
+        }
     }
+
     if (!m_pMPCVR) {
         return E_FAIL;
     }

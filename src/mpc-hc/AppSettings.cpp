@@ -38,6 +38,7 @@
 #include <chrono>
 #include "date/date.h"
 #include "PPageExternalFilters.h"
+#include "../VideoRenderers/MPCVRAllocatorPresenter.h"
 
 #pragma warning(push)
 #pragma warning(disable: 4351) // new behavior: elements of array 'array' will be default initialized
@@ -839,7 +840,7 @@ bool CAppSettings::IsVideoRendererAvailable(int iVideoRendererType)
         case VIDRNDT_DS_MADVR:
             return IsCLSIDRegistered(CLSID_madVR);
         case VIDRNDT_DS_MPCVR:
-            return IsCLSIDRegistered(CLSID_MPCVR);
+            return IsCLSIDRegistered(CLSID_MPCVR) || DSObjects::CMPCVRAllocatorPresenter::HasInternalMPCVRFilter();
 #ifdef _WIN64
         case VIDRNDT_DS_OVERLAYMIXER:
             return false;
