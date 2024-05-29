@@ -93,7 +93,6 @@ SRCS_LC = \
 	libavcodec/avcodec.c \
 	libavcodec/avdct.c \
 	libavcodec/avfft.c \
-	libavcodec/avpacket.c \
 	libavcodec/avpicture.c \
 	libavcodec/bitstream.c \
 	libavcodec/bitstream_filter.c \
@@ -120,6 +119,7 @@ SRCS_LC = \
 	libavcodec/mediacodec.c \
 	libavcodec/mpeg12framerate.c \
 	libavcodec/options.c \
+	libavcodec/packet.c \
 	libavcodec/parser.c \
 	libavcodec/parsers.c \
 	libavcodec/profiles.c \
@@ -219,6 +219,7 @@ SRCS_LU = \
 	libavutil/threadmessage.c \
 	libavutil/time.c \
 	libavutil/timecode.c \
+	libavutil/timestamp.c \
 	libavutil/tree.c \
 	libavutil/twofish.c \
 	libavutil/tx.c \
