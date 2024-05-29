@@ -6128,25 +6128,52 @@ CString CMainFrame::MakeSnapshotFileName(BOOL thumbnails)
     ASSERT(!thumbnails || GetPlaybackMode() == PM_FILE);
 
     auto videoFn = GetFileName();
-    if (!s.bSnapShotKeepVideoExtension) {
+    auto fullName = m_wndPlaylistBar.GetCurFileName(true);
+    bool needsExtensionRemoval = !s.bSnapShotKeepVideoExtension;
+    if (IsPlaylistFile(videoFn)) {
+        CPlaylistItem pli;
+        if (m_wndPlaylistBar.GetCur(pli, true)) {
+            videoFn = pli.m_label;
+            needsExtensionRemoval = false;
+        }
+    } else if (needsExtensionRemoval && PathUtils::IsURL(fullName)){
+        auto title = getBestTitle();
+        if (!title.IsEmpty()) {
+            videoFn = title;
+            needsExtensionRemoval = false;
+        }
+    }
+
+
+    if (needsExtensionRemoval) {
         int nPos = videoFn.ReverseFind('.');
         if (nPos != -1) {
             videoFn = videoFn.Left(nPos);
         }
     }
 
+    bool saveImagePosition, saveImageCurrentTime;
+
+    if (m_wndSeekBar.HasDuration()) {
+        saveImagePosition = s.bSaveImagePosition;
+        saveImageCurrentTime = s.bSaveImageCurrentTime;
+    } else {
+        saveImagePosition = false;
+        saveImageCurrentTime = true;
+    }
+
     if (GetPlaybackMode() == PM_FILE) {
         if (thumbnails) {
             prefix.Format(_T("%s_thumbs"), videoFn.GetString());
         } else {
-            if (s.bSaveImagePosition) {
+            if (saveImagePosition) {
                 prefix.Format(_T("%s_snapshot_%s"), videoFn.GetString(), GetVidPos().GetString());
             } else {
-                prefix.Format(_T("%s"), videoFn.GetString());
+                prefix.Format(_T("%s_snapshot"), videoFn.GetString());
             }
         }
     } else if (GetPlaybackMode() == PM_DVD) {
-        if (s.bSaveImagePosition) {
+        if (saveImagePosition) {
             prefix.Format(_T("dvd_snapshot_%s"), GetVidPos().GetString());
         } else {
             prefix = _T("dvd_snapshot");
@@ -6157,7 +6184,7 @@ CString CMainFrame::MakeSnapshotFileName(BOOL thumbnails)
         prefix = _T("snapshot");
     }
 
-    if (!thumbnails && s.bSaveImageCurrentTime) {
+    if (!thumbnails && saveImageCurrentTime) {
         CTime t = CTime::GetCurrentTime();
         fn.Format(_T("%s_[%s]%s"), PathUtils::FilterInvalidCharsFromFileName(prefix).GetString(), t.Format(_T("%Y.%m.%d_%H.%M.%S")).GetString(), s.strSnapshotExt.GetString());
     } else {
