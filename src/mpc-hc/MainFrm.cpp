@@ -17845,7 +17845,12 @@ void CMainFrame::DoSeekTo(REFERENCE_TIME rtPos, bool bShowOSD /*= true*/)
         }
 
         //SleepEx(5000, False); // artificial slow seek for testing purposes
-        m_pMS->SetPositions(&rtPos, AM_SEEKING_AbsolutePositioning, nullptr, AM_SEEKING_NoPositioning);
+        if (FAILED(m_pMS->SetPositions(&rtPos, AM_SEEKING_AbsolutePositioning, nullptr, AM_SEEKING_NoPositioning))) {
+            TRACE(_T("IMediaSeeking SetPositions failure\n"));
+            if (abRepeat.positionA && rtPos == abRepeat.positionA) {
+                DisableABRepeat();
+            }
+        }
         UpdateChapterInInfoBar();
     } else if (GetPlaybackMode() == PM_DVD && m_iDVDDomain == DVD_DOMAIN_Title) {
         if (fs == State_Stopped) {
