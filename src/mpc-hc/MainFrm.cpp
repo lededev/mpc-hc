@@ -2663,8 +2663,10 @@ void CMainFrame::DoAfterPlaybackEvent()
         // remembered after playback events
         switch (s.eAfterPlayback) {
             case CAppSettings::AfterPlayback::PLAY_NEXT:
-                if (!SearchInDir(true, s.bLoopFolderOnPlayNextFile)) {
-                    SendMessage(WM_COMMAND, ID_FILE_CLOSE_AND_RESTORE);
+                if (m_wndPlaylistBar.GetCount() < 2) { // ignore global PLAY_NEXT in case of a playlist
+                    if (!SearchInDir(true, s.bLoopFolderOnPlayNextFile)) {
+                        SendMessage(WM_COMMAND, ID_FILE_CLOSE_AND_RESTORE);
+                    }
                 }
                 break;
             case CAppSettings::AfterPlayback::REWIND:
