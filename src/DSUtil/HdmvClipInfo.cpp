@@ -22,7 +22,7 @@
 #include "HdmvClipInfo.h"
 #include "DSUtil.h"
 #include "ISOLang.h"
-
+#include "FileHandle.h"
 
 CHdmvClipInfo::CHdmvClipInfo()
     : SequenceInfo_start_address(0)
@@ -417,7 +417,8 @@ HRESULT CHdmvClipInfo::FindMainMovie(LPCTSTR strFolder, CString& strPlaylistFile
 
     strPath.Replace(_T("\\PLAYLIST\\"), _T("\\"));
     strPath.Replace(_T("\\STREAM\\"), _T("\\"));
-    strPath += _T("\\BDMV\\");
+    strPath = AddSlash(strPath);
+    strPath += _T("BDMV\\");
     strFilter.Format(_T("%sPLAYLIST\\*.mpls"), strPath.GetString());
 
     HANDLE hFind = FindFirstFile(strFilter, &fd);
