@@ -251,7 +251,9 @@ HRESULT CAudioSwitcherFilter::Transform(IMediaSample* pIn, IMediaSample* pOut)
     m_rtNextStop += rtDur;
 
     if (pIn->IsDiscontinuity() == S_OK) {
-        m_normalizeFactor = m_nMaxNormFactor;
+        if (m_normalizeFactor < m_nMaxNormFactor * 0.75) {
+            m_normalizeFactor = std::max(m_normalizeFactor, std::max(1.0, m_nMaxNormFactor * 0.5));
+        }
     }
 
     WORD tag = wfe->wFormatTag;
@@ -455,9 +457,16 @@ HRESULT CAudioSwitcherFilter::Transform(IMediaSample* pIn, IMediaSample* pOut)
             double normFact = 1.0 / sample_max;
             if (m_normalizeFactor > normFact) {
                 m_normalizeFactor = normFact;
-            } else if (m_fNormalizeRecover
-                       && sample_max * m_normalizeFactor < NORMALIZATION_REGAIN_THRESHOLD) { // we don't regain if we are too close of the maximum
-                m_normalizeFactor += NORMALIZATION_REGAIN_STEP * rtDur / 10000000; // the step is per second so we weight it with the duration
+            } else {
+                if (m_fNormalizeRecover) {
+                    // we don't regain if we are too close of the maximum
+                    if (sample_max * m_normalizeFactor < NORMALIZATION_REGAIN_THRESHOLD) {
+                        m_normalizeFactor += NORMALIZATION_REGAIN_STEP * rtDur / 10000000; // the step is per second so we weight it with the duration
+                    }
+                } else if (m_normalizeFactor < 0.8 && normFact >= 1.0) {
+                    // recover from overflow situation (audio glitch?)
+                    m_normalizeFactor += NORMALIZATION_REGAIN_STEP * rtDur / 10000000;
+                }
             }
 
             if (m_normalizeFactor > m_nMaxNormFactor) {
