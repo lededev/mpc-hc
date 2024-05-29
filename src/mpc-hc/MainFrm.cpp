@@ -10056,7 +10056,7 @@ void CMainFrame::OnUpdateAfterplayback(CCmdUI* pCmdUI)
             break;
         case ID_AFTERPLAYBACK_PLAYNEXT:
             bChecked = !!(s.nCLSwitches & CLSW_PLAYNEXT);
-            bRadio = s.eAfterPlayback == CAppSettings::AfterPlayback::PLAY_NEXT;
+            bRadio = (s.eAfterPlayback == CAppSettings::AfterPlayback::PLAY_NEXT) && (m_wndPlaylistBar.GetCount() < 2);
             break;
         case ID_AFTERPLAYBACK_DONOTHING:
             bChecked = !!(s.nCLSwitches & CLSW_DONOTHING);
