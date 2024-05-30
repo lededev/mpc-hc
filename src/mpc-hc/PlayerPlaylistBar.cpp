@@ -382,21 +382,29 @@ bool CPlayerPlaylistBar::AddItemsInFolder(CString pathname, bool insertAtCurrent
 }
 
 void CPlayerPlaylistBar::ExternalPlayListLoaded(CStringW fn) {
+    auto& s = AfxGetAppSettings();
     if (!PathUtils::IsURL(fn)) {
-        m_ExternalPlayListPath = fn;
+        s.externalPlayListPath = fn;
         m_ExternalPlayListFNCopy = m_pl.GetIDs();
     } else {
-        m_ExternalPlayListPath = L"";
+        s.externalPlayListPath = L"";
         m_ExternalPlayListFNCopy.clear();
     }
 }
 
+//convenience function to clear the saved playlist if it has been invalidated
+void CPlayerPlaylistBar::ClearExternalPlaylistIfInvalid() {
+    CStringW discard;
+    IsExternalPlayListActive(discard);
+}
+
 bool CPlayerPlaylistBar::IsExternalPlayListActive(CStringW& playlistPath) {
-    if (!m_ExternalPlayListPath.IsEmpty() && m_pl.GetIDs() == m_ExternalPlayListFNCopy) {
-        playlistPath = m_ExternalPlayListPath;
+    auto& s = AfxGetAppSettings();
+    if (!s.externalPlayListPath.IsEmpty() && m_pl.GetIDs() == m_ExternalPlayListFNCopy) {
+        playlistPath = s.externalPlayListPath;
         return true;
     } else {
-        m_ExternalPlayListPath = L"";
+        s.externalPlayListPath = L"";
         m_ExternalPlayListFNCopy.clear();
         return false;
     }
@@ -1053,7 +1061,7 @@ void CPlayerPlaylistBar::Refresh()
 }
 
 void CPlayerPlaylistBar::PlayListChanged() {
-    m_ExternalPlayListPath = L"";
+    AfxGetAppSettings().externalPlayListPath = L"";
 }
 
 bool CPlayerPlaylistBar::Empty()
@@ -1061,7 +1069,7 @@ bool CPlayerPlaylistBar::Empty()
     bool bWasPlaying = m_pl.RemoveAll();
     m_list.DeleteAllItems();
     m_SaveDelayed = true;
-    m_ExternalPlayListPath = L"";
+    AfxGetAppSettings().externalPlayListPath = L"";
 
     return bWasPlaying;
 }
@@ -1104,11 +1112,11 @@ void CPlayerPlaylistBar::Append(CAtlList<CString>& fns, bool fMulti, CAtlList<CS
     } else { // if the playlist was originally empty
         CAppSettings& s = AfxGetAppSettings();
         posFirstAdded = m_pl.GetHeadPosition();
-        if (s.fKeepHistory && s.bRememberExternalPlaylistPos && fns.GetCount() == 1 && fns.GetHead() == m_ExternalPlayListPath) {
-            UINT idx = s.GetSavedPlayListPosition(m_ExternalPlayListPath);
+        if (s.fKeepHistory && s.bRememberExternalPlaylistPos && fns.GetCount() == 1 && fns.GetHead() == s.externalPlayListPath) {
+            UINT idx = s.GetSavedPlayListPosition(s.externalPlayListPath);
             if (idx != 0) {
                 posFirstAdded = FindPos(idx);
-                activateListItemIndex = idx;
+                m_pl.SetPos(posFirstAdded);
             }
         }
     }
@@ -1529,6 +1537,7 @@ bool CPlayerPlaylistBar::DeleteFileInPlaylist(POSITION pos, bool recycle)
 void CPlayerPlaylistBar::LoadPlaylist(LPCTSTR filename)
 {
     CString base;
+    auto& s = AfxGetAppSettings();
 
     m_list.SetRedraw(FALSE);
 
@@ -1537,10 +1546,19 @@ void CPlayerPlaylistBar::LoadPlaylist(LPCTSTR filename)
         p.Combine(base, _T("default.mpcpl"));
 
         if (p.FileExists()) {
-            if (AfxGetAppSettings().bRememberPlaylistItems) {
+            if (s.bRememberPlaylistItems) {
                 ParseMPCPlayList(p);
                 Refresh();
-                SelectFileInPlaylist(filename);
+                //this code checks for a saved position in a playlist that was active when the player was last closed
+                if (s.fKeepHistory && s.bRememberExternalPlaylistPos && !s.externalPlayListPath.IsEmpty()) { 
+                    ExternalPlayListLoaded(s.externalPlayListPath);
+                    UINT idx = s.GetSavedPlayListPosition(s.externalPlayListPath);
+                    if (idx != 0) {
+                        m_pl.SetPos(FindPos(idx));
+                    }
+                } else {
+                    SelectFileInPlaylist(filename);
+                }
             } else {
                 ::DeleteFile(p);
             }

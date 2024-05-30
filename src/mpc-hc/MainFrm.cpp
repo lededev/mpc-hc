@@ -1246,6 +1246,8 @@ void CMainFrame::OnClose()
         CloseMedia();
     }
 
+    m_wndPlaylistBar.ClearExternalPlaylistIfInvalid();
+
     s.WinLircClient.DisConnect();
     s.UIceClient.DisConnect();
 

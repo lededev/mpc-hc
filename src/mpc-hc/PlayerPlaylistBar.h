@@ -63,7 +63,6 @@ private:
     int m_itemHeight = 0;
     int m_initialWindowDPI = 0;
     bool createdWindow;
-    CStringW m_ExternalPlayListPath;
     CPlaylistIDs m_ExternalPlayListFNCopy;
     void ExternalPlayListLoaded(CStringW fn);
 
@@ -175,6 +174,7 @@ public:
     bool SelectFileInPlaylist(LPCTSTR filename);
     bool DeleteFileInPlaylist(POSITION pos, bool recycle = true);
     bool IsExternalPlayListActive(CStringW& playlistPath);
+    void ClearExternalPlaylistIfInvalid();
 
 protected:
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);

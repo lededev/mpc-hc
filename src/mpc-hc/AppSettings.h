@@ -964,6 +964,7 @@ public:
     CStringW lastQuickOpenPath;
     CStringW lastFileSaveCopyPath;
     CStringW lastFileOpenDirPath;
+    CStringW externalPlayListPath;
 
     int iRedirectOpenToAppendThreshold;
     bool bFullscreenSeparateControls;
@@ -972,7 +973,6 @@ public:
     int iMouseLeftUpDelay;
 
     bool bCaptureDeinterlace;
-
 private:
     struct FilterKey {
         CString name;
