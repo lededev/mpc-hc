@@ -1551,9 +1551,9 @@ void CPlayerPlaylistBar::LoadPlaylist(LPCTSTR filename)
                 Refresh();
                 //this code checks for a saved position in a playlist that was active when the player was last closed
                 if (s.fKeepHistory && s.bRememberExternalPlaylistPos && !s.externalPlayListPath.IsEmpty()) { 
-                    ExternalPlayListLoaded(s.externalPlayListPath);
                     UINT idx = s.GetSavedPlayListPosition(s.externalPlayListPath);
-                    if (idx != 0) {
+                    if (idx >= 0 && idx < m_pl.GetCount()) {
+                        ExternalPlayListLoaded(s.externalPlayListPath);
                         m_pl.SetPos(FindPos(idx));
                     }
                 } else {
