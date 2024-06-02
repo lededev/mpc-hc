@@ -93,6 +93,7 @@ CAudioSwitcherFilter::CAudioSwitcherFilter(LPUNKNOWN lpunk, HRESULT* phr)
     , m_normalizeFactor(m_nMaxNormFactor)
     , m_rtNextStart(0)
     , m_rtNextStop(1)
+    , m_rtSegmentStart(0)
 {
     ZeroMemory(m_pSpeakerToChannelMap, sizeof(m_pSpeakerToChannelMap));
 
@@ -250,10 +251,8 @@ HRESULT CAudioSwitcherFilter::Transform(IMediaSample* pIn, IMediaSample* pOut)
     m_rtNextStart += rtDur;
     m_rtNextStop += rtDur;
 
-    if (pIn->IsDiscontinuity() == S_OK) {
-        if (m_normalizeFactor < m_nMaxNormFactor * 0.75) {
-            m_normalizeFactor = std::max(m_normalizeFactor, std::max(1.0, m_nMaxNormFactor * 0.5));
-        }
+    if (m_normalizeFactor < 1.0 && pIn->IsDiscontinuity() == S_OK) {
+        m_normalizeFactor = std::max(1.0, m_nMaxNormFactor * 0.5);
     }
 
     WORD tag = wfe->wFormatTag;
@@ -589,14 +588,22 @@ void CAudioSwitcherFilter::OnNewOutputMediaType(const CMediaType& mtIn, const CM
 HRESULT CAudioSwitcherFilter::DeliverEndFlush()
 {
     TRACE(_T("CAudioSwitcherFilter::DeliverEndFlush\n"));
-    m_normalizeFactor = m_nMaxNormFactor;
+
     return __super::DeliverEndFlush();
 }
 
 HRESULT CAudioSwitcherFilter::DeliverNewSegment(REFERENCE_TIME tStart, REFERENCE_TIME tStop, double dRate)
 {
     TRACE(_T("CAudioSwitcherFilter::DeliverNewSegment\n"));
-    m_normalizeFactor = m_nMaxNormFactor;
+
+    if (m_fNormalizeRecover && m_normalizeFactor < m_nMaxNormFactor) {
+        // regain after large jump
+        if (tStart == 0LL || std::abs(tStart - m_rtSegmentStart - m_rtNextStart) >= 600000000LL) {
+            m_normalizeFactor = std::max(m_normalizeFactor, std::max(1.0, m_nMaxNormFactor * 0.5));
+        }
+    }
+    m_rtSegmentStart = tStart;
+
     return __super::DeliverNewSegment(tStart, tStop, dRate);
 }
 
