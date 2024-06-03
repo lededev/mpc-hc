@@ -12433,7 +12433,7 @@ void CMainFrame::ZoomVideoWindow(double dScale/* = ZOOM_DEFAULT_LEVEL*/)
             ASSERT(FALSE);
             return;
         }
-        MoveWindow(GetZoomWindowRect(GetZoomWindowSize(dScale), true));
+        MoveWindow(GetZoomWindowRect(GetZoomWindowSize(dScale), !s.fRememberWindowPos));
     }
 }
 
