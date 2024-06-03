@@ -89,4 +89,5 @@ public:
     afx_msg void OnHoverClicked();
     afx_msg void OnThemeClicked();
     afx_msg void OnChngOSDCombo();
+    void AdjustDynamicWidgets();
 };

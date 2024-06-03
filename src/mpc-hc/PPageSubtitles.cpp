@@ -209,6 +209,7 @@ BOOL CPPageSubtitles::OnInitDialog()
 
     UpdateData(FALSE);
 
+    AdjustDynamicWidgets();
     EnableThemedDialogTooltips(this);
     CreateToolTip();
 
@@ -327,4 +328,11 @@ BOOL CPPageSubtitles::OnToolTipNotify(UINT id, NMHDR* pNMHDR, LRESULT* pResult)
     }
 
     return bRet;
+}
+
+void CPPageSubtitles::AdjustDynamicWidgets() {
+    AdjustDynamicWidgetPair(this, IDC_STATIC9, IDC_SUBPIC_TO_BUFFER);
+    AdjustDynamicWidgetPair(this, IDC_STATIC21, IDC_COMBO1);
+    AdjustDynamicWidgetPair(this, IDC_STATIC1, IDC_EDIT2);
+    AdjustDynamicWidgetPair(this, IDC_STATIC3, IDC_EDIT3);
 }

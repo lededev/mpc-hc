@@ -135,6 +135,7 @@ BOOL CPPageSubMisc::OnInitDialog()
         PostMessage(WM_SUPPORTED_LANGUAGES_READY); // Notify the window that languages have been fetched
     });
 
+    AdjustDynamicWidgets();
     //    EnableToolTips(TRUE);
     CreateToolTip();
     m_wndToolTip.AddTool(GetDlgItem(IDC_EDIT2), ResStr(IDS_SUB_AUTODL_IGNORE_TOOLTIP));
@@ -373,4 +374,9 @@ int CALLBACK CPPageSubMisc::SortCompare(LPARAM lParam1, LPARAM lParam2, LPARAM l
     size_t left = ((SubtitlesProvider*)list.GetItemData((int)lParam1))->Index();
     size_t right = ((SubtitlesProvider*)list.GetItemData((int)lParam2))->Index();
     return int(left - right);
+}
+
+void CPPageSubMisc::AdjustDynamicWidgets() {
+    AdjustDynamicWidgetPair(this, IDC_STATIC1, IDC_EDIT2);
+    AdjustDynamicWidgetPair(this, IDC_STATIC2, IDC_EDIT3);
 }

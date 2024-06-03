@@ -82,4 +82,5 @@ public:
     afx_msg void OnExportKeys();
 
     virtual void OnCancel();
+    void AdjustDynamicWidgets();
 };

@@ -391,6 +391,7 @@ BOOL CPPageCapture::OnInitDialog()
 
     SaveFoundDevices(); // Save (new) devices to ensure that comboboxes reflect actual settings.
 
+    AdjustDynamicWidgets();
     EnableThemedDialogTooltips(this);
 
     return TRUE;
@@ -720,4 +721,10 @@ void CPPageCapture::SaveFoundDevices()
 
     s.nDVBRebuildFilterGraph = (DVB_RebuildFilterGraph)m_cbRebuildFilterGraph.GetCurSel();
     s.nDVBStopFilterGraph = (DVB_StopFilterGraph)m_cbStopFilterGraph.GetCurSel();
+}
+
+void CPPageCapture::AdjustDynamicWidgets() {
+    AdjustDynamicWidgetPair(this, IDC_STATIC1, IDC_COMBO1);
+    AdjustDynamicWidgetPair(this, IDC_STATIC2, IDC_COMBO2);
+    AdjustDynamicWidgetPair(this, IDC_STATIC3, IDC_COMBO9);
 }

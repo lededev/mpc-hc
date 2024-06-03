@@ -134,6 +134,7 @@ BOOL CPPageMisc::OnInitDialog()
     m_nUpdaterDelay = s.nUpdaterDelay;
     m_updaterDelaySpin.SetRange32(1, 365);
 
+    AdjustDynamicWidgets();
     UpdateData(FALSE);
 
     return TRUE;
@@ -280,4 +281,8 @@ void CPPageMisc::OnCancel()
 
     ((CMainFrame*)AfxGetMyApp()->GetMainWnd())->SetColorControl(ProcAmp_All, s.iBrightness, s.iContrast, s.iHue, s.iSaturation);
     __super::OnCancel();
+}
+
+void CPPageMisc::AdjustDynamicWidgets() {
+    AdjustDynamicWidgetPair(this, IDC_STATIC5, IDC_EDIT1);
 }

@@ -52,6 +52,7 @@ private:
 public:
     CPPageSubtitles();
     virtual ~CPPageSubtitles();
+    void AdjustDynamicWidgets();
 
     // Dialog Data
     enum { IDD = IDD_PPAGESUBTITLES };

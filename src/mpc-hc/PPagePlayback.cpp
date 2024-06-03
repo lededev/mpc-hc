@@ -175,6 +175,7 @@ BOOL CPPagePlayback::OnInitDialog()
     UDACCEL accel = { 0, 5 };
     m_SpeedStepCtrl.SetAccel(1, &accel);
 
+    AdjustDynamicWidgets();
     EnableThemedDialogTooltips(this);
     CreateToolTip();
 
@@ -354,4 +355,14 @@ void CPPagePlayback::OnChangeFitFactorMax() {
         }
         SetModified();
     }
+}
+
+void CPPagePlayback::AdjustDynamicWidgets() {
+    AdjustDynamicWidgetPair(this, IDC_STATIC5, IDC_VOLUMESTEP);
+    AdjustDynamicWidgetPair(this, IDC_STATIC6, IDC_SPEEDSTEP);
+    AdjustDynamicWidgetPair(this, IDC_STATIC7, IDC_COMBO3);
+    AdjustDynamicWidgetPair(this, IDC_CHECK5, IDC_COMBO1);
+    AdjustDynamicWidgetPair(this, IDC_STATIC4, IDC_COMBO4);
+    AdjustDynamicWidgetPair(this, IDC_STATIC8, IDC_EDIT2);
+    AdjustDynamicWidgetPair(this, IDC_STATIC9, IDC_EDIT3);
 }

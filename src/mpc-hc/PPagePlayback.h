@@ -92,4 +92,5 @@ public:
     virtual void OnCancel();
     afx_msg void OnChangeFitFactorMin();
     afx_msg void OnChangeFitFactorMax();
+    void AdjustDynamicWidgets();
 };

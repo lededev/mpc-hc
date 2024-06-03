@@ -16,6 +16,7 @@ public:
     afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 protected:
     virtual BOOL OnInitDialog();
+    virtual void AdjustDynamicWidgets() {};
     void SetMPCThemeButtonIcon(UINT nIDButton, UINT nIDIcon, ImageGrayer::mpcColorStyle colorStyle = ImageGrayer::mpcMono);
     BOOL PreTranslateMessage(MSG* pMsg);
     CPPageBase* FindSiblingPage(CRuntimeClass* pClass);

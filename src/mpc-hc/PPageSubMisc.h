@@ -73,6 +73,8 @@ protected:
 
     static int CALLBACK SortCompare(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
 
+    void AdjustDynamicWidgets();
+
     DECLARE_MESSAGE_MAP()
 
     afx_msg void OnSupportedLanguagesReady();

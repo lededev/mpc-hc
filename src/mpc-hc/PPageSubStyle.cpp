@@ -215,6 +215,7 @@ BOOL CPPageSubStyle::OnInitDialog()
 
     UpdateData(FALSE);
 
+    AdjustDynamicWidgets();
     CreateToolTip();
     if (m_bDefaultStyle) {
         m_wndToolTip.AddTool(GetDlgItem(IDC_CHECK_RELATIVETO), ResStr(IDS_TEXT_SUB_RENDERING_TARGET));
@@ -359,4 +360,17 @@ void CPPageSubStyle::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
     SetModified();
 
     __super::OnHScroll(nSBCode, nPos, pScrollBar);
+}
+
+void CPPageSubStyle::AdjustDynamicWidgets() {
+    AdjustDynamicWidgetPair(this, IDC_STATIC1, IDC_EDIT3);
+    AdjustDynamicWidgetPair(this, IDC_STATIC2, IDC_EDIT4);
+    AdjustDynamicWidgetPair(this, IDC_STATIC3, IDC_EDIT5);
+    AdjustDynamicWidgetPair(this, IDC_STATIC4, IDC_EDIT6);
+    AdjustDynamicWidgetPair(this, IDC_STATIC5, IDC_EDIT1);
+    AdjustDynamicWidgetPair(this, IDC_STATIC6, IDC_EDIT2);
+    AdjustDynamicWidgetPair(this, IDC_STATIC7, IDC_EDIT7);
+    AdjustDynamicWidgetPair(this, IDC_STATIC8, IDC_EDIT8);
+    AdjustDynamicWidgetPair(this, IDC_STATIC9, IDC_EDIT9);
+    AdjustDynamicWidgetPair(this, IDC_STATIC10, IDC_EDIT10);
 }

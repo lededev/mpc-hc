@@ -51,6 +51,7 @@ private:
 public:
     CPPageCapture();
     virtual ~CPPageCapture();
+    void AdjustDynamicWidgets();
 
     // Dialog Data
     enum { IDD = IDD_PPAGECAPTURE };
