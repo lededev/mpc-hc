@@ -11,6 +11,7 @@
 *.tss
 *.user
 *.vspx
+_*.bat
 /.cov/*
 /.git-rewrite
 /.vs
@@ -38,3 +39,4 @@
 /src/thirdparty/fribidi/generated/config.h
 /src/thirdparty/libxml2/generated/libxml/xmlversion.h
 ipch
+/distrib/MPCVR/

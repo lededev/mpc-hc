@@ -72,6 +72,7 @@
   #define lavfiltersdir = "LAVFilters64"
   #define OutFilename   = app_name + "." + app_ver + ".x64"
   #define platform      = "x64"
+  #define mpcvr_ax      = "MpcVideoRenderer64.ax"
 #else
   #define bindir        = AddBackslash(base_bindir) + "mpc-hc_x86"
   #define mpchc_exe     = "mpc-hc.exe"
@@ -79,6 +80,7 @@
   #define lavfiltersdir = "LAVFilters"
   #define OutFilename   = app_name + "." + app_ver + ".x86"
   #define platform      = "x86"
+  #define mpcvr_ax      = "MpcVideoRenderer.ax"
 #endif
 
 #if defined(MPCHC_LITE)
@@ -111,6 +113,12 @@
 #endif
 #ifdef x64Build
   #define FullAppNameVer = FullAppNameVer + " " + "(64-bit)"
+#endif
+
+#ifexist "..\distrib\mpcvr\MpcVideoRenderer.ax"
+#define INCLUDE_MPCVR = true
+#else
+#define INCLUDE_MPCVR = false
 #endif
 
 
@@ -223,6 +231,9 @@ Name: custom;             Description: {cm:types_CustomInstallation};           
 
 [Components]
 Name: main;               Description: {#app_vername};             Types: default custom; Flags: fixed
+#if INCLUDE_MPCVR
+Name: mpcvr;              Description: MPC Video Renderer;         Types: default custom
+#endif
 Name: mpciconlib;         Description: {cm:comp_mpciconlib};       Types: default custom
 #if localize == "true"
 Name: mpcresources;       Description: {cm:comp_mpcresources};     Types: default custom; Flags: disablenouninstallwarning
@@ -264,6 +275,9 @@ Source: {#platform}\crashrpt.dll;                  DestDir: {app}\CrashReporter;
 Source: {#platform}\dbghelp.dll;                   DestDir: {app}\CrashReporter;    Components: main;         Flags: ignoreversion
 Source: {#platform}\sendrpt.exe;                   DestDir: {app}\CrashReporter;    Components: main;         Flags: ignoreversion
 Source: CrashReporter_LICENSE.txt;                 DestDir: {app}\CrashReporter;    Components: main;         Flags: ignoreversion
+	#endif
+	#if INCLUDE_MPCVR
+Source: ..\distrib\mpcvr\{#mpcvr_ax};              DestDir: {app}\MPCVR;            Components: mpcvr;        Flags: ignoreversion
 	#endif
 
 
@@ -472,6 +486,11 @@ begin
   RegDeleteKeyIncludingSubkeys(HKCU, 'Software\MPC-HC\Filters');
   RegDeleteKeyIncludingSubkeys(HKCU, 'Software\MPC-HC\MPC-HC');
   RegDeleteKeyIfEmpty(HKCU, 'Software\MPC-HC');
+
+  #if INCLUDE_MPCVR
+  RegDeleteKeyIncludingSubkeys(HKCU, 'Software\MPC-BE Filters\MPC Video Renderer');
+  RegDeleteKeyIfEmpty(HKCU, 'Software\MPC-BE Filters');  
+  #endif
 end;
 
 
