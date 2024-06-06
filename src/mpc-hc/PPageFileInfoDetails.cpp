@@ -356,7 +356,22 @@ BOOL CPPageFileInfoDetails::OnInitDialog()
         m_type.LoadString(IDS_AG_NOT_KNOWN);
     }
 
+    //we have multiple IDC_STATIC, we'll get them by window
+    CWnd* pChild = GetWindow(GW_CHILD);
+    while (pChild) {
+        if (pChild->GetDlgCtrlID() == IDC_STATIC) {
+            AddAnchor(pChild->GetSafeHwnd(), TOP_LEFT);
+        }
+        pChild = pChild->GetNextWindow();
+    }
+
+    AddAnchor(IDC_DEFAULTICON, TOP_LEFT);
     AddAnchor(IDC_EDIT1, TOP_LEFT, TOP_RIGHT);
+    AddAnchor(IDC_EDIT2, TOP_LEFT);
+    AddAnchor(IDC_EDIT3, TOP_LEFT);
+    AddAnchor(IDC_EDIT4, TOP_LEFT);
+    AddAnchor(IDC_EDIT5, TOP_LEFT);
+    AddAnchor(IDC_EDIT6, TOP_LEFT);
     AddAnchor(IDC_EDIT7, TOP_LEFT, BOTTOM_RIGHT);
     AddAnchor(IDC_STATIC1, TOP_LEFT, TOP_RIGHT);
     AddAnchor(IDC_STATIC2, TOP_LEFT, TOP_RIGHT);

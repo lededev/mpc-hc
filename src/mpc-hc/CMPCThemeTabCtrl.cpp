@@ -122,42 +122,47 @@ BOOL CMPCThemeTabCtrl::OnEraseBkgnd(CDC* pDC)
     return TRUE;
 }
 
-
-
 void CMPCThemeTabCtrl::OnPaint()
 {
     if (AppIsThemeLoaded()) {
         CPaintDC dc(this); // device context for painting
         int oldDC = dc.SaveDC();
+        CRect rClient, rContent, rectDC;
+        GetClientRect(rClient);
+        rectDC = rClient;
 
-        dc.SelectObject(GetFont());
+        CDC dcMem;
+        CBitmap bmMem;
+        CMPCThemeUtil::initMemDC(&dc, dcMem, bmMem, rectDC);
+        rClient.OffsetRect(-rectDC.TopLeft());
+
+        dcMem.SelectObject(GetFont());
 
         DRAWITEMSTRUCT dItemStruct;
         dItemStruct.CtlType = ODT_TAB;
         dItemStruct.CtlID = GetDlgCtrlID();
         dItemStruct.hwndItem = GetSafeHwnd();
-        dItemStruct.hDC = dc.GetSafeHdc();
+        dItemStruct.hDC = dcMem.GetSafeHdc();
         dItemStruct.itemAction = ODA_DRAWENTIRE;
+        dItemStruct.rcItem = rClient;
 
-        CRect rClient, rContent;
-        GetClientRect(&dItemStruct.rcItem);
         rContent = dItemStruct.rcItem;
         AdjustRect(FALSE, rContent);
         dItemStruct.rcItem.top = rContent.top - 2;
 
-        COLORREF oldTextColor = dc.GetTextColor();
-        COLORREF oldBkColor = dc.GetBkColor();
+        COLORREF oldTextColor = dcMem.GetTextColor();
+        COLORREF oldBkColor = dcMem.GetBkColor();
 
         CBrush contentFrameBrush;
         contentFrameBrush.CreateSolidBrush(CMPCTheme::TabCtrlBorderColor);
         rContent.InflateRect(1, 1);
-        dc.FrameRect(rContent, &CMPCThemeUtil::windowBrush);
+        dcMem.FrameRect(rContent, &CMPCThemeUtil::windowBrush);
         rContent.InflateRect(1, 1);
-        dc.FrameRect(rContent, &contentFrameBrush);
+        dcMem.FrameRect(rContent, &contentFrameBrush);
         contentBrush.DeleteObject();
 
-        dc.SetTextColor(oldTextColor);
-        dc.SetBkColor(oldBkColor);
+        dcMem.SetTextColor(oldTextColor);
+        dcMem.SetBkColor(oldBkColor);
 
 
         int nTab = GetItemCount();
@@ -186,6 +191,7 @@ void CMPCThemeTabCtrl::OnPaint()
         dItemStruct.rcItem.top -= 2;
         DrawItem(&dItemStruct);
 
+        CMPCThemeUtil::flushMemDC(&dc, dcMem, rectDC);
         dc.RestoreDC(oldDC);
     } else {
         __super::OnPaint();

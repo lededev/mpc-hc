@@ -52,7 +52,8 @@ private:
 	BOOL m_bSavePage;
 
 	// layout vars
-	LRESULT m_nCallbackID;
+public: //mpc-hc for inherited functions
+    LRESULT m_nCallbackID;
 	CSize m_sizePageTL, m_sizePageBR;
 	BOOL m_bLayoutDone;
 
@@ -79,7 +80,7 @@ public:
 // used internally
 private:
 	void PrivateConstruct();
-
+public://mpc-hc inheritance
 	BOOL IsWizard() const;
 
 // callable from derived classes

@@ -176,6 +176,16 @@ BOOL CPPageFileInfoClip::OnInitDialog()
         m_tooltip.AddTool(&m_locationCtrl, IDS_TOOLTIP_EXPLORE_TO_FILE);
     }
 
+    //we have multiple IDC_STATIC, we'll get them by window
+    CWnd* pChild = GetWindow(GW_CHILD);
+    while (pChild) {
+        if (pChild->GetDlgCtrlID() == IDC_STATIC) {
+            AddAnchor(pChild->GetSafeHwnd(), TOP_LEFT);
+        }
+        pChild = pChild->GetNextWindow();
+    }
+
+    AddAnchor(IDC_DEFAULTICON, TOP_LEFT);
     AddAnchor(IDC_EDIT1, TOP_LEFT, TOP_RIGHT);
     AddAnchor(IDC_EDIT2, TOP_LEFT, TOP_RIGHT);
     AddAnchor(IDC_EDIT3, TOP_LEFT, TOP_RIGHT);

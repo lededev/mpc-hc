@@ -45,9 +45,6 @@ void CMPCThemeEdit::OnWindowPosChanged(WINDOWPOS* lpwndpos) {
 void CMPCThemeEdit::PreSubclassWindow()
 {
     if (AppIsThemeLoaded()) {
-        if (WS_EX_CLIENTEDGE == (GetStyle() & WS_EX_CLIENTEDGE)) {
-            ModifyStyleEx(WS_EX_CLIENTEDGE, WS_EX_STATICEDGE, SWP_FRAMECHANGED);
-        }
         CRect r;
         GetClientRect(r);
         r.DeflateRect(2, 2); //some default padding for those spaceless fonts
@@ -78,14 +75,20 @@ void CMPCThemeEdit::OnNcPaint()
             GetWindowRect(&rect);
             rect.OffsetRect(-rect.left, -rect.top);
 
-            CBrush brush;
-            if (isFileDialogChild) {//special case for edits injected to file dialog
-                brush.CreateSolidBrush(CMPCTheme::W10DarkThemeFileDialogInjectedEditBorderColor);
-            } else {
-                brush.CreateSolidBrush(CMPCTheme::EditBorderColor);
-            }
+            //note: rc file with style "NOT WS_BORDER" will remove the default of WS_EX_CLIENTEDGE from EDITTEXT
+            //WS_BORDER itself is not typically present
+            auto stEx = GetExStyle();
+            if (0 != (GetStyle() & WS_BORDER) || 0 != (GetExStyle() & WS_EX_CLIENTEDGE)) {
+                CBrush brush;
+                if (isFileDialogChild) {//special case for edits injected to file dialog
+                    brush.CreateSolidBrush(CMPCTheme::W10DarkThemeFileDialogInjectedEditBorderColor);
+                } else {
+                    brush.CreateSolidBrush(CMPCTheme::EditBorderColor);
+                }
 
-            dc.FrameRect(&rect, &brush);
+                dc.FrameRect(&rect, &brush);
+                brush.DeleteObject();
+            }
 
             //added code to draw the inner rect for the border.  we shrunk the draw rect for border spacing earlier
             //normally, the bg of the dialog is sufficient, but in the case of ResizableDialog, it clips the anchored
@@ -96,7 +99,6 @@ void CMPCThemeEdit::OnNcPaint()
             if (nullptr != buddy) {
                 buddy->Invalidate();
             }
-            brush.DeleteObject();
         }
 
     } else {

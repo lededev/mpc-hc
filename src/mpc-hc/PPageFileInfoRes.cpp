@@ -27,9 +27,9 @@
 
 // CPPageFileInfoRes dialog
 
-IMPLEMENT_DYNAMIC(CPPageFileInfoRes, CMPCThemePPageBase)
+IMPLEMENT_DYNAMIC(CPPageFileInfoRes, CMPCThemeResizablePropertyPage)
 CPPageFileInfoRes::CPPageFileInfoRes(CString path, IFilterGraph* pFG, IFileSourceFilter* pFSF)
-    : CMPCThemePPageBase(CPPageFileInfoRes::IDD, CPPageFileInfoRes::IDD)
+    : CMPCThemeResizablePropertyPage(CPPageFileInfoRes::IDD, CPPageFileInfoRes::IDD)
     , m_hIcon(nullptr)
     , m_fn(path)
     , m_displayFn(path)
@@ -85,7 +85,7 @@ void CPPageFileInfoRes::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_LIST1, m_list);
 }
 
-BEGIN_MESSAGE_MAP(CPPageFileInfoRes, CMPCThemePPageBase)
+BEGIN_MESSAGE_MAP(CPPageFileInfoRes, CMPCThemeResizablePropertyPage)
     ON_BN_CLICKED(IDC_BUTTON1, OnSaveAs)
     ON_UPDATE_COMMAND_UI(IDC_BUTTON1, OnUpdateSaveAs)
     ON_NOTIFY(NM_DBLCLK, IDC_LIST1, OnOpenEmbeddedResInBrowser)
@@ -112,6 +112,13 @@ BOOL CPPageFileInfoRes::OnInitDialog()
         m_list.SetItemText(nItem, 1, r.mime);
         m_list.SetItemData(nItem, i);
     }
+
+    AddAnchor(IDC_EDIT1, TOP_LEFT, TOP_RIGHT);
+    AddAnchor(IDC_STATIC, TOP_LEFT, TOP_RIGHT);
+    AddAnchor(IDC_LIST1, TOP_LEFT, BOTTOM_RIGHT);
+    AddAnchor(IDC_DEFAULTICON, TOP_LEFT);
+    AddAnchor(IDC_BUTTON1, BOTTOM_LEFT);
+
 
     UpdateData(FALSE);
 

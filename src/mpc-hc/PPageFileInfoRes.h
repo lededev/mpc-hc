@@ -24,13 +24,13 @@
 #include <afxwin.h>
 #include <afxcmn.h>
 #include "DSMPropertyBag.h"
-#include "CMPCThemePPageBase.h"
+#include "CMPCThemeResizablePropertyPage.h"
 #include "CMPCThemePlayerListCtrl.h"
 
 
 // CPPageFileInfoRes dialog
 
-class CPPageFileInfoRes : public CMPCThemePPageBase
+class CPPageFileInfoRes : public CMPCThemeResizablePropertyPage
 {
     DECLARE_DYNAMIC(CPPageFileInfoRes)
 
