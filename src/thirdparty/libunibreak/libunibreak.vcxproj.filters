@@ -45,6 +45,9 @@
     <ClInclude Include="libunibreak\src\wordbreakdef.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="libunibreak\src\eastasianwidthdef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libunibreak\src\emojidata.c">
@@ -78,6 +81,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="libunibreak\src\wordbreakdata.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="libunibreak\src\eastasianwidthdata.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="libunibreak\src\eastasianwidthdef.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
