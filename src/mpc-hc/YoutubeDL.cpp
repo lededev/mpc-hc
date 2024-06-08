@@ -301,8 +301,15 @@ void GetVideoScore(YDLStreamDetails& details) {
         score += 1;
     }
 
-    if (s.iYDLMaxHeight > 0 && s.iYDLMaxHeight >= details.height) {
-        score += 64;
+    if (s.iYDLMaxHeight > 0) {
+        if (details.height > details.width) {
+            // vertical video
+            if (s.iYDLMaxHeight >= details.width) {
+                score += 64;
+            }
+        } else if (s.iYDLMaxHeight >= details.height) {
+            score += 64;
+        }
     }
 
     switch (s.iYDLVideoFormat) {
@@ -537,22 +544,44 @@ bool IsBetterYDLStream(YDLStreamDetails& first, YDLStreamDetails& second, int ma
         }
 
         // Video resolution
-        if (second.height > first.height) {
-            if (max_height > 0) {
-                // calculate maximum width based on 16:9 AR
-                return (max_height * 16 / 9 + 1) >= second.width;
-            }
-            return true;
-        } else {
-            if (second.height == first.height) {
-                if (second.width > first.width) {
-                    return true;
+        if (first.height > first.width) {
+            // vertical video
+            if (second.width > first.width) {
+                if (max_height > 0) {
+                    // calculate maximum height based on 9:16 AR
+                    return (max_height * 16 / 9 + 1) >= second.height;
                 }
-                if (second.width < first.width) {
+                return true;
+            } else {
+                if (second.width == first.width) {
+                    if (second.height > first.height) {
+                        return true;
+                    }
+                    if (second.height < first.height) {
+                        return false;
+                    }
+                } else {
                     return false;
                 }
+            }
+        } else {
+            if (second.height > first.height) {
+                if (max_height > 0) {
+                    // calculate maximum width based on 16:9 AR
+                    return (max_height * 16 / 9 + 1) >= second.width;
+                }
+                return true;
             } else {
-                return false;
+                if (second.height == first.height) {
+                    if (second.width > first.width) {
+                        return true;
+                    }
+                    if (second.width < first.width) {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
             }
         }
     } else if (first.has_audio) {
