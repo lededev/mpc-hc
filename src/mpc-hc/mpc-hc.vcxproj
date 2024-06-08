@@ -221,6 +221,7 @@
     <ClCompile Include="Monitors.cpp" />
     <ClCompile Include="MouseTouch.cpp" />
     <ClCompile Include="MouseWndWithArtView.cpp" />
+    <ClCompile Include="MPCFolderPickerDialog.cpp" />
     <ClCompile Include="MPCPngImage.cpp" />
     <ClCompile Include="Mpeg2SectionData.cpp" />
     <ClCompile Include="mplayerc.cpp" />
@@ -419,6 +420,7 @@
     <ClInclude Include="MouseTouch.h" />
     <ClInclude Include="MouseWndWithArtView.h" />
     <ClInclude Include="MpcApi.h" />
+    <ClInclude Include="MPCFolderPickerDialog.h" />
     <ClInclude Include="MPCPngImage.h" />
     <ClInclude Include="Mpeg2SectionData.h" />
     <ClInclude Include="mplayerc.h" />

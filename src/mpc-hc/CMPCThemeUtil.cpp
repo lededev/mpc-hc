@@ -215,56 +215,81 @@ LRESULT CALLBACK wndProcFileDialog(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
     return ::CallWindowProc(wndProcSink, hWnd, uMsg, wParam, lParam);
 }
 
-
-void CMPCThemeUtil::subClassFileDialog(CWnd* wnd, HWND hWnd, bool findSink)
-{
-    if (AfxGetAppSettings().bWindows10DarkThemeActive) {
-        initHelperObjects();
-        HWND pChild = ::GetWindow(hWnd, GW_CHILD);
-
-        while (pChild) {
-            TCHAR childWindowClass[MAX_PATH];
-            ::GetClassName(pChild, childWindowClass, _countof(childWindowClass));
-            if (findSink) {
-                if (0 == _tcsicmp(childWindowClass, _T("FloatNotifySink"))) { //children are the injected controls
-                    subClassFileDialog(wnd, pChild, false); //recurse into the sinks
-                }
-            } else {
-                if (0 == _tcsicmp(childWindowClass, WC_STATIC)) {
-                    CWnd* c = CWnd::FromHandle(pChild);
-                    c->UnsubclassWindow();
-                    CMPCThemeStatic* pObject = DEBUG_NEW CMPCThemeStatic();
-                    pObject->setFileDialogChild(true);
-                    allocatedWindows.push_back(pObject);
-                    pObject->SubclassWindow(pChild);
-                } else if (0 == _tcsicmp(childWindowClass, WC_BUTTON)) {
-                    CWnd* c = CWnd::FromHandle(pChild);
-                    DWORD style = c->GetStyle();
-                    DWORD buttonType = (style & BS_TYPEMASK);
-                    if (buttonType == BS_CHECKBOX || buttonType == BS_AUTOCHECKBOX) {
-                        c->UnsubclassWindow();
-                        CMPCThemeRadioOrCheck* pObject = DEBUG_NEW CMPCThemeRadioOrCheck();
-                        pObject->setFileDialogChild(true);
-                        allocatedWindows.push_back(pObject);
-                        pObject->SubclassWindow(pChild);
-                    }
-                } else if (0 == _tcsicmp(childWindowClass, WC_EDIT)) {
-                    CWnd* c = CWnd::FromHandle(pChild);
-                    c->UnsubclassWindow();
-                    CMPCThemeEdit* pObject = DEBUG_NEW CMPCThemeEdit();
-                    pObject->setFileDialogChild(true);
-                    allocatedWindows.push_back(pObject);
-                    pObject->SubclassWindow(pChild);
-                    if (nullptr == GetProp(hWnd, _T("WNDPROC_SINK"))) {
-                        LONG_PTR wndProcOld = ::SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LONG_PTR)wndProcFileDialog);
-                        SetProp(hWnd, _T("WNDPROC_SINK"), (HANDLE)wndProcOld);
-                    }
-                }
-            }
-            pChild = ::GetNextWindow(pChild, GW_HWNDNEXT);
+void CMPCThemeUtil::subClassFileDialogWidgets(HWND widget, HWND parent, wchar_t* childWindowClass) {
+    if (0 == wcsicmp(childWindowClass, WC_STATIC)) {
+        CWnd* c = CWnd::FromHandle(widget);
+        c->UnsubclassWindow();
+        CMPCThemeStatic* pObject = DEBUG_NEW CMPCThemeStatic();
+        pObject->setFileDialogChild(true);
+        allocatedWindows.push_back(pObject);
+        pObject->SubclassWindow(widget);
+    } else if (0 == wcsicmp(childWindowClass, WC_BUTTON)) {
+        CWnd* c = CWnd::FromHandle(widget);
+        DWORD style = c->GetStyle();
+        DWORD buttonType = (style & BS_TYPEMASK);
+        if (buttonType == BS_CHECKBOX || buttonType == BS_AUTOCHECKBOX) {
+            c->UnsubclassWindow();
+            CMPCThemeRadioOrCheck* pObject = DEBUG_NEW CMPCThemeRadioOrCheck();
+            pObject->setFileDialogChild(true);
+            allocatedWindows.push_back(pObject);
+            pObject->SubclassWindow(widget);
+        }
+    } else if (0 == wcsicmp(childWindowClass, WC_EDIT)) {
+        CWnd* c = CWnd::FromHandle(widget);
+        c->UnsubclassWindow();
+        CMPCThemeEdit* pObject = DEBUG_NEW CMPCThemeEdit();
+        pObject->setFileDialogChild(true);
+        allocatedWindows.push_back(pObject);
+        pObject->SubclassWindow(widget);
+        if (nullptr == GetProp(parent, _T("WNDPROC_SINK"))) {
+            LONG_PTR wndProcOld = ::SetWindowLongPtr(parent, GWLP_WNDPROC, (LONG_PTR)wndProcFileDialog);
+            SetProp(parent, _T("WNDPROC_SINK"), (HANDLE)wndProcOld);
         }
     }
 }
+
+void CMPCThemeUtil::subClassFileDialog(CWnd* wnd, HWND& fileDialogHandle) {
+    if (AfxGetAppSettings().bWindows10DarkThemeActive) {
+        initHelperObjects();
+
+        HWND duiview = ::FindWindowExW(fileDialogHandle, NULL, L"DUIViewWndClassName", NULL);
+        HWND duihwnd = ::FindWindowExW(duiview, NULL, L"DirectUIHWND", NULL);
+
+        if (duihwnd) { //we found the FileDialog
+            if (dialogProminentControlStringID) { //if this is set, we assume there is a single prominent control (note, it's in the filedialog main window)
+                subClassFileDialogRecurse(wnd, fileDialogHandle, ProminentControlIDWidget);
+            } else {
+                subClassFileDialogRecurse(wnd, duihwnd, RecurseSinkWidgets);
+            }
+            fileDialogHandle = nullptr;
+            ::RedrawWindow(duiview, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW | RDW_ALLCHILDREN);
+        }
+    }
+}
+
+void CMPCThemeUtil::subClassFileDialogRecurse(CWnd* wnd, HWND hWnd, FileDialogWidgetSearch searchType) {
+    HWND pChild = ::GetWindow(hWnd, GW_CHILD);
+    while (pChild) {
+        WCHAR childWindowClass[MAX_PATH];
+        ::GetClassName(pChild, childWindowClass, _countof(childWindowClass));
+        if (searchType == RecurseSinkWidgets) {
+            if (0 == wcsicmp(childWindowClass, L"FloatNotifySink")) { //children are the injected controls
+                subClassFileDialogRecurse(wnd, pChild, ThemeAllChildren); //recurse and theme all children of sink
+            }
+        } else if (searchType == ThemeAllChildren) {
+            subClassFileDialogWidgets(pChild, hWnd, childWindowClass);
+        } else if (searchType == ProminentControlIDWidget){
+            WCHAR str[MAX_PATH];
+            ::GetWindowText(pChild, str, _countof(str));
+            if (0 == wcsicmp(str, ResStr(dialogProminentControlStringID))) {
+                subClassFileDialogWidgets(pChild, hWnd, childWindowClass);
+                return;
+            }
+        }
+        pChild = ::GetNextWindow(pChild, GW_HWNDNEXT);
+    }
+}
+
 AFX_STATIC DLGITEMTEMPLATE* AFXAPI _AfxFindNextDlgItem(DLGITEMTEMPLATE* pItem, BOOL bDialogEx);
 AFX_STATIC DLGITEMTEMPLATE* AFXAPI _AfxFindFirstDlgItem(const DLGTEMPLATE* pTemplate);
 

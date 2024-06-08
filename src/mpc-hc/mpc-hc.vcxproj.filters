@@ -618,6 +618,9 @@
     <ClCompile Include="WicUtils.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
+    <ClCompile Include="MPCFolderPickerDialog.cpp">
+      <Filter>Modal Dialogs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppSettings.h">
@@ -1172,6 +1175,9 @@
     </ClInclude>
     <ClInclude Include="WicUtils.h">
       <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="MPCFolderPickerDialog.h">
+      <Filter>Modal Dialogs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

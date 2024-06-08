@@ -37,9 +37,19 @@ public:
     static HBRUSH getCtlColorFileDialog(HDC hDC, UINT nCtlColor);
     static HBRUSH getCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
     static bool MPCThemeEraseBkgnd(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
-    void subClassFileDialog(CWnd* wnd, HWND hwnd, bool findSink = true);
+
+    enum FileDialogWidgetSearch {
+        RecurseSinkWidgets
+        ,ThemeAllChildren
+        ,ProminentControlIDWidget
+    };
+
+    void subClassFileDialogRecurse(CWnd* wnd, HWND hWnd, FileDialogWidgetSearch searchType);
+    void subClassFileDialog(CWnd* wnd, HWND& fileDialogHandle);
+    void subClassFileDialogWidgets(HWND widget, HWND parent, wchar_t* childWindowClass);
 
 protected:
+    int dialogProminentControlStringID = 0;
     static CBrush contentBrush, windowBrush, controlAreaBrush, W10DarkThemeFileDialogInjectedBGBrush;
     static NONCLIENTMETRICS nonClientMetrics;
     std::vector<CWnd*> allocatedWindows;
