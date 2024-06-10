@@ -189,7 +189,7 @@ msgstr "İşleyici ayarları"
 
 msgctxt "ID_VIEW_TEARING_TEST"
 msgid "&Tearing Test"
-msgstr "&Yırtılma testi"
+msgstr "&Yırtılmayı sına"
 
 msgctxt "ID_VIEW_DISPLAY_RENDERER_STATS"
 msgid "&Display Statistics"
@@ -361,11 +361,11 @@ msgstr "S&ıfırla"
 
 msgctxt "ID_VIEW_RESET_DEFAULT"
 msgid "Reset to &default renderer settings"
-msgstr "&Varsayılan işleyici ayarlarına dön"
+msgstr "&Olağan işleyici ayarlarına dön"
 
 msgctxt "ID_VIEW_RESET_OPTIMAL"
 msgid "Reset to &optimal renderer settings"
-msgstr "&Tavsiye edilen işleyici ayarlarına dön"
+msgstr "En &uygun işleyici ayarlarına dön"
 
 msgctxt "POPUP"
 msgid "Video &Frame"
@@ -385,7 +385,7 @@ msgstr "&İki kat boyut"
 
 msgctxt "ID_VIEW_VF_STRETCH"
 msgid "&Stretch To Window"
-msgstr "&Pencereye uzat"
+msgstr "&Sündür"
 
 msgctxt "ID_VIEW_VF_FROMINSIDE"
 msgid "Touch Window From &Inside"

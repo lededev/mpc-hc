@@ -134,7 +134,7 @@ msgstr "Przesunięcie synchronizacji"
 
 msgctxt "IDS_STATSBAR_SYNC_OFFSET_FORMAT"
 msgid "avg: %d ms, dev: %d ms"
-msgstr "śr.: %d ms, odch. std.: %d ms"
+msgstr "średnie: %d ms, odchylenie std.: %d ms"
 
 msgctxt "IDS_STATSBAR_JITTER"
 msgid "Jitter"
@@ -180,7 +180,7 @@ msgstr "Tryb powtarzania: Plik"
 
 msgctxt "IDS_PLAYLOOP_FOREVER_ON"
 msgid "Repeat Forever: On"
-msgstr "Powtarzanie ciągłe: wł."
+msgstr "Powtarzanie ciągłe: Włączone"
 
 msgctxt "IDS_PLAYLOOP_FOREVER_OFF"
 msgid "Repeat Forever: Off"
@@ -768,7 +768,7 @@ msgstr "Odtwarzanie::Strumień wyjściowy"
 
 msgctxt "IDD_PPAGEWEBSERVER"
 msgid "Player::Web Interface"
-msgstr "Program::Interfejs sieciowy"
+msgstr "Program::Interfejs internetowy"
 
 msgctxt "IDD_FILEPROPDETAILS"
 msgid "Details"
@@ -1007,7 +1007,7 @@ msgstr "Przesunięcie (ms):"
 
 msgctxt "IDS_SPEEDSTEP_AUTO"
 msgid "Auto"
-msgstr "Automatyczny"
+msgstr "Auto"
 
 msgctxt "IDS_EXPORT_SETTINGS_NO_KEYS"
 msgid "There are no customized keys to export."
@@ -1805,7 +1805,7 @@ msgstr "Zapisz obraz"
 
 msgctxt "IDS_MPLAYERC_6"
 msgid "Save Image (auto)"
-msgstr "Zapisz obraz (autom.)"
+msgstr "Zapisz obraz (automatycznie)"
 
 msgctxt "IDS_OSD_IMAGE_SAVED"
 msgid "Image saved successfully"
@@ -2237,7 +2237,7 @@ msgstr "200%"
 
 msgctxt "IDS_ZOOM_AUTOFIT"
 msgid "Auto Fit"
-msgstr "Dopasowanie automatyczne"
+msgstr "Dopasuj automatyczne"
 
 msgctxt "IDS_AG_ZOOM_AUTO_FIT_LARGER"
 msgid "Zoom Auto Fit (Larger Only)"
@@ -2669,7 +2669,7 @@ msgstr "Błąd"
 
 msgctxt "IDS_SUBTITLE_STREAM_OFF"
 msgid "Subtitle: off"
-msgstr "Napisy: wył."
+msgstr "Napisy: wyłączone"
 
 msgctxt "IDS_SUBTITLE_STREAM"
 msgid "Subtitle: %s"
@@ -3482,51 +3482,51 @@ msgstr "Proporcje"
 
 msgctxt "IDS_OSD_RS_VSYNC_ON"
 msgid "VSync: On"
-msgstr "Synch. pion.: wł."
+msgstr "Synchronizacja pionowa: włączona"
 
 msgctxt "IDS_OSD_RS_VSYNC_OFF"
 msgid "VSync: Off"
-msgstr "Synch. pion.: wył."
+msgstr "Synchronizacja pionowa: wyłączona"
 
 msgctxt "IDS_OSD_RS_ACCURATE_VSYNC_ON"
 msgid "Accurate VSync: On"
-msgstr "Dokł. synch. pion.: wł."
+msgstr "Dokładna synchronizacja pionowa: włączona"
 
 msgctxt "IDS_OSD_RS_ACCURATE_VSYNC_OFF"
 msgid "Accurate VSync: Off"
-msgstr "Dokł. synch. pion.: wył."
+msgstr "Dokładna synchronizacja pionowa: wyłączona"
 
 msgctxt "IDS_OSD_RS_SYNC_TO_DISPLAY_ON"
 msgid "Synchronize Video to Display: On"
-msgstr "Synchronizacja wideo do wyświetlacza: wł."
+msgstr "Synchronizacja wideo do wyświetlacza: włączona"
 
 msgctxt "IDS_OSD_RS_SYNC_TO_DISPLAY_OFF"
 msgid "Synchronize Video to Display: Off"
-msgstr "Synchronizacja wideo do wyświetlacza: wył."
+msgstr "Synchronizacja wideo do wyświetlacza: wyłączona"
 
 msgctxt "IDS_OSD_RS_SYNC_TO_VIDEO_ON"
 msgid "Synchronize Display to Video: On"
-msgstr "Synchronizacja wyświetlacza do wideo: wł."
+msgstr "Synchronizacja wyświetlacza do wideo: włączona"
 
 msgctxt "IDS_OSD_RS_SYNC_TO_VIDEO_OFF"
 msgid "Synchronize Display to Video: Off"
-msgstr "Synchronizacja wyświetlacza do wideo: wył."
+msgstr "Synchronizacja wyświetlacza do wideo: wyłączona"
 
 msgctxt "IDS_OSD_RS_PRESENT_NEAREST_ON"
 msgid "Present at Nearest VSync: On"
-msgstr "Obecność przy najbliższej synch. pion.: wł."
+msgstr "Obecność przy najbliższej synchronizacji pionowej: włączona"
 
 msgctxt "IDS_OSD_RS_PRESENT_NEAREST_OFF"
 msgid "Present at Nearest VSync: Off"
-msgstr "Obecność przy najbliższej synch. pion.: wył."
+msgstr "Obecność przy najbliższej synchronizacji pionowej: wyłączona"
 
 msgctxt "IDS_OSD_RS_COLOR_MANAGEMENT_ON"
 msgid "Color Management: On"
-msgstr "Zarządzanie kolorami: wł."
+msgstr "Zarządzanie kolorami: włączone"
 
 msgctxt "IDS_OSD_RS_COLOR_MANAGEMENT_OFF"
 msgid "Color Management: Off"
-msgstr "Zarządzanie kolorami: wył."
+msgstr "Zarządzanie kolorami: wyłączone"
 
 msgctxt "IDS_OSD_RS_INPUT_TYPE_AUTO"
 msgid "Input Type: Auto-Detect"
@@ -3578,51 +3578,51 @@ msgstr "Zakres luminacji: %s"
 
 msgctxt "IDS_OSD_RS_FLUSH_BEF_VSYNC_ON"
 msgid "Flush GPU before VSync: On"
-msgstr "Opróżnianie bufora przed synch. pion: wł."
+msgstr "Opróżnianie bufora przed synchronizacją pionową: włączone"
 
 msgctxt "IDS_OSD_RS_FLUSH_BEF_VSYNC_OFF"
 msgid "Flush GPU before VSync: Off"
-msgstr "Opróżnianie bufora przed synch. pion: wył."
+msgstr "Opróżnianie bufora przed synchronizacją pionową: wyłączone"
 
 msgctxt "IDS_OSD_RS_FLUSH_AFT_PRES_ON"
 msgid "Flush GPU after Present: On"
-msgstr "Opróżnianie bufora po wyświetleniu: wł."
+msgstr "Opróżnianie bufora po wyświetleniu: włączone"
 
 msgctxt "IDS_OSD_RS_FLUSH_AFT_PRES_OFF"
 msgid "Flush GPU after Present: Off"
-msgstr "Opróżnianie bufora po wyświetleniu: wył."
+msgstr "Opróżnianie bufora po wyświetleniu: wyłączone"
 
 msgctxt "IDS_OSD_RS_WAIT_ON"
 msgid "Wait for GPU Flush: On"
-msgstr "Oczekiwanie na opróżnienie bufora: wł."
+msgstr "Oczekiwanie na opróżnienie bufora: włączone"
 
 msgctxt "IDS_OSD_RS_WAIT_OFF"
 msgid "Wait for GPU Flush: Off"
-msgstr "Oczekiwanie na opróżnienie bufora: wył."
+msgstr "Oczekiwanie na opróżnienie bufora: wyłączone"
 
 msgctxt "IDS_OSD_RS_D3D_FULLSCREEN_ON"
 msgid "D3D Fullscreen: On"
-msgstr "Pełny ekran Direct3D: wł."
+msgstr "Pełny ekran Direct3D: włączony"
 
 msgctxt "IDS_OSD_RS_D3D_FULLSCREEN_OFF"
 msgid "D3D Fullscreen: Off"
-msgstr "Pełny ekran Direct3D: wył."
+msgstr "Pełny ekran Direct3D: wyłączony"
 
 msgctxt "IDS_OSD_RS_NO_DESKTOP_COMP_ON"
 msgid "Disable desktop composition: On"
-msgstr "Wyłączenie kompozycji pulpitu: wł."
+msgstr "Wyłączenie kompozycji pulpitu: włączone"
 
 msgctxt "IDS_OSD_RS_NO_DESKTOP_COMP_OFF"
 msgid "Disable desktop composition: Off"
-msgstr "Wyłączenie kompozycji pulpitu: wył."
+msgstr "Wyłączenie kompozycji pulpitu: wyłączone"
 
 msgctxt "IDS_OSD_RS_ALT_VSYNC_ON"
 msgid "Alternative VSync: On"
-msgstr "Alternatywna synch. pion: wł."
+msgstr "Alternatywna synchronizacja pionowa: włączona"
 
 msgctxt "IDS_OSD_RS_ALT_VSYNC_OFF"
 msgid "Alternative VSync: Off"
-msgstr "Alternatywna synch. pion: wył."
+msgstr "Alternatywna synchronizacja pionowa: wyłączona"
 
 msgctxt "IDS_OSD_RS_RESET_DEFAULT"
 msgid "Renderer settings reset to default"
@@ -3642,35 +3642,35 @@ msgstr "Wsparcie dla GUI na pełnym ekranie D3D: wyłączone"
 
 msgctxt "IDS_OSD_RS_10BIT_RBG_OUT_ON"
 msgid "10-bit RGB Output: On"
-msgstr "Wyjście 10-bitowe RGB: wł."
+msgstr "Wyjście 10-bitowe RGB: włączone"
 
 msgctxt "IDS_OSD_RS_10BIT_RBG_OUT_OFF"
 msgid "10-bit RGB Output: Off"
-msgstr "Wyjście 10-bitowe RGB: wył."
+msgstr "Wyjście 10-bitowe RGB: wyłączone"
 
 msgctxt "IDS_OSD_RS_10BIT_RBG_IN_ON"
 msgid "Force 10-bit RGB Input: On"
-msgstr "Wymuszenie 10-bitowego wejścia RGB: wł."
+msgstr "Wymuszenie 10-bitowego wejścia RGB: włączone"
 
 msgctxt "IDS_OSD_RS_10BIT_RBG_IN_OFF"
 msgid "Force 10-bit RGB Input: Off"
-msgstr "Wymuszenie 10-bitowego wejścia RGB: wył."
+msgstr "Wymuszenie 10-bitowego wejścia RGB: wyłączone"
 
 msgctxt "IDS_OSD_RS_FULL_FP_PROCESS_ON"
 msgid "Full Floating Point Processing: On"
-msgstr "Pełne przetwarzanie zmiennoprzecinkowe: wł."
+msgstr "Pełne przetwarzanie zmiennoprzecinkowe: włączone"
 
 msgctxt "IDS_OSD_RS_FULL_FP_PROCESS_OFF"
 msgid "Full Floating Point Processing: Off"
-msgstr "Pełne przetwarzanie zmiennoprzecinkowe: wył."
+msgstr "Pełne przetwarzanie zmiennoprzecinkowe: wyłączone"
 
 msgctxt "IDS_OSD_RS_HALF_FP_PROCESS_ON"
 msgid "Half Floating Point Processing: On"
-msgstr "Niepełne przetwarzanie zmiennoprzecinkowe: wł."
+msgstr "Niepełne przetwarzanie zmiennoprzecinkowe: włączone"
 
 msgctxt "IDS_OSD_RS_HALF_FP_PROCESS_OFF"
 msgid "Half Floating Point Processing: Off"
-msgstr "Niepełne przetwarzanie zmiennoprzecinkowe: wył."
+msgstr "Niepełne przetwarzanie zmiennoprzecinkowe: wyłączone"
 
 msgctxt "IDS_BRIGHTNESS_DEC"
 msgid "Brightness decrease"
@@ -3760,11 +3760,11 @@ msgstr "Przełącz własne mapowanie kanałów"
 
 msgctxt "IDS_OSD_CUSTOM_CH_MAPPING_ON"
 msgid "Custom channel mapping: On"
-msgstr "Własne mapowanie kanałów: wł."
+msgstr "Własne mapowanie kanałów: włączone"
 
 msgctxt "IDS_OSD_CUSTOM_CH_MAPPING_OFF"
 msgid "Custom channel mapping: Off"
-msgstr "Własne mapowanie kanałów: wył."
+msgstr "Własne mapowanie kanałów: wyłączone"
 
 msgctxt "IDS_NORMALIZE"
 msgid "Toggle normalization"
@@ -3772,11 +3772,11 @@ msgstr "Przełącz normalizację dźwięku"
 
 msgctxt "IDS_OSD_NORMALIZE_ON"
 msgid "Normalization: On"
-msgstr "Normalizowanie: wł."
+msgstr "Normalizowanie: włączone"
 
 msgctxt "IDS_OSD_NORMALIZE_OFF"
 msgid "Normalization: Off"
-msgstr "Normalizowanie: wył."
+msgstr "Normalizowanie: wyłączone"
 
 msgctxt "IDS_REGAIN_VOLUME"
 msgid "Toggle regain volume"
@@ -3784,11 +3784,11 @@ msgstr "Przełącz utrzymywanie głośności"
 
 msgctxt "IDS_OSD_REGAIN_VOLUME_ON"
 msgid "Regain volume: On"
-msgstr "Utrzymywanie głośności: wł."
+msgstr "Utrzymywanie głośności: włączone"
 
 msgctxt "IDS_OSD_REGAIN_VOLUME_OFF"
 msgid "Regain volume: Off"
-msgstr "Utrzymywanie głośności: wył."
+msgstr "Utrzymywanie głośności: wyłączone"
 
 msgctxt "IDS_SIZE_UNIT_BYTES"
 msgid "bytes"
@@ -4663,11 +4663,11 @@ msgstr ""
 
 msgctxt "IDS_PRESIZE_SHADERS_ENABLED"
 msgid "Pre-Resize Pixel Shaders: on"
-msgstr "Shadery przed skalowaniem: wł."
+msgstr "Shadery przed skalowaniem: włączone"
 
 msgctxt "IDS_PRESIZE_SHADERS_DISABLED"
 msgid "Pre-Resize Pixel Shaders: off"
-msgstr "Shadery przed skalowaniem: wył."
+msgstr "Shadery przed skalowaniem: wyłączone"
 
 msgctxt "IDS_PRESIZE_SHADERS_TOGGLE"
 msgid "Enable Pre-Resize Pixel Shaders"
@@ -4675,11 +4675,11 @@ msgstr "Włącz shadery przed skalowaniem"
 
 msgctxt "IDS_POSTSIZE_SHADERS_ENABLED"
 msgid "Post-Resize Pixel Shaders: on"
-msgstr "Shadery po skalowaniu: wł."
+msgstr "Shadery po skalowaniu: włączone"
 
 msgctxt "IDS_POSTSIZE_SHADERS_DISABLED"
 msgid "Post-Resize Pixel Shaders: off"
-msgstr "Shadery po skalowaniu: wył."
+msgstr "Shadery po skalowaniu: wyłączone"
 
 msgctxt "IDS_POSTSIZE_SHADERS_TOGGLE"
 msgid "Enable Post-Resize Pixel Shaders"
