@@ -37,15 +37,16 @@ CSaveImageDialog::CSaveImageDialog(
         IFileDialogCustomize* pfdc = GetIFileDialogCustomize();
         CString str;
 
-        pfdc->StartVisualGroup(IDS_IMAGE_JPEG_QUALITY, ResStr(IDS_IMAGE_JPEG_QUALITY));
-        pfdc->AddText(IDS_IMAGE_QUALITY, ResStr(IDS_IMAGE_QUALITY));
+        pfdc->StartVisualGroup(IDS_IMAGE_QUALITY, ResStr(IDS_IMAGE_QUALITY));
         str.Format(L"%d", std::clamp(m_nJpegQuality, 20, 100));
         pfdc->AddEditBox(IDC_EDIT1, str);
         pfdc->EndVisualGroup();
 
         bSubtitleOptionSupported = subtitleOptionSupported;
         if (bSubtitleOptionSupported) {
+            pfdc->StartVisualGroup(IDS_SAVEDIALOG_INCLUDE_SUBS, L"");
             pfdc->AddCheckButton(IDS_SNAPSHOT_SUBTITLES, ResStr(IDS_SNAPSHOT_SUBTITLES), AfxGetAppSettings().bSnapShotSubtitles);
+            pfdc->EndVisualGroup();
         }
 
         pfdc->Release();
@@ -103,12 +104,9 @@ void CSaveImageDialog::OnTypeChange()
         IFileDialogCustomize* pfdc = GetIFileDialogCustomize();
 
         if (m_pOFN->nFilterIndex == 2) { // JPEG encoding is chosen
-            pfdc->SetControlState(IDS_IMAGE_JPEG_QUALITY, CDCS_ENABLEDVISIBLE);
             pfdc->SetControlState(IDS_IMAGE_QUALITY, CDCS_ENABLEDVISIBLE);
             pfdc->SetControlState(IDC_EDIT1, CDCS_ENABLEDVISIBLE);
-            redrawAllThemedWidgets(); //in some cases, showing the themed widgets using IFileDialogCustomize doesn't seem to trigger a redraw
         } else {
-            pfdc->SetControlState(IDS_IMAGE_JPEG_QUALITY, CDCS_INACTIVE);
             pfdc->SetControlState(IDS_IMAGE_QUALITY, CDCS_INACTIVE);
             pfdc->SetControlState(IDC_EDIT1, CDCS_INACTIVE);
         }
