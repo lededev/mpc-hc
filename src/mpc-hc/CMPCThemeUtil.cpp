@@ -248,7 +248,7 @@ void CMPCThemeUtil::subClassFileDialogWidgets(HWND widget, HWND parent, wchar_t*
     }
 }
 
-void CMPCThemeUtil::subClassFileDialog(CWnd* wnd, HWND& fileDialogHandle) {
+void CMPCThemeUtil::subClassFileDialog(CWnd* wnd) {
     if (AfxGetAppSettings().bWindows10DarkThemeActive) {
         initHelperObjects();
 
@@ -287,6 +287,12 @@ void CMPCThemeUtil::subClassFileDialogRecurse(CWnd* wnd, HWND hWnd, FileDialogWi
             }
         }
         pChild = ::GetNextWindow(pChild, GW_HWNDNEXT);
+    }
+}
+
+void CMPCThemeUtil::redrawAllThemedWidgets() {
+    for (auto w : allocatedWindows) {
+        w->RedrawWindow(NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
     }
 }
 

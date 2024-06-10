@@ -1365,7 +1365,6 @@ public:
 
 private:
     bool watchingFileDialog;
-    HWND fileDialogHandle;
     CMPCThemeUtil* fileDialogHookHelper;
 public:
     afx_msg void OnSettingChange(UINT uFlags, LPCTSTR lpszSection);

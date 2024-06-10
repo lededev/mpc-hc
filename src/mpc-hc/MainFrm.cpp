@@ -20424,7 +20424,6 @@ void CMainFrame::enableFileDialogHook(CMPCThemeUtil* helper)
     if (AfxGetAppSettings().bWindows10DarkThemeActive) { //hard coded behavior for windows 10 dark theme file dialogs, irrespsective of theme loaded by user (fixing windows bugs)
         watchingFileDialog = true;
         fileDialogHookHelper = helper;
-        fileDialogHandle = nullptr;
     }
 }
 
@@ -20483,12 +20482,12 @@ LRESULT CMainFrame::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
                 break;
         }
         return 0;
-    } else if (watchingFileDialog && message == WM_ACTIVATE && LOWORD(wParam) == WA_INACTIVE) {
-        fileDialogHandle = (HWND)lParam;
+    } else if (watchingFileDialog && nullptr != fileDialogHookHelper && message == WM_ACTIVATE && LOWORD(wParam) == WA_INACTIVE) {
+        fileDialogHookHelper->fileDialogHandle = (HWND)lParam;
         watchingFileDialog = false;
         //capture but process message normally
-    } else if (message == WM_GETICON && nullptr != fileDialogHookHelper && nullptr != fileDialogHandle) {
-        fileDialogHookHelper->subClassFileDialog(this, fileDialogHandle);
+    } else if (message == WM_GETICON && nullptr != fileDialogHookHelper && nullptr != fileDialogHookHelper->fileDialogHandle) {
+        fileDialogHookHelper->subClassFileDialog(this);
     }
 
     if (message == WM_NCLBUTTONDOWN && wParam == HTCAPTION && !m_pMVRSR) {

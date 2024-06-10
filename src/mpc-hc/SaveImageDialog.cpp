@@ -106,6 +106,7 @@ void CSaveImageDialog::OnTypeChange()
             pfdc->SetControlState(IDS_IMAGE_JPEG_QUALITY, CDCS_ENABLEDVISIBLE);
             pfdc->SetControlState(IDS_IMAGE_QUALITY, CDCS_ENABLEDVISIBLE);
             pfdc->SetControlState(IDC_EDIT1, CDCS_ENABLEDVISIBLE);
+            redrawAllThemedWidgets(); //in some cases, showing the themed widgets using IFileDialogCustomize doesn't seem to trigger a redraw
         } else {
             pfdc->SetControlState(IDS_IMAGE_JPEG_QUALITY, CDCS_INACTIVE);
             pfdc->SetControlState(IDS_IMAGE_QUALITY, CDCS_INACTIVE);

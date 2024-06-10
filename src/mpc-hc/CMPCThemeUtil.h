@@ -32,7 +32,6 @@ public:
 
     static bool ModifyTemplates(CPropertySheet* sheet, CRuntimeClass* pageClass, DWORD id, DWORD addStyle, DWORD removeStyle = 0);
 
-    void enableFileDialogHook();
 
     static HBRUSH getCtlColorFileDialog(HDC hDC, UINT nCtlColor);
     static HBRUSH getCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
@@ -44,12 +43,15 @@ public:
         ,ProminentControlIDWidget
     };
 
+    HWND fileDialogHandle = nullptr;
+    void enableFileDialogHook();
     void subClassFileDialogRecurse(CWnd* wnd, HWND hWnd, FileDialogWidgetSearch searchType);
-    void subClassFileDialog(CWnd* wnd, HWND& fileDialogHandle);
+    void subClassFileDialog(CWnd* wnd);
     void subClassFileDialogWidgets(HWND widget, HWND parent, wchar_t* childWindowClass);
-
+    void redrawAllThemedWidgets();
 protected:
     int dialogProminentControlStringID = 0;
+
     static CBrush contentBrush, windowBrush, controlAreaBrush, W10DarkThemeFileDialogInjectedBGBrush;
     static NONCLIENTMETRICS nonClientMetrics;
     std::vector<CWnd*> allocatedWindows;
