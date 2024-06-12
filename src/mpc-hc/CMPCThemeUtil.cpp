@@ -822,6 +822,38 @@ const std::vector<CMPCTheme::pathPoint> CMPCThemeUtil::getIconPathByDPI(CWnd* wn
     }
 }
 
+//MapDialogRect deficiencies:
+// 1. Caches results for windows even after they receive a DPI change
+// 2. for templateless dialogs (e.g., MessageBoxDialog.cpp), the caching requires a reboot to fix
+// 3. Does not honor selected font
+// 4. For PropSheet, always uses "MS Shell Dlg" no matter what the sheet has selected in the .rc
+void CMPCThemeUtil::MapDialogRect2(CDialog* wnd, CRect& r) {
+    CDC* pDC;
+    if (wnd && (pDC = wnd->GetDC())) {
+        CFont msgFont;
+        if (!getFontByType(msgFont, wnd, CMPCThemeUtil::MessageFont)) {
+        //if (!getFontByFace(msgFont, wnd, L"MS Shell Dlg", 9)){
+            return;
+        }
+
+        CFont* oldFont = pDC->SelectObject(&msgFont);
+
+        //average character dimensions: https://web.archive.org/web/20131208002908/http://support.microsoft.com/kb/125681
+        TEXTMETRICW tm;
+        SIZE size;
+        pDC->GetTextMetricsW(&tm);
+        GetTextExtentPoint32W(pDC->GetSafeHdc(), L"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 52, &size);
+        pDC->SelectObject(oldFont);
+        int avgWidth = (size.cx / 26 + 1) / 2;
+        int avgHeight = (WORD)tm.tmHeight;
+
+        //MapDialogRect definition: https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-mapdialogrect
+        r.left = MulDiv(r.left, avgWidth, 4);
+        r.right = MulDiv(r.right, avgWidth, 4);
+        r.top = MulDiv(r.top, avgHeight, 8);
+        r.bottom = MulDiv(r.bottom, avgHeight, 8);
+    }
+}
 
 const std::vector<CMPCTheme::pathPoint> CMPCThemeUtil::getIconPathByDPI(CMPCThemeTitleBarControlButton* button)
 {

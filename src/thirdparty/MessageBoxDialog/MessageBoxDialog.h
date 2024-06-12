@@ -145,6 +145,7 @@ private:
     CStatic	m_stcIcon;			// Static control for the icon.
     //mpc-hc use themed static instead (for message only--themed static has no impl for icons)
     CMPCThemeStatic	m_stcMessage;		// Static control for the message.
+    CFont       messageFont;
 
 	CWnd*		m_pParent;
 

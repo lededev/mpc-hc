@@ -95,6 +95,7 @@ public:
     static float getConstantFByDPI(CWnd* window, const float* constants);
     static int getConstantByDPI(CWnd* window, const int* constants);
     static UINT getResourceByDPI(CWnd* window, CDC* pDC, const UINT* resources);
+    static void MapDialogRect2(CDialog* wnd, CRect& r);
     static const std::vector<CMPCTheme::pathPoint> getIconPathByDPI(CMPCThemeTitleBarControlButton* button);
     static const std::vector<CMPCTheme::pathPoint> getIconPathByDPI(CWnd* wnd, WPARAM buttonType);
     static void drawCheckBox(CWnd* window, UINT checkState, bool isHover, bool useSystemSize, CRect rectCheck, CDC* pDC, bool isRadio = false);

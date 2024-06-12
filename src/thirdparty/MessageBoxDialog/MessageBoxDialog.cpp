@@ -53,7 +53,7 @@ IMPLEMENT_DYNAMIC(CMessageBoxDialog, CDialog)
 #define CX_BORDER					8		// Width of the border.
 #define CY_BORDER					6		// Height of the border.
 
-#define CX_BUTTON					40		// Standard width of a button.
+#define CX_BUTTON					35		// Standard width of a button.
 #define CY_BUTTON					10		// Standard height of a button.
 #define CY_TEXTPADDING				14		// Space before and after message.
 #define CX_BUTTON_BORDER			4		// Standard border for a button.
@@ -371,6 +371,10 @@ BOOL CMessageBoxDialog::OnInitDialog ( )
 		return FALSE;
 	}
 
+    if (!CMPCThemeUtil::getFontByType(messageFont, this, CMPCThemeUtil::MessageFont)) {
+        return FALSE;
+    }
+
 	// Set the title of the dialog.
 	SetWindowText(m_strTitle);
 
@@ -621,11 +625,14 @@ int CMessageBoxDialog::XDialogUnitToPixel ( int x )
 		CRect rcDialog(0, 0, CX_DLGUNIT_BASE, CY_DLGUNIT_BASE);
 
 		// Map the rect to the dialog.
-		MapDialogRect(rcDialog);
+
+        //mpc-hc: CDialog without a template does not work well with MapDialogRect--use MapDialogRect2
+        //MapDialogRect(rcDialog);
+        CMPCThemeUtil::MapDialogRect2(this, rcDialog);
 
 		// Save the rect.
-		m_sDialogUnit = rcDialog.Size();
-	}
+        m_sDialogUnit = rcDialog.Size();
+    }
 
 	// Return the converted value.
 	return ( MulDiv( x , m_sDialogUnit.cx , CX_DLGUNIT_BASE ));
@@ -643,7 +650,9 @@ int CMessageBoxDialog::YDialogUnitToPixel ( int y )
 		CRect rcDialog(0, 0, CX_DLGUNIT_BASE, CY_DLGUNIT_BASE);
 
 		// Map the rect to the dialog.
-		MapDialogRect(rcDialog);
+        //mpc-hc: CDialog without a template does not work well with MapDialogRect--use MapDialogRect2
+        //MapDialogRect(rcDialog);
+        CMPCThemeUtil::MapDialogRect2(this, rcDialog);
 
 		// Save the rect.
 		m_sDialogUnit = rcDialog.Size();
@@ -822,13 +831,9 @@ void CMessageBoxDialog::CreateMessageControl ( )
 	dcDisplay.CreateDC(_T("DISPLAY"), NULL, NULL, NULL);
 
 	// Select the new font and store the old one.
-    //mpc-hc use theme font for metrics
-    //CFont* pOldFont = dcDisplay.SelectObject(GetFont());
-    CFont* pOldFont = dcDisplay.GetCurrentFont();
-    CFont font;
-    if (CMPCThemeUtil::getFontByType(font, this, CMPCThemeUtil::MessageFont)) {
-        dcDisplay.SelectObject(&font);
-    }
+    //mpc-hc use stored font for metrics
+     //CFont* pOldFont = dcDisplay.SelectObject(GetFont());
+    CFont* pOldFont = dcDisplay.SelectObject(&messageFont);
 
 	// Define the maximum width of the message.
     int nMaxWidth = GetSystemMetrics(SM_CXSCREEN) - 2 * XDialogUnitToPixel(CX_BORDER);
@@ -912,7 +917,7 @@ void CMessageBoxDialog::CreateMessageControl ( )
 	}
 
 	// Set the font of the dialog.
-	m_stcMessage.SetFont(GetFont());
+	m_stcMessage.SetFont(&messageFont);
 }
 
 /**
@@ -957,7 +962,7 @@ void CMessageBoxDialog::CreateButtonControls ( )
 			rcDummy, this, m_aButtons.GetKeyAt(i));
 
 		// Set the font of the control.
-		btnControl.SetFont(pWndFont);
+		btnControl.SetFont(&messageFont);
 
 		// Remove the subclassing again.
 		btnControl.UnsubclassWindow();
