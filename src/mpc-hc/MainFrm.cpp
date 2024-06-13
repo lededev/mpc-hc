@@ -8770,7 +8770,7 @@ void CMainFrame::OnPlayStop()
         }
         m_nStepForwardCount = 0;
     } else if (GetLoadState() == MLS::CLOSING) {
-        MediaControlStop();
+        MediaControlStop(true);
     }
 
     m_nLoops = 0;
