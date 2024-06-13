@@ -174,6 +174,7 @@ public:
     }
 
     STSStyle* GetStyle(int i);
+    static void UpdateSubRelativeTo(Subtitle::SubType type, STSStyle::RelativeTo& relativeTo);
     bool GetStyle(int i, STSStyle& stss);
     bool GetStyle(CString styleName, STSStyle& stss);
     int GetCharSet(int charSet);

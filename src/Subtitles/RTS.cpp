@@ -2909,6 +2909,7 @@ CSubtitle* CRenderedTextSubtitle::GetSubtitle(int entry)
     if (m_bOverrideStyle) {
         // this RTS has been signaled to ignore embedded styles, use the built-in one
         stss = m_styleOverride;
+        UpdateSubRelativeTo(m_subtitleType, stss.relativeTo);
 
         // Scale values relatively to subtitles without explicitly defined m_storageRes, we use 384x288 px in this case
         // This allow to produce constant font size for default style regardless of m_storageRes value

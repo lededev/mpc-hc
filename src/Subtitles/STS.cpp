@@ -2963,6 +2963,16 @@ STSStyle* CSimpleTextSubtitle::GetStyle(int i)
     return style;
 }
 
+void CSimpleTextSubtitle::UpdateSubRelativeTo(Subtitle::SubType type, STSStyle::RelativeTo& relativeTo) {
+    if (relativeTo == STSStyle::AUTO) {
+        if (type == Subtitle::ASS || type == Subtitle::SSA) {
+            relativeTo = STSStyle::VIDEO;
+        } else {
+            relativeTo = STSStyle::WINDOW;
+        }
+    }
+}
+
 bool CSimpleTextSubtitle::GetStyle(int i, STSStyle& stss)
 {
     STSStyle* style = nullptr;
@@ -2988,13 +2998,7 @@ bool CSimpleTextSubtitle::GetStyle(int i, STSStyle& stss)
     if (stss.relativeTo == STSStyle::AUTO && defstyle) {
         stss.relativeTo = defstyle->relativeTo;
         // If relative to is set to "auto" even for the default style, decide based on the subtitle type
-        if (stss.relativeTo == STSStyle::AUTO) {
-            if (m_subtitleType == Subtitle::ASS || m_subtitleType == Subtitle::SSA) {
-                stss.relativeTo = STSStyle::VIDEO;
-            } else {
-                stss.relativeTo = STSStyle::WINDOW;
-            }
-        }
+        UpdateSubRelativeTo(m_subtitleType, stss.relativeTo);
     }
 
     return true;
@@ -3015,13 +3019,7 @@ bool CSimpleTextSubtitle::GetStyle(CString styleName, STSStyle& stss)
     if (defstyle && stss.relativeTo == STSStyle::AUTO) {
         stss.relativeTo = defstyle->relativeTo;
         // If relative to is set to "auto" even for the default style, decide based on the subtitle type
-        if (stss.relativeTo == STSStyle::AUTO) {
-            if (m_subtitleType == Subtitle::ASS || m_subtitleType == Subtitle::SSA) {
-                stss.relativeTo = STSStyle::VIDEO;
-            } else {
-                stss.relativeTo = STSStyle::WINDOW;
-            }
-        }
+        UpdateSubRelativeTo(m_subtitleType, stss.relativeTo);
     }
 
     return true;

@@ -829,8 +829,9 @@ void LibassContext::LoadASSFont() {
 
 CRect LibassContext::GetSPDRect(SubPicDesc& spd) {
     CRect spdRect;
-    if (m_STS->m_subtitleType == Subtitle::SubType::SRT && m_STS->m_SubRendererSettings.defaultStyle.relativeTo != STSStyle::VIDEO
-        || m_STS->m_SubRendererSettings.defaultStyle.relativeTo == STSStyle::WINDOW) {
+    auto relativeTo = m_STS->m_SubRendererSettings.defaultStyle.relativeTo;
+    CSimpleTextSubtitle::UpdateSubRelativeTo(m_STS->m_subtitleType, relativeTo);
+    if (relativeTo == STSStyle::WINDOW) {
         spdRect = CRect(0, 0, spd.w, spd.h);
     } else {
         spdRect = CRect(spd.vidrect);
