@@ -376,11 +376,23 @@ ASS_Track* srt_read_data(ASS_Library* library, ASS_Track* track, std::istream &s
     return track;
 }
 
-ASS_Track* ass_read_fileW(ASS_Library* library, CStringW fname) {
+ASS_Track* ass_read_fileW(ASS_Library* library, CStringW fname, const STSStyle& style) {
     std::ifstream t(fname, std::ios::in);
     std::stringstream buffer;
     buffer << t.rdbuf();
-    return ass_read_memory(library, (char*)buffer.str().c_str(), buffer.str().size(), "UTF-8");
+    auto str = buffer.str();
+
+    ASS_Track* track = ass_read_memory(library, (char*)str.c_str(), str.size(), "UTF-8");
+    if (!track) { //failed, try ansi file encoding
+        if (style.charSet == 0) {
+            track = ass_read_memory(library, (char*)str.c_str(), str.size(), 0);
+        } else {
+            DWORD cp = CharSetToCodePage(style.charSet);
+            std::string cpString = "CP" + std::to_string(cp);
+            track = ass_read_memory(library, (char*)str.c_str(), str.size(), (char*)cpString.c_str());
+        }
+    }
+    return track;
 }
 
 void ConvertCPToUTF8(int charset, std::string& codepage_str) {
@@ -728,7 +740,7 @@ bool LibassContext::LoadASSFile(Subtitle::SubType subType) {
     if (subType == Subtitle::SRT) {
         m_track = decltype(m_track)(srt_read_file(m_ass.get(), m_STS->m_path, defStyle, m_STS->m_SubRendererSettings.openTypeLangHint));
     } else { //subType == Subtitle::SSA/ASS
-        m_track = decltype(m_track)(ass_read_fileW(m_ass.get(), m_STS->m_path));
+        m_track = decltype(m_track)(ass_read_fileW(m_ass.get(), m_STS->m_path, defStyle));
     }
 
     if (!m_track) return false;
