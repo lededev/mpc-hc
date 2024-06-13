@@ -1211,7 +1211,7 @@ void COSD::CreateFontInternal()
     lf.lfPitchAndFamily = DEFAULT_PITCH | FF_MODERN;
     lf.lfHeight = -m_DPIHelper.PointsToPixels(m_FontSize);
     lf.lfQuality = CLEARTYPE_QUALITY;
-    wcscpy_s(lf.lfFaceName, LF_FACESIZE, m_OSD_Font);
+    wcsncpy_s(lf.lfFaceName, LF_FACESIZE, m_OSD_Font, LF_FACESIZE-1);
 
     m_MainFont.CreateFontIndirectW(&lf);
 }
