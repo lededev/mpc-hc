@@ -198,10 +198,13 @@ extern CAtlList<CString>& MakeUpper(CAtlList<CString>& sl);
 extern int LastIndexOfCString(const CString& text, const CString& pattern);
 extern bool IsNameSimilar(const CString& title, const CString& fileName);
 extern CStringW ToUnicode(CStringW str, DWORD CharSet);
-void AppendWithDelimiter(CStringW& output, CStringW append, wchar_t delim = L' ');
-
-CString FormatNumber(CString szNumber, bool bNoFractionalDigits = true);
-void GetLocaleString(LCID lcid, LCTYPE type, CString& output);
+extern void AppendWithDelimiter(CStringW& output, CStringW append, wchar_t delim = L' ');
+extern bool EndsWith(CStringW str, CStringW suffix);
+extern bool StartsWith(CStringW str, CStringW prefix);
+extern bool EndsWithNoCase(CStringW str, CStringW suffix);
+extern bool StartsWithNoCase(CStringW str, CStringW prefix);
+extern CString FormatNumber(CString szNumber, bool bNoFractionalDigits = true);
+extern void GetLocaleString(LCID lcid, LCTYPE type, CString& output);
 
 template<class T>
 T& FastTrimRight(T& str)

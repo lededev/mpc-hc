@@ -393,3 +393,27 @@ void AppendWithDelimiter(CStringW &output, CStringW append, wchar_t delim) {
         output.Append(append);
     }
 }
+
+bool EndsWith(CStringW str, CStringW suffix) {
+    const int str_len = str.GetLength();
+    const int suffix_len = suffix.GetLength();
+    return str_len >= suffix_len && 0 == str.Right(suffix_len).Compare(suffix);
+}
+
+bool StartsWith(CStringW str, CStringW prefix) {
+    const int str_len = str.GetLength();
+    const int prefix_len = prefix.GetLength();
+    return str_len >= prefix_len && 0 == str.Left(prefix_len).Compare(prefix);
+}
+
+bool EndsWithNoCase(CStringW str, CStringW suffix) {
+    const int str_len = str.GetLength();
+    const int suffix_len = suffix.GetLength();
+    return str_len >= suffix_len && 0 == str.Right(suffix_len).CompareNoCase(suffix);
+}
+
+bool StartsWithNoCase(CStringW str, CStringW prefix) {
+    const int str_len = str.GetLength();
+    const int prefix_len = prefix.GetLength();
+    return str_len >= prefix_len && 0 == str.Left(prefix_len).CompareNoCase(prefix);
+}
