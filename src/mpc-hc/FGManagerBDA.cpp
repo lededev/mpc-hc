@@ -976,7 +976,13 @@ STDMETHODIMP CFGManagerBDA::Info(long lIndex, AM_MEDIA_TYPE** ppmt, DWORD* pdwFl
 
         if (pStreamInfo && pStream && pCurrentStream) {
             if (ppmt) {
-                *ppmt = CreateMediaType(pStream->GetMediaType());
+                const AM_MEDIA_TYPE* pMT = pStream->GetMediaType();
+                if (pMT) {
+                    *ppmt = CreateMediaType(pMT);
+                } else {
+                    *ppmt = nullptr;
+                    return E_FAIL;
+                }
             }
             if (pdwFlags) {
                 *pdwFlags = (pCurrentStream->GetMappedPID() == pStreamInfo->ulPID) ? AMSTREAMSELECTINFO_ENABLED | AMSTREAMSELECTINFO_EXCLUSIVE : 0;
