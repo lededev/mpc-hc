@@ -13946,9 +13946,6 @@ HRESULT CMainFrame::OpenBDAGraph()
                 if (!m_pAMNS) {
                     m_pAMNS = pBF;
                 }
-                if (!m_pSplitterSS) {
-                    m_pSplitterSS = pBF;
-                }
             }
         }
         // IAMStreamSelect / IDirectVobSub
@@ -13956,25 +13953,9 @@ HRESULT CMainFrame::OpenBDAGraph()
             if (clsid == __uuidof(CAudioSwitcherFilter)) {
                 m_pAudioSwitcherSS = pBF;
             } else {
-                if (clsid == GUID_LAVSplitter) {
-                    m_pSplitterSS = pBF;
-                } else {
-                    if (clsid == CLSID_VSFilter || clsid == CLSID_XySubFilter) {
-                        m_pDVS = pBF;
-                        m_pDVS2 = pBF;
-                    } else {
-                        if (clsid != CLSID_MPCBEAudioRenderer) {
-                            if (CComQIPtr<IAMStreamSelect> pTest = pBF) {
-                                if (!m_pOtherSS[0]) {
-                                    m_pOtherSS[0] = pBF;
-                                } else if (!m_pOtherSS[1]) {
-                                    m_pOtherSS[1] = pBF;
-                                } else {
-                                    ASSERT(false);
-                                }
-                            }
-                        }
-                    }
+                if (clsid == CLSID_VSFilter || clsid == CLSID_XySubFilter) {
+                    m_pDVS = pBF;
+                    m_pDVS2 = pBF;
                 }
             }
         }
@@ -13990,6 +13971,9 @@ HRESULT CMainFrame::OpenBDAGraph()
         EndEnumFilters;
 
         ASSERT(m_pFSF);
+
+        // BDA graph builder implements IAMStreamSelect
+        m_pSplitterSS = m_pGB;
     }
     return hr;
 }
