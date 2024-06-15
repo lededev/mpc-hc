@@ -2219,6 +2219,15 @@ bool GetVideoFormatNameFromMediaType(const GUID& guid, CString& name) {
     } else if (guid == MEDIASUBTYPE_MPEG2_VIDEO) {
         name = L"MPEG2";
         return true;
+    } else if (guid == MEDIASUBTYPE_ARGB32) {
+        name = L"ARGB";
+        return true;
+    } else if (guid == MEDIASUBTYPE_RGB32) {
+        name = L"RGB";
+        return true;
+    } else if (guid == MEDIASUBTYPE_LAV_RAWVIDEO) {
+        name = L"RAW";
+        return true;
     } else {
         name = L"UNKN";
         ASSERT(false);
