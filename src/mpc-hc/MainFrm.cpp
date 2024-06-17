@@ -18734,40 +18734,24 @@ void CMainFrame::CloseMedia(bool bNextIsQueued/* = false*/)
 
         if (m_bOpenedThroughThread) {
             BeginWaitCursor();
-            if (WaitForSingleObject(m_evOpenPrivateFinished, 5000) == WAIT_TIMEOUT) { // TODO: it's really dangerous, decide if we should do it at all
-                // graph thread is taking too long to respond, we take extreme measures and terminate it
+            if (WaitForSingleObject(m_evOpenPrivateFinished, 5000) == WAIT_TIMEOUT) {
+                // Aborting graph failed
+                TRACE(_T("Failed to abort graph creation.\n"));
                 MessageBeep(MB_ICONEXCLAMATION);
-                ASSERT(FALSE);
-#ifndef DEBUG
-                if (bNextIsQueued) {
-#endif
-                    ENSURE(TerminateThread(m_pGraphThread->m_hThread, DWORD_ERROR));
-                    // then we recreate graph thread
-                    bGraphTerminated = true;
-                    CWinThread* newthread = AfxBeginThread(RUNTIME_CLASS(CGraphThread));
-                    if (newthread) {
-                        m_pGraphThread = (CGraphThread*)newthread;
-                        m_pGraphThread->SetMainFrame(this);
-                    } else {
-                        m_pGraphThread = nullptr;
-                    }
-#ifndef DEBUG
-                } else {
-                    if (CrashReporter::IsEnabled()) {
-                        CrashReporter::Disable();
-                    }
-                    exit(1);
+                if (CrashReporter::IsEnabled()) {
+                    CrashReporter::Disable();
                 }
-#endif
+                exit(1);
             }
             EndWaitCursor();
         } else {
-#ifndef DEBUG
+            // Aborting graph failed
+            TRACE(_T("Failed to abort graph creation.\n"));
+            MessageBeep(MB_ICONEXCLAMATION);
             if (CrashReporter::IsEnabled()) {
                 CrashReporter::Disable();
             }
             exit(1);
-#endif
         }
 
         MSG msg;
@@ -18824,13 +18808,13 @@ void CMainFrame::CloseMedia(bool bNextIsQueued/* = false*/)
                 MSG msg;
                 PeekMessage(&msg, nullptr, 0, 0, PM_NOREMOVE);
             } else {
-                ASSERT(FALSE);
-#ifndef DEBUG
+                // Aborting graph failed
+                TRACE(_T("Failed to close filter graph.\n"));
+                MessageBeep(MB_ICONEXCLAMATION);
                 if (CrashReporter::IsEnabled()) {
                     CrashReporter::Disable();
                 }
                 exit(1);
-#endif
             }
         }
     } else {
