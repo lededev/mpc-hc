@@ -12872,9 +12872,14 @@ void CMainFrame::OpenCreateGraphObject(OpenMediaData* pOMD)
     if (m_bUseSeekPreview) {
         if (OpenFileData* pFileData = dynamic_cast<OpenFileData*>(pOMD)) {
             CString fn = pFileData->fns.GetHead();
-            if (!fn.IsEmpty() && ((fn.Find(L"://") >= 0) || IsAudioFilename(fn) || PathIsOnOpticalDisc(fn))) {
-                // disable seek preview for: streaming data, audio files, files on optical disc
+            if (fn.IsEmpty()) {
                 m_bUseSeekPreview = false;
+            } else {
+                CString ext = CPath(fn).GetExtension().MakeLower();
+                if (((fn.Find(L"://") >= 0) || IsAudioFileExt(ext) || ext == L".avs" || PathIsOnOpticalDisc(fn))) {
+                    // disable seek preview for: streaming data, audio files, files on optical disc
+                    m_bUseSeekPreview = false;
+                }
             }
         }
     }
