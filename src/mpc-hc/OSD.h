@@ -63,6 +63,7 @@ class COSD : public CWnd
         IMG_CLOSE_A = 24,
     };
 
+    CComPtr<IVMRMixerBitmap9>    m_pVMB;
     CComPtr<IMFVideoMixerBitmap> m_pMFVMB;
     CComPtr<IMadVRTextOsd>       m_pMVTO;
 
@@ -72,6 +73,7 @@ class COSD : public CWnd
 
     CCritSec            m_Lock;
     CDC                 m_MemDC;
+    VMR9AlphaBitmap    m_VMR9AlphaBitmap = {};
     MFVideoAlphaBitmap  m_MFVAlphaBitmap = {};
     BITMAP              m_BitmapInfo;
 
@@ -152,7 +154,7 @@ public:
 
     HRESULT Create(CWnd* pWnd);
 
-    void Start(CWnd* pWnd, CComPtr<IMFVideoMixerBitmap> pMFVMB, bool bShowSeekBar);
+    void Start(CWnd* pWnd, CComPtr<IVMRMixerBitmap9> pVMB, CComPtr<IMFVideoMixerBitmap> pMFVMB, bool bShowSeekBar);
     void Start(CWnd* pWnd, IMadVRTextOsd* pMVTO);
     void Start(CWnd* pWnd);
     void Stop();
