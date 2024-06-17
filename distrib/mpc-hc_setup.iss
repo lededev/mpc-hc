@@ -20,8 +20,8 @@
 ; Inno Setup Unicode: http://www.jrsoftware.org/isdl.php
 
 
-#if VER < EncodeVer(5,5,9)
-  #error Update your Inno Setup version (5.5.9 or newer)
+#if VER < EncodeVer(6,3,1)
+  #error Update your Inno Setup version (6.3.1 or newer)
 #endif
 
 #ifndef UNICODE
@@ -126,8 +126,8 @@
 #ifdef x64Build
 AppId                     = {{2ACBF1FA-F5C3-4B19-A774-B22A31F231B9}
 DefaultGroupName          = {#app_name} x64
-ArchitecturesAllowed      = x64 arm64
-ArchitecturesInstallIn64BitMode = x64 arm64
+ArchitecturesAllowed      = x64compatible
+ArchitecturesInstallIn64BitMode = x64compatible
 #else
 AppId                     = {{2624B969-7135-4EB1-B0F6-2D8C397B45F7}
 DefaultGroupName          = {#app_name}
@@ -176,9 +176,6 @@ Name: ca;    MessagesFile: compiler:Languages\Catalan.isl
 Name: cs;    MessagesFile: compiler:Languages\Czech.isl
 Name: da;    MessagesFile: compiler:Languages\Danish.isl
 Name: de;    MessagesFile: compiler:Languages\German.isl
-#if VER <= EncodeVer(5,5,9)
-Name: el;    MessagesFile: compiler:Languages\Greek.isl
-#endif
 Name: en_GB; MessagesFile: Languages\EnglishBritish.isl
 Name: es;    MessagesFile: compiler:Languages\Spanish.isl
 Name: eu;    MessagesFile: Languages\Basque.isl
@@ -188,11 +185,7 @@ Name: gl;    MessagesFile: Languages\Galician.isl
 Name: he;    MessagesFile: compiler:Languages\Hebrew.isl
 Name: hr;    MessagesFile: Languages\Croatian.isl
 Name: hu;    MessagesFile: compiler:Languages\Hungarian.isl
-#if VER < EncodeVer(6,0,0)
-Name: hy;    MessagesFile: compiler:Languages\Armenian.islu
-#else
 Name: hy;    MessagesFile: compiler:Languages\Armenian.isl
-#endif
 Name: id;    MessagesFile: Languages\Indonesian.isl
 Name: it;    MessagesFile: compiler:Languages\Italian.isl
 Name: ja;    MessagesFile: compiler:Languages\Japanese.isl
@@ -207,9 +200,6 @@ Name: ro;    MessagesFile: Languages\Romanian.isl
 Name: ru;    MessagesFile: compiler:Languages\Russian.isl
 Name: sk;    MessagesFile: Languages\Slovak.isl
 Name: sl;    MessagesFile: compiler:Languages\Slovenian.isl
-#if VER <= EncodeVer(5,5,9)
-Name: sr;    MessagesFile: compiler:Languages\SerbianCyrillic.isl
-#endif
 Name: sv;    MessagesFile: Languages\Swedish.isl
 Name: th_TH; MessagesFile: Languages\Thai.isl
 Name: tt;    MessagesFile: Languages\Tatar.isl
@@ -559,11 +549,6 @@ begin
 #if defined(sse2_required)
     if not Is_SSE2_Supported() then begin
       SuppressibleMsgBox(CustomMessage('msg_simd_sse2'), mbCriticalError, MB_OK, MB_OK);
-      Result := False;
-    end;
-#elif defined(sse_required)
-    if not Is_SSE_Supported() then begin
-      SuppressibleMsgBox(CustomMessage('msg_simd_sse'), mbCriticalError, MB_OK, MB_OK);
       Result := False;
     end;
 #endif
