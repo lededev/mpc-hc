@@ -18741,7 +18741,7 @@ void CMainFrame::CloseMedia(bool bNextIsQueued/* = false*/)
                 if (CrashReporter::IsEnabled()) {
                     CrashReporter::Disable();
                 }
-                exit(1);
+                TerminateProcess(GetCurrentProcess(), 0xDEADBEEF);
             }
             EndWaitCursor();
         } else {
@@ -18751,7 +18751,7 @@ void CMainFrame::CloseMedia(bool bNextIsQueued/* = false*/)
             if (CrashReporter::IsEnabled()) {
                 CrashReporter::Disable();
             }
-            exit(1);
+            TerminateProcess(GetCurrentProcess(), 0xDEADBEEF);
         }
 
         MSG msg;
@@ -18814,7 +18814,7 @@ void CMainFrame::CloseMedia(bool bNextIsQueued/* = false*/)
                 if (CrashReporter::IsEnabled()) {
                     CrashReporter::Disable();
                 }
-                exit(1);
+                TerminateProcess(GetCurrentProcess(), 0xDEADBEEF);
             }
         }
     } else {
