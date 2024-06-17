@@ -1428,7 +1428,7 @@ bool CMPlayerCApp::SendCommandLine(HWND hWnd)
     cds.cbData = bufflen;
     cds.lpData = (void*)(BYTE*)buff;
 
-    return !!SendMessage(hWnd, WM_COPYDATA, (WPARAM)nullptr, (LPARAM)&cds);
+    return !!SendMessageTimeoutW(hWnd, WM_COPYDATA, (WPARAM)nullptr, (LPARAM)&cds, SMTO_ABORTIFHUNG | SMTO_NOTIMEOUTIFNOTHUNG, 5000, nullptr);
 }
 
 // CMPlayerCApp initialization
