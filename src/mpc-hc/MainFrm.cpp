@@ -12871,7 +12871,7 @@ void CMainFrame::OpenCreateGraphObject(OpenMediaData* pOMD)
     const CAppSettings& s = AfxGetAppSettings();
 
     m_pGB_preview = nullptr;
-    m_bUseSeekPreview = s.fSeekPreview && m_wndPreView && ::IsWindow(m_wndPreView.m_hWnd);
+    m_bUseSeekPreview = s.fUseSeekbarHover && s.fSeekPreview && m_wndPreView && ::IsWindow(m_wndPreView.m_hWnd);
     if (m_bUseSeekPreview) {
         if (OpenFileData* pFileData = dynamic_cast<OpenFileData*>(pOMD)) {
             CString fn = pFileData->fns.GetHead();
@@ -18424,10 +18424,8 @@ void CMainFrame::SendStatusMessage(CString msg, int nTimeOut)
 }
 
 bool CMainFrame::CanPreviewUse() {
-    return (m_bUseSeekPreview && m_wndPreView && !m_fAudioOnly
-        && m_eMediaLoadState == MLS::LOADED
-        && (GetPlaybackMode() == PM_DVD || GetPlaybackMode() == PM_FILE)
-        && AfxGetAppSettings().fSeekPreview);
+    return (m_bUseSeekPreview && m_wndPreView && !m_fAudioOnly && m_eMediaLoadState == MLS::LOADED
+        && (GetPlaybackMode() == PM_DVD || GetPlaybackMode() == PM_FILE));
 }
 
 void CMainFrame::OpenCurPlaylistItem(REFERENCE_TIME rtStart, bool reopen /* = false */, ABRepeat abRepeat /* = ABRepeat() */)

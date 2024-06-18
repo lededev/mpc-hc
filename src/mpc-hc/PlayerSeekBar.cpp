@@ -817,21 +817,17 @@ void CPlayerSeekBar::OnMouseMove(UINT nFlags, CPoint point)
         CheckScrollDistance(point, std::min(5000000LL, m_rtStop / 30), 150LL);
     }
 
-    bool usepreview = m_bHasDuration && m_pMainFrame->CanPreviewUse();
-
-    if (usepreview || AfxGetAppSettings().fUseSeekbarHover) {
+    if (AfxGetAppSettings().fUseSeekbarHover) {
         UpdateTooltip(point);
-    }
 
-    if (usepreview) {
-        //checkHover(point);
-
-        const OAFilterState fs = m_pMainFrame->m_CachedFilterState;
-        if (fs != -1) {
-            UpdateToolTipPosition(point);
-            PreviewWindowShow(point);
-        } else {
-            m_pMainFrame->PreviewWindowHide();
+        if (m_bHasDuration && m_pMainFrame->CanPreviewUse()) {
+            const OAFilterState fs = m_pMainFrame->m_CachedFilterState;
+            if (fs != -1) {
+                UpdateToolTipPosition(point);
+                PreviewWindowShow(point);
+            } else {
+                m_pMainFrame->PreviewWindowHide();
+            }
         }
     }
 }

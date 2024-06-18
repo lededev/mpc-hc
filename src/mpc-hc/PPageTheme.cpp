@@ -174,7 +174,6 @@ BOOL CPPageTheme::OnInitDialog()
     m_nOSDSize = s.nOSDSize;
     m_strOSDFont = s.strOSDFont;
 
-    //m_fSeekPreview = s.fSeekPreview;
     m_HoverType.AddString(ResStr(IDS_SEEKBAR_HOVER_TOOLTIP));
     m_HoverType.AddString(ResStr(IDS_SEEKBAR_HOVER_PREVIEW));
     m_HoverType.SetCurSel(s.fSeekPreview ? 1 : 0);
