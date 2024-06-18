@@ -8728,6 +8728,9 @@ void CMainFrame::OnPlayStop()
             LONGLONG pos = 0;
             m_pMS->SetPositions(&pos, AM_SEEKING_AbsolutePositioning, nullptr, AM_SEEKING_NoPositioning);
             MediaControlStop();
+            if (m_bUseSeekPreview && m_pMC_preview) {
+                m_pMC_preview->Stop();
+            }
 
             if (m_pAMNS && m_pFSF) {
                 // After pause or stop the netshow url source filter won't continue
@@ -15353,6 +15356,15 @@ void CMainFrame::CloseMediaPrivate()
     MediaControlStop(true); // needed for StreamBufferSource, because m_iMediaLoadState is always MLS::CLOSED // TODO: fix the opening for such media
     m_CachedFilterState = -1;
 
+    if (m_pGB_preview) {
+        PreviewWindowHide();
+        m_bUseSeekPreview = false;
+        if (m_pMC_preview) {
+            m_pMC_preview->Stop();
+        }
+        ReleasePreviewGraph();
+    }
+
     m_fLiveWM = false;
     m_fEndOfStream = false;
     m_bBuffering = false;
@@ -15438,11 +15450,6 @@ void CMainFrame::CloseMediaPrivate()
     if (m_pGB) {
         m_pGB->RemoveFromROT();
         m_pGB.Release();
-    }
-
-    if (m_pGB_preview) {
-        PreviewWindowHide();
-        ReleasePreviewGraph();
     }
 
     m_pProv.Release();
