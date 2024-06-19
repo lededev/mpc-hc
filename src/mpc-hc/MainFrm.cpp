@@ -18736,6 +18736,9 @@ void CMainFrame::CloseMedia(bool bNextIsQueued/* = false*/)
         if (m_pGB) {
             m_pGB->Abort(); // TODO: lock on graph objects somehow, this is not thread safe
         }
+        if (m_pGB_preview) {
+            m_pGB_preview->Abort();
+        }
 
         if (m_bOpenedThroughThread) {
             BeginWaitCursor();
