@@ -18835,13 +18835,15 @@ void CMainFrame::CloseMedia(bool bNextIsQueued/* = false*/)
                     ForceCloseProcess();
                 } else {
                     int wait = 15000;
-                    while (wait > 0 && m_pGB) {
+                    while (wait > 0 && (m_pGB || m_pGB_preview)) {
                         Sleep(100);
                         wait -= 100;
                     }
-                    if (m_pGB) {
+                    if (m_pGB || m_pGB_preview) {
                         ForceCloseProcess();
                     }
+                    Sleep(200);
+                    break;
                 }
             }
         }
