@@ -270,7 +270,10 @@ HRESULT CFGFilterLAVSplitterBase::Create(IBaseFilter** ppBF, CInterfaceList<IUnk
 
             if (SUCCEEDED(hr)) {
                 if (isPreview) {
+                    pLAVFSettings->SetMaxQueueMemSize(20);
                     pLAVFSettings->SetMaxQueueSize(50);
+                    pLAVFSettings->SetSubstreamsEnabled(false);
+                    pLAVFSettings->SetSubtitleMode(LAVSubtitleMode_NoSubs);
                 } else {
                     Settings settings;
                     if (settings.GetSettings(pLAVFSettings)) { // Get default settings from LAVSplitter
