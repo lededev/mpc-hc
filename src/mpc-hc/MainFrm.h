@@ -574,6 +574,8 @@ protected:
     int m_AngleX, m_AngleY, m_AngleZ;
     int m_iDefRotation;
 
+    void ForceCloseProcess();
+
     // Operations
     bool OpenMediaPrivate(CAutoPtr<OpenMediaData> pOMD);
     void CloseMediaPrivate();

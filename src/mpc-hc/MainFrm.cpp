@@ -15356,15 +15356,6 @@ void CMainFrame::CloseMediaPrivate()
     MediaControlStop(true); // needed for StreamBufferSource, because m_iMediaLoadState is always MLS::CLOSED // TODO: fix the opening for such media
     m_CachedFilterState = -1;
 
-    if (m_pGB_preview) {
-        PreviewWindowHide();
-        m_bUseSeekPreview = false;
-        if (m_pMC_preview) {
-            m_pMC_preview->Stop();
-        }
-        ReleasePreviewGraph();
-    }
-
     m_fLiveWM = false;
     m_fEndOfStream = false;
     m_bBuffering = false;
@@ -15450,6 +15441,15 @@ void CMainFrame::CloseMediaPrivate()
     if (m_pGB) {
         m_pGB->RemoveFromROT();
         m_pGB.Release();
+    }
+
+    if (m_pGB_preview) {
+        if (m_pMC_preview) {
+            TRACE(_T("Stopping preview graph\n"));
+            m_pMC_preview->Stop();
+        }
+        TRACE(_T("Releasing preview graph\n"));
+        ReleasePreviewGraph();
     }
 
     m_pProv.Release();
@@ -18626,6 +18626,15 @@ void CMainFrame::CloseMediaBeforeOpen()
     }
 }
 
+void CMainFrame::ForceCloseProcess()
+{
+    MessageBeep(MB_ICONEXCLAMATION);
+    if (CrashReporter::IsEnabled()) {
+        CrashReporter::Disable();
+    }
+    TerminateProcess(GetCurrentProcess(), 0xDEADBEEF);
+}
+
 void CMainFrame::CloseMedia(bool bNextIsQueued/* = false*/)
 {
     TRACE(_T("CMainFrame::CloseMedia\n"));
@@ -18745,21 +18754,13 @@ void CMainFrame::CloseMedia(bool bNextIsQueued/* = false*/)
             if (WaitForSingleObject(m_evOpenPrivateFinished, 5000) == WAIT_TIMEOUT) {
                 // Aborting graph failed
                 TRACE(_T("Failed to abort graph creation.\n"));
-                MessageBeep(MB_ICONEXCLAMATION);
-                if (CrashReporter::IsEnabled()) {
-                    CrashReporter::Disable();
-                }
-                TerminateProcess(GetCurrentProcess(), 0xDEADBEEF);
+                ForceCloseProcess();
             }
             EndWaitCursor();
         } else {
             // Aborting graph failed
             TRACE(_T("Failed to abort graph creation.\n"));
-            MessageBeep(MB_ICONEXCLAMATION);
-            if (CrashReporter::IsEnabled()) {
-                CrashReporter::Disable();
-            }
-            TerminateProcess(GetCurrentProcess(), 0xDEADBEEF);
+            ForceCloseProcess();
         }
 
         MSG msg;
@@ -18779,6 +18780,11 @@ void CMainFrame::CloseMedia(bool bNextIsQueued/* = false*/)
     // we are on the way
     m_bSettingUpMenus = true;
     SetLoadState(MLS::CLOSING);
+
+    if (m_pGB_preview) {
+        PreviewWindowHide();
+        m_bUseSeekPreview = false;
+    }
 
     // stop the graph before destroying it
     OnPlayStop();
@@ -18817,12 +18823,26 @@ void CMainFrame::CloseMedia(bool bNextIsQueued/* = false*/)
                 PeekMessage(&msg, nullptr, 0, 0, PM_NOREMOVE);
             } else {
                 // Aborting graph failed
-                TRACE(_T("Failed to close filter graph.\n"));
-                MessageBeep(MB_ICONEXCLAMATION);
-                if (CrashReporter::IsEnabled()) {
-                    CrashReporter::Disable();
+                TRACE(_T("Failed to close filter graph thread.\n"));
+                CString msg;
+                if (!m_pGB && m_pGB_preview) {
+                    msg = L"Timeout when closing preview filter graph.\n\nClick YES to terminate player process. Click NO to wait longer (up to 15s).";
+                } else {
+                    msg = L"Timeout when closing filter graph.\n\nClick YES to terminate player process. Click NO to wait longer (up to 15s).";
                 }
-                TerminateProcess(GetCurrentProcess(), 0xDEADBEEF);
+
+                if (m_fFullScreen || (IDYES == AfxMessageBox(msg, MB_ICONEXCLAMATION | MB_YESNO, 0))) {
+                    ForceCloseProcess();
+                } else {
+                    int wait = 15000;
+                    while (wait > 0 && m_pGB) {
+                        Sleep(100);
+                        wait -= 100;
+                    }
+                    if (m_pGB) {
+                        ForceCloseProcess();
+                    }
+                }
             }
         }
     } else {
