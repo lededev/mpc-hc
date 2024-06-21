@@ -11219,43 +11219,40 @@ void CMainFrame::SetDefaultFullscreenState()
 {
     CAppSettings& s = AfxGetAppSettings();
 
-    if (!s.bFullscreenSeparateControls) {
-        bool clGoFullscreen = !(s.nCLSwitches & CLSW_ADD) && (s.nCLSwitches & CLSW_FULLSCREEN);
+    bool clGoFullscreen = !(s.nCLSwitches & CLSW_ADD) && (s.nCLSwitches & CLSW_FULLSCREEN);
 
-        if (clGoFullscreen && !s.slFiles.IsEmpty()) {
-            // ignore fullscreen if all files are audio
-            clGoFullscreen = false;
-            const CMediaFormats& mf = AfxGetAppSettings().m_Formats;
-            POSITION pos = s.slFiles.GetHeadPosition();
-            while (pos) {
-                CString fpath = s.slFiles.GetNext(pos);
-                CString ext = fpath.Mid(fpath.ReverseFind('.') + 1);
-                if (!mf.FindExt(ext, true)) {
-                    clGoFullscreen = true;
-                    break;
-                }
+    if (clGoFullscreen && !s.slFiles.IsEmpty()) {
+        // ignore fullscreen if all files are audio
+        clGoFullscreen = false;
+        const CMediaFormats& mf = AfxGetAppSettings().m_Formats;
+        POSITION pos = s.slFiles.GetHeadPosition();
+        while (pos) {
+            CString fpath = s.slFiles.GetNext(pos);
+            CString ext = fpath.Mid(fpath.ReverseFind('.') + 1);
+            if (!mf.FindExt(ext, true)) {
+                clGoFullscreen = true;
+                break;
             }
         }
+    }
 
-        if (clGoFullscreen) {
-            if (s.IsD3DFullscreen()) {
-                m_fStartInD3DFullscreen = true;
-            }
-            else {
-                ToggleFullscreen(true, true);
-                m_fFirstFSAfterLaunchOnFS = true;
-            }
-            s.nCLSwitches &= ~CLSW_FULLSCREEN;
+    if (clGoFullscreen) {
+        if (s.IsD3DFullscreen()) {
+            m_fStartInD3DFullscreen = true;
+        } else if (s.bFullscreenSeparateControls) {
+            m_fStartInFullscreen = true;
+        } else {
+            ToggleFullscreen(true, true);
+            m_fFirstFSAfterLaunchOnFS = true;
         }
-        else if (s.fRememberWindowSize && s.fRememberWindowPos && !m_fFullScreen && s.fLastFullScreen) {
-            // Casimir666 : if fullscreen was on, put it on back
-            if (s.IsD3DFullscreen()) {
-                m_fStartInD3DFullscreen = true;
-            }
-            else {
-                ToggleFullscreen(true, true);
-                m_fFirstFSAfterLaunchOnFS = true;
-            }
+        s.nCLSwitches &= ~CLSW_FULLSCREEN;
+    } else if (s.fRememberWindowSize && s.fRememberWindowPos && !m_fFullScreen && s.fLastFullScreen) {
+        // Casimir666 : if fullscreen was on, put it on back
+        if (s.IsD3DFullscreen()) {
+            m_fStartInD3DFullscreen = true;
+        } else {
+            ToggleFullscreen(true, true);
+            m_fFirstFSAfterLaunchOnFS = true;
         }
     }
 }
