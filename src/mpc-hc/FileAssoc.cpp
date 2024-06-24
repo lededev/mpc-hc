@@ -198,6 +198,7 @@ bool CFileAssoc::Register(CString ext, CString strLabel, bool bRegister, bool bA
             if (ERROR_SUCCESS != key.Create(HKEY_CLASSES_ROOT, strProgID + _T("\\shell\\enqueue"))
                     || ERROR_SUCCESS != key.SetStringValue(nullptr, ResStr(IDS_ADD_TO_PLAYLIST))
                     || ERROR_SUCCESS != key.SetStringValue(_T("Icon"), appIcon)
+                    || ERROR_SUCCESS != key.SetStringValue(_T("MultiSelectModel"), _T("Player"))
                     || ERROR_SUCCESS != key.Create(HKEY_CLASSES_ROOT, strProgID + _T("\\shell\\enqueue\\command"))
                     || ERROR_SUCCESS != key.SetStringValue(nullptr, m_strEnqueueCommand)) {
                 return false;
@@ -213,6 +214,7 @@ bool CFileAssoc::Register(CString ext, CString strLabel, bool bRegister, bool bA
             return false;
         }
         if (ERROR_SUCCESS != key.SetStringValue(nullptr, ResStr(IDS_OPEN_WITH_MPC))
+                || ERROR_SUCCESS != key.SetStringValue(_T("MultiSelectModel"), _T("Player"))
                 || ERROR_SUCCESS != key.SetStringValue(_T("Icon"), appIcon)) {
             return false;
         }
