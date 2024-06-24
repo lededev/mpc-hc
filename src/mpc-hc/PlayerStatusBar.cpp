@@ -484,6 +484,7 @@ void CPlayerStatusBar::OnSize(UINT nType, int cx, int cy)
 void CPlayerStatusBar::OnLButtonDown(UINT nFlags, CPoint point)
 {
     CMainFrame* pFrame = ((CMainFrame*)GetParentFrame());
+    pFrame->RestoreFocus();
 
     WINDOWPLACEMENT wp;
     wp.length = sizeof(wp);

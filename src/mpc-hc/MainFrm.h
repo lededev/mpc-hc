@@ -876,6 +876,8 @@ public:
 
     afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 
+    void RestoreFocus();
+
     afx_msg void OnInitMenu(CMenu* pMenu);
     afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
     afx_msg void OnUnInitMenuPopup(CMenu* pPopupMenu, UINT nFlags);

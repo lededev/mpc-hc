@@ -487,6 +487,7 @@ void CPlayerToolBar::OnLButtonDown(UINT nFlags, CPoint point)
     } else {
         __super::OnLButtonDown(nFlags, point);
     }
+    m_pMainFrame->RestoreFocus();
 }
 
 void CPlayerToolBar::OnRButtonDown(UINT nFlags, CPoint point) {
