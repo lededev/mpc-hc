@@ -1714,7 +1714,7 @@ void CMainFrame::OnSizingFixWndToVideo(UINT nSide, LPRECT lpRect, bool bCtrl)
     const auto& s = AfxGetAppSettings();
 
     if (GetLoadState() != MLS::LOADED || s.iDefaultVideoSize == DVS_STRETCH ||
-        bCtrl == s.fLimitWindowProportions || IsAeroSnapped()) {
+        bCtrl == s.fLimitWindowProportions || IsAeroSnapped() || (m_fAudioOnly && !m_wndView.IsCustomImgLoaded())) {
         return;
     }
 
@@ -1809,6 +1809,7 @@ void CMainFrame::OnSizingSnapToScreen(UINT nSide, LPRECT lpRect, bool bCtrl /*= 
     };
 
     CSize videoSize = GetVideoSize();
+
     if (bCtrl == s.fLimitWindowProportions || videoSize.cx == 0 || videoSize.cy == 0) {
         SnapTo(rect.left, areaRect.left, threshold.cx);
         SnapTo(rect.top, areaRect.top, threshold.cy);
