@@ -15092,21 +15092,6 @@ bool CMainFrame::OpenMediaPrivate(CAutoPtr<OpenMediaData> pOMD)
         m_pMVRFG = m_pCAP;
         pMVTO = m_pCAP;
 
-        if (s.fShowOSD || s.fShowDebugInfo) { // Force OSD on when the debug switch is used
-            m_OSD.Stop();
-
-            if (IsD3DFullScreenMode() && !m_fAudioOnly) {
-                if (m_pVMB || m_pMFVMB) {
-                    m_OSD.Start(m_pVideoWnd, m_pVMB, m_pMFVMB, true);
-                }
-            } else {
-                if (pMVTO) {
-                    m_OSD.Start(m_pVideoWnd, pMVTO);
-                } else {
-                    m_OSD.Start(m_pOSDWnd);
-                }
-            }
-        }
         checkAborted();
 
         SetupVMR9ColorControl();
@@ -15149,6 +15134,22 @@ bool CMainFrame::OpenMediaPrivate(CAutoPtr<OpenMediaData> pOMD)
 
         OpenSetupVideo();
         checkAborted();
+
+        if (s.fShowOSD || s.fShowDebugInfo) { // Force OSD on when the debug switch is used
+            m_OSD.Stop();
+
+            if (IsD3DFullScreenMode() && !m_fAudioOnly) {
+                if (m_pVMB || m_pMFVMB) {
+                    m_OSD.Start(m_pVideoWnd, m_pVMB, m_pMFVMB, true);
+                }
+            } else {
+                if (pMVTO) {
+                    m_OSD.Start(m_pVideoWnd, pMVTO);
+                } else {
+                    m_OSD.Start(m_pOSDWnd);
+                }
+            }
+        }
 
         OpenSetupAudio();
         checkAborted();
