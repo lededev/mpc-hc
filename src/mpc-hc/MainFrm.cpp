@@ -11472,6 +11472,9 @@ CSize CMainFrame::GetVideoSize() const
             preferedAR.SetSize(arx, ary);
         }
     }
+    if (preferedAR.cx <= 0 || preferedAR.cy <= 0) { //due to IBasicVideo2 not being found, this could still be zero for .swf
+        preferedAR.SetSize(videoSize.cx, videoSize.cy);
+    }
 
     if (videoSize.cx <= 0 || videoSize.cy <= 0) {
         return ret;
