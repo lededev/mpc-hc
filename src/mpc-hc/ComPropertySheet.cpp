@@ -89,7 +89,7 @@ CComPropertySheet::~CComPropertySheet()
 {
 }
 
-int CComPropertySheet::AddPages(ISpecifyPropertyPages* pSPP, ULONG uIgnorePage /*= -1*/)
+int CComPropertySheet::AddPages(ISpecifyPropertyPages* pSPP, bool internalfilter /*= false*/, ULONG uIgnorePage /*= -1*/)
 {
     if (!pSPP) {
         return 0;
@@ -121,11 +121,15 @@ int CComPropertySheet::AddPages(ISpecifyPropertyPages* pSPP, ULONG uIgnorePage /
             hr = pSPP2->CreatePage(caGUID.pElems[i], &pPage);
         }
 
+        if (FAILED(hr) && internalfilter && !pPage && pPersist) {
+            hr = LoadExternalPropertyPage(pPersist, caGUID.pElems[i], &pPage);
+        }
+
         if (FAILED(hr) && !pPage) {
             hr = pPage.CoCreateInstance(caGUID.pElems[i]);
         }
 
-        if (FAILED(hr) && !pPage && pPersist) {
+        if (FAILED(hr) && !internalfilter && !pPage && pPersist) {
             hr = LoadExternalPropertyPage(pPersist, caGUID.pElems[i], &pPage);
         }
 

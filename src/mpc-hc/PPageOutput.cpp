@@ -445,14 +445,16 @@ void CPPageOutput::OpenVideoRendererSettings() {
 
     auto m = AfxGetMainFrame();
     if (!m->FilterSettingsByClassID(clsid, this)) { //if it is currently in use, get the running instance
-        CFGFilterRegistry fvr(clsid);
-        CComPtr<IBaseFilter> pBF;
         CComPtr<IUnknown> pIU;
-        CInterfaceList<IUnknown, &IID_IUnknown> pUnks; //unused
-        if (SUCCEEDED(fvr.Create(&pBF, pUnks))) { //otherwise, create our own
-            m->FilterSettings(CComPtr<IUnknown>(pBF), this);
-        } else if (CLSID_MPCVR == clsid && SUCCEEDED(DSObjects::CMPCVRAllocatorPresenter::InstantiateInternalMPCVR(pIU, nullptr))) {
+        if (CLSID_MPCVR == clsid && SUCCEEDED(DSObjects::CMPCVRAllocatorPresenter::InstantiateInternalMPCVR(pIU, nullptr))) {
             m->FilterSettings(pIU, this);
+        } else {
+            CFGFilterRegistry fvr(clsid);
+            CComPtr<IBaseFilter> pBF;
+            CInterfaceList<IUnknown, &IID_IUnknown> pUnks; //unused
+            if (SUCCEEDED(fvr.Create(&pBF, pUnks))) { //otherwise, create our own
+                m->FilterSettings(CComPtr<IUnknown>(pBF), this);
+            }
         }
     }
 }

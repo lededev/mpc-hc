@@ -9442,36 +9442,35 @@ bool CMainFrame::FilterSettingsByClassID(CLSID clsid, CWnd* parent)
 void CMainFrame::FilterSettings(CComPtr<IUnknown> pUnk, CWnd* parent) {
     CComPropertySheet ps(IDS_PROPSHEET_PROPERTIES);
 
-    // Find out if we are opening the property page for an internal filter
     CComQIPtr<IBaseFilter> pBF = pUnk;
-    bool bIsInternalFilter = false;
-    CFGFilterLAV::LAVFILTER_TYPE LAVFilterType = CFGFilterLAV::INVALID;
-    if (pBF) {
-        bIsInternalFilter = CFGFilterLAV::IsInternalInstance(pBF, &LAVFilterType);
+    if (!pBF) {
+        return;
     }
+    CLSID clsid = GetCLSID(pBF);
+
+    CFGFilterLAV::LAVFILTER_TYPE LAVFilterType = CFGFilterLAV::INVALID;
+    bool bIsInternalLAV = CFGFilterLAV::IsInternalInstance(pBF, &LAVFilterType);
 
     if (CComQIPtr<ISpecifyPropertyPages> pSPP = pUnk) {
         ULONG uIgnoredPage = ULONG(-1);
         // If we are dealing with an internal filter, we want to ignore the "Formats" page.
-        if (bIsInternalFilter) {
+        if (bIsInternalLAV) {
             uIgnoredPage = (LAVFilterType != CFGFilterLAV::AUDIO_DECODER) ? 1 : 2;
         }
-        ps.AddPages(pSPP, uIgnoredPage);
+        bool bIsInternalFilter = bIsInternalLAV || clsid == CLSID_MPCVR;
+        ps.AddPages(pSPP, bIsInternalFilter, uIgnoredPage);
     }
 
-    if (pBF) {
-        HRESULT hr;
-        CComPtr<IPropertyPage> pPP = DEBUG_NEW CInternalPropertyPageTempl<CPinInfoWnd>(nullptr, &hr);
-        ps.AddPage(pPP, pBF);
-    }
+    HRESULT hr;
+    CComPtr<IPropertyPage> pPP = DEBUG_NEW CInternalPropertyPageTempl<CPinInfoWnd>(nullptr, &hr);
+    ps.AddPage(pPP, pBF);
 
-    if (pBF && ps.GetPageCount() > 0) {
-        CLSID clsid = GetCLSID(pBF);
+    if (ps.GetPageCount() > 0) {
         CMPCThemeComPropertyPage::SetDialogType(clsid);
         ps.DoModal();
         OpenSetupStatusBar();
 
-        if (bIsInternalFilter) {
+        if (bIsInternalLAV) {
             if (CComQIPtr<ILAVFSettings> pLAVFSettings = pBF) {
                 CFGFilterLAVSplitterBase::Settings settings;
                 if (settings.GetSettings(pLAVFSettings)) { // Get current settings from LAVSplitter

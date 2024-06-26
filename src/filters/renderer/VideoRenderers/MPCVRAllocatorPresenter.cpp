@@ -270,11 +270,10 @@ STDMETHODIMP CMPCVRAllocatorPresenter::CreateRenderer(IUnknown** ppRenderer)
         return E_UNEXPECTED;
     }
 
-    HRESULT hr;
-    if (IsCLSIDRegistered(CLSID_MPCVR)) {
+    HRESULT hr = InstantiateInternalMPCVR(m_pMPCVR, GetOwner());
+
+    if (FAILED(hr) && IsCLSIDRegistered(CLSID_MPCVR)) {
         hr = m_pMPCVR.CoCreateInstance(CLSID_MPCVR, GetOwner());
-    } else {
-        hr = InstantiateInternalMPCVR(m_pMPCVR, GetOwner());
     }
 
     if (FAILED(hr)) {
