@@ -9755,6 +9755,7 @@ void CMainFrame::OnPlaySubtitles(UINT nID)
                         }
                         InvalidateSubtitle();
                         RepaintVideo();
+                        m_wndSubresyncBar.ReloadSubtitle();
                     }
                 }
             }
