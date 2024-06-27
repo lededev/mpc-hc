@@ -728,6 +728,12 @@ void CPlayerSeekBar::OnLButtonDown(UINT nFlags, CPoint point)
     CRect clientRect;
     GetClientRect(&clientRect);
     if (m_bEnabled && m_bHasDuration && clientRect.PtInRect(point)) {
+        if (AfxGetAppSettings().bPauseWhileDraggingSeekbar && m_pMainFrame->GetMediaState() == State_Running) {
+            pausedDuringSeek = true;
+            m_pMainFrame->OnPlayPause();
+        } else {
+            pausedDuringSeek = false;
+        }
         SetCapture();
         m_bDraggingThumb = true;
         MoveThumb(point);
@@ -753,6 +759,9 @@ void CPlayerSeekBar::OnLButtonUp(UINT nFlags, CPoint point)
         // update video position if seekbar moved at least 250 ms or 1/100th of duration
         CheckScrollDistance(point, std::min(2500000LL, m_rtStop / 100), 0LL);
         invalidateThumb();
+        if (pausedDuringSeek) {
+            m_pMainFrame->OnPlayPlay();
+        }
     }
     checkHover(point);
 }

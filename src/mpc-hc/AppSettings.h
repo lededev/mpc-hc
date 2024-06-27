@@ -959,6 +959,7 @@ public:
     bool bUseAutomaticCaptions;
     bool bUseFreeType;
     bool bUseMediainfoLoadFileDuration;
+    bool bPauseWhileDraggingSeekbar;
     CStringA strOpenTypeLangHint;
 
     CStringW lastQuickOpenPath;

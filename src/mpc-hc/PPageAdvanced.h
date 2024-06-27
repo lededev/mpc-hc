@@ -232,6 +232,7 @@ private:
         USE_FREETYPE,
         USE_MEDIAINFO_LOAD_FILE_DURATION,
         CAPTURE_DEINTERLACE,
+        PAUSE_WHILE_DRAGGING_SEEKBAR,
     };
 
     enum {
