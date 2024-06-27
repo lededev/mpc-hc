@@ -4596,6 +4596,10 @@ msgctxt "IDS_PPAGEADVANCED_SHOW_VIDEOINFO_STATUSBAR"
 msgid "Display video info (codec name, resolution) in status bar."
 msgstr "상태 표시줄에 비디오 정보(코덱 이름, 해상도)를 표시합니다."
 
+msgctxt "IDS_PPAGEADVANCED_PAUSE_WHILE_DRAGGING_SEEKBAR"
+msgid "Pause playback while dragging the seekbar."
+msgstr ""
+
 msgctxt "IDS_PPAGEADVANCED_OPEN_REC_PANEL_WHEN_OPENING_DEVICE"
 msgid ""
 "Show the recording settings dialog automatically when opening a device."

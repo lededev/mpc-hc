@@ -4746,6 +4746,10 @@ msgstr ""
 "Mostrar información de vídeo (nombre del códec, resolución) en la barra de "
 "estado."
 
+msgctxt "IDS_PPAGEADVANCED_PAUSE_WHILE_DRAGGING_SEEKBAR"
+msgid "Pause playback while dragging the seekbar."
+msgstr ""
+
 msgctxt "IDS_PPAGEADVANCED_OPEN_REC_PANEL_WHEN_OPENING_DEVICE"
 msgid ""
 "Show the recording settings dialog automatically when opening a device."
