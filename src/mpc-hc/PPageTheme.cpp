@@ -28,6 +28,7 @@
 #include "ColorProfileUtil.h"
 #include "resource.h"
 #include "Translations.h"
+#include "WinAPIUtils.h"
 
 // CPPageTheme dialog
 
@@ -201,7 +202,12 @@ BOOL CPPageTheme::OnInitDialog()
     if (iSel == CB_ERR) {
         iSel = m_FontType.FindString(0, m_strOSDFont);
         if (iSel == CB_ERR) {
-            iSel = 0;
+            LOGFONT lf;
+            GetMessageFont(&lf);
+            iSel = m_FontType.FindStringExact(0, lf.lfFaceName);
+            if (iSel == CB_ERR) {
+                iSel = 0;
+            }
         }
     }
     m_FontType.SetCurSel(iSel);
