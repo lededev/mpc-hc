@@ -1348,6 +1348,9 @@ public:
     CAtlList<CHdmvClipInfo::PlaylistItem> m_MPLSPlaylist;
     bool m_bIsBDPlay;
     bool OpenBD(CString Path);
+    bool m_bHasBDMeta;
+    CAtlList<CHdmvClipInfo::BDMVMeta> m_BDMeta;
+    CHdmvClipInfo::BDMVMeta GetBDMVMeta();
 
     bool GetDecoderType(CString& type) const;
 

@@ -891,6 +891,7 @@ CMainFrame::CMainFrame()
     , m_dLastVideoScaleFactor(0)
     , m_bExtOnTop(false)
     , m_bIsBDPlay(false)
+    , m_bHasBDMeta(false)
     , watchingFileDialog(false)
     , fileDialogHookHelper(nullptr)
     , delayingFullScreen(false)
@@ -13199,6 +13200,16 @@ void CMainFrame::OpenFile(OpenFileData* pOFD)
             lastOpenFile = fn;
         }
 
+        CString ext = GetFileExt(fn);
+        if (ext == ".mpls") {
+            CString fnn = PathUtils::StripPathOrUrl(fn);
+            CString tempath(fn);
+            tempath.Replace(fnn, _T(""));
+            tempath.Replace(_T("BDMV\\PLAYLIST\\"), _T(""));
+            CHdmvClipInfo clipinfo;
+            m_bHasBDMeta = clipinfo.ReadMeta(tempath, m_BDMeta);
+        }
+
         HRESULT hr;
         HRESULT rarHR = E_NOTIMPL;
 #if INTERNAL_SOURCEFILTER_RFS
@@ -13209,6 +13220,7 @@ void CMainFrame::OpenFile(OpenFileData* pOFD)
             }
         }
 #endif
+
         if (E_NOTIMPL == rarHR) {
             hr = m_pGB->RenderFile(fn, nullptr);
         } else {
@@ -20862,6 +20874,8 @@ bool CMainFrame::OpenBD(CString Path)
         if (SUCCEEDED(ClipInfo.FindMainMovie(Path, strPlaylistFile, MainPlaylist, m_MPLSPlaylist))) {
             m_bIsBDPlay = true;
 
+            m_bHasBDMeta = ClipInfo.ReadMeta(Path, m_BDMeta);
+
             if (!InternalMpegSplitter && !ext.IsEmpty() && ext == _T(".bdmv")) {
                 return false;
             } else {
@@ -21621,6 +21635,11 @@ void CMainFrame::OnMouseHWheel(UINT nFlags, short zDelta, CPoint pt) {
     __super::OnMouseHWheel(nFlags, zDelta, pt);
 }
 
+CHdmvClipInfo::BDMVMeta CMainFrame::GetBDMVMeta()
+{
+    return m_BDMeta.GetHead();
+}
+
 BOOL CMainFrame::AppendMenuEx(CMenu& menu, UINT nFlags, UINT nIDNewItem, CString& text)
 {
     text.Replace(_T("&"), _T("&&"));
@@ -21655,6 +21674,16 @@ CString CMainFrame::getBestTitle(bool fTitleBarTextTitle) {
             return title;
         }
     }
+
+    CStringW ext = GetFileExt(GetFileName());
+    if (ext == ".mpls" && m_bHasBDMeta) {
+        title = GetBDMVMeta().title;
+        return title;
+    } else if (ext != ".mpls") {
+        m_bHasBDMeta = false;
+        m_BDMeta.RemoveAll();
+    }
+
     return L"";
 }
 
