@@ -20,8 +20,8 @@
 ; Inno Setup Unicode: http://www.jrsoftware.org/isdl.php
 
 
-#if VER < EncodeVer(6,3,1)
-  #error Update your Inno Setup version (6.3.1 or newer)
+#if VER < EncodeVer(6,3,2)
+  #error Update your Inno Setup version (6.3.2 or newer)
 #endif
 
 #ifndef UNICODE
@@ -73,6 +73,7 @@
   #define OutFilename   = app_name + "." + app_ver + ".x64"
   #define platform      = "x64"
   #define mpcvr_ax      = "MpcVideoRenderer64.ax"
+  #define mediainfo_dll = "..\distrib\x64\MediaInfo.dll"
 #else
   #define bindir        = AddBackslash(base_bindir) + "mpc-hc_x86"
   #define mpchc_exe     = "mpc-hc.exe"
@@ -81,6 +82,7 @@
   #define OutFilename   = app_name + "." + app_ver + ".x86"
   #define platform      = "x86"
   #define mpcvr_ax      = "MpcVideoRenderer.ax"
+  #define mediainfo_dll = "..\distrib\x86\MediaInfo.dll"
 #endif
 
 #if defined(MPCHC_LITE)
@@ -119,6 +121,17 @@
 #define INCLUDE_MPCVR = true
 #else
 #define INCLUDE_MPCVR = false
+#bla
+#endif
+
+#ifexist mediainfo_dll
+	#if !defined(MPCHC_LITE)
+#define INCLUDE_MEDIAINFO = true
+	#else
+#define INCLUDE_MEDIAINFO = false
+	#endif
+#else
+#define INCLUDE_MEDIAINFO = false
 #endif
 
 
@@ -252,7 +265,7 @@ Source: {#bindir}\{#lavfiltersdir}\*.manifest;     DestDir: {app}\{#lavfiltersdi
 	#endif
 Source: {#platform}\d3dcompiler_{#MPC_D3D_COMPILER_VERSION}.dll; DestDir: {app};    Components: main;         Flags: ignoreversion
 Source: {#platform}\d3dx9_{#MPC_DX_SDK_NUMBER}.dll;              DestDir: {app};    Components: main;         Flags: ignoreversion
-	#if !defined(MPCHC_LITE)
+	#if INCLUDE_MEDIAINFO
 Source: {#platform}\mediainfo.dll;                 DestDir: {app};                  Components: main;         Flags: ignoreversion
 	#endif
 Source: ..\src\mpc-hc\res\shaders\dx9\*.hlsl;      DestDir: {app}\Shaders;          Components: main;         Flags: onlyifdoesntexist

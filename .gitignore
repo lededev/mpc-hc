@@ -40,3 +40,5 @@ _*.bat
 /src/thirdparty/libxml2/generated/libxml/xmlversion.h
 ipch
 /distrib/MPCVR/
+/distrib/x64/MediaInfo.dll
+/distrib/x86/MediaInfo.dll
