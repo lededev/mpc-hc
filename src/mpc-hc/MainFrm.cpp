@@ -832,7 +832,7 @@ CMainFrame::CMainFrame()
     , m_bFullScreenWindowIsOnSeparateDisplay(false)
     , m_fFirstFSAfterLaunchOnFS(false)
     , m_fStartInD3DFullscreen(false)
-    , m_fStartInFullscreen(false)
+    , m_fStartInFullscreenSeparate(false)
     , m_pLastBar(nullptr)
     , m_bFirstPlay(false)
     , m_bOpeningInAutochangedMonitorMode(false)
@@ -3969,7 +3969,7 @@ LRESULT CMainFrame::OnFilePostOpenmedia(WPARAM wParam, LPARAM lParam)
         if (s.IsD3DFullscreen()) {
             m_fStartInD3DFullscreen = true;
         } else {
-            m_fStartInFullscreen = true;
+            m_fStartInFullscreenSeparate = true;
         }
     }
 
@@ -4326,7 +4326,7 @@ void CMainFrame::OnFilePostClosemedia(bool bNextIsQueued/* = false*/)
         if (IsD3DFullScreenMode()) {
             m_fStartInD3DFullscreen = true;
         } else {
-            m_fStartInFullscreen = true;
+            m_fStartInFullscreenSeparate = true;
         }
         if (!bNextIsQueued) {
             m_pDedicatedFSVideoWnd->DestroyWindow();
@@ -11245,14 +11245,26 @@ void CMainFrame::SetDefaultFullscreenState()
         }
     }
 
+
     if (clGoFullscreen) {
         if (s.IsD3DFullscreen()) {
             m_fStartInD3DFullscreen = true;
-        } else if (s.bFullscreenSeparateControls) {
-            m_fStartInFullscreen = true;
         } else {
-            ToggleFullscreen(true, true);
-            m_fFirstFSAfterLaunchOnFS = true;
+            bool launchingFullscreenSeparateControls = false;
+            if (s.bFullscreenSeparateControls && (!s.strFullScreenMonitorID.IsEmpty() || !s.strFullScreenMonitorDeviceName.IsEmpty())) {//do some checks to see if this will apply
+                CMonitors monitors;
+                CMonitor fullscreenMonitor = monitors.GetMonitor(s.strFullScreenMonitorID, s.strFullScreenMonitorDeviceName);
+                if (fullscreenMonitor && fullscreenMonitor != CMonitors::GetNearestMonitor(this)) {
+                    launchingFullscreenSeparateControls = true;
+                }
+            }
+
+            if (launchingFullscreenSeparateControls) {
+                m_fStartInFullscreenSeparate = true;
+            } else {
+                ToggleFullscreen(true, true);
+                m_fFirstFSAfterLaunchOnFS = true;
+            }
         }
         s.nCLSwitches &= ~CLSW_FULLSCREEN;
     } else if (s.fRememberWindowSize && s.fRememberWindowPos && !m_fFullScreen && s.fLastFullScreen) {
@@ -18566,10 +18578,10 @@ void CMainFrame::OpenMedia(CAutoPtr<OpenMediaData> pOMD)
         CreateFullScreenWindow();
         m_pVideoWnd = m_pDedicatedFSVideoWnd;
         m_fStartInD3DFullscreen = false;
-    } else if (m_fStartInFullscreen) {
+    } else if (m_fStartInFullscreenSeparate) {
         CreateFullScreenWindow(false);
         m_pVideoWnd = m_pDedicatedFSVideoWnd;
-        m_fStartInFullscreen = false;
+        m_fStartInFullscreenSeparate = false;
     } else {
         m_pVideoWnd = &m_wndView;
     }

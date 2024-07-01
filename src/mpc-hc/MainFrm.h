@@ -531,7 +531,7 @@ public:
     bool m_fFullScreen;
     bool m_fFirstFSAfterLaunchOnFS;
     bool m_fStartInD3DFullscreen;
-    bool m_fStartInFullscreen;
+    bool m_fStartInFullscreenSeparate;
     bool m_bFullScreenWindowIsD3D;
     bool m_bFullScreenWindowIsOnSeparateDisplay;
 
