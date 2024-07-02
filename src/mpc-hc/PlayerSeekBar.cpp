@@ -730,7 +730,7 @@ void CPlayerSeekBar::OnLButtonDown(UINT nFlags, CPoint point)
     if (m_bEnabled && m_bHasDuration && clientRect.PtInRect(point)) {
         if (AfxGetAppSettings().bPauseWhileDraggingSeekbar && m_pMainFrame->GetMediaState() == State_Running) {
             pausedDuringSeek = true;
-            m_pMainFrame->OnPlayPause();
+            m_pMainFrame->MediaControlPause();
         } else {
             pausedDuringSeek = false;
         }
@@ -760,7 +760,7 @@ void CPlayerSeekBar::OnLButtonUp(UINT nFlags, CPoint point)
         CheckScrollDistance(point, std::min(2500000LL, m_rtStop / 100), 0LL);
         invalidateThumb();
         if (pausedDuringSeek) {
-            m_pMainFrame->OnPlayPlay();
+            m_pMainFrame->MediaControlRun();
         }
     }
     checkHover(point);
