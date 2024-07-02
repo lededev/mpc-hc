@@ -17364,14 +17364,12 @@ void CMainFrame::UpdateSubtitleColorInfo()
 
     // store video mediatype, so colorspace information can be extracted when present
     // FIXME: mediatype extended colorinfo may be absent on initial connection, call this again after first frame has been decoded?
-    if (m_pCAP) {
-        CComQIPtr<IBaseFilter> pBF = m_pCAP;
-        CComPtr<IPin> pPin = GetFirstPin(pBF);
-        if (pPin) {
-            AM_MEDIA_TYPE mt;
-            if (SUCCEEDED(pPin->ConnectionMediaType(&mt))) {
-                m_pCAP->SetVideoMediaType(CMediaType(mt));
-            }
+    CComQIPtr<IBaseFilter> pBF = m_pCAP;
+    CComPtr<IPin> pPin = GetFirstPin(pBF);
+    if (pPin) {
+        AM_MEDIA_TYPE mt;
+        if (SUCCEEDED(pPin->ConnectionMediaType(&mt))) {
+            m_pCAP->SetVideoMediaType(CMediaType(mt));
         }
     }
 
@@ -17412,6 +17410,8 @@ void CMainFrame::SetSubtitle(const SubtitleInput& subInput, bool skip_lcid /* = 
     {
         CAutoLock cAutoLock(&m_csSubLock);
 
+        bool firstuse = !m_pCurrentSubInput.pSubStream;
+
         if (subInput.pSubStream) {
             bool found = false;
             POSITION pos = m_pSubStreams.GetHeadPosition();
@@ -17434,7 +17434,11 @@ void CMainFrame::SetSubtitle(const SubtitleInput& subInput, bool skip_lcid /* = 
         m_pCurrentSubInput = subInput;
 
         UpdateSubtitleRenderingParameters();
-        UpdateSubtitleColorInfo();
+
+        if (firstuse) {
+            // note: can deadlock when calling ConnectionMediaType() with MPCVR when SubPicProvider!=nullptr
+            UpdateSubtitleColorInfo();
+        }
 
         if (!skip_lcid) {
             LCID lcid = 0;
