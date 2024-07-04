@@ -36,7 +36,7 @@ bool IsFontInstalled(LPCTSTR lpszFont);
 
 bool ExploreToFile(LPCTSTR path);
 
-HRESULT FileDelete(CString file, HWND hWnd, bool recycle = true);
+HRESULT FileDelete(CString file, HWND hWnd, bool recycle = true, bool noconfirm = false);
 
 class CoInitializeHelper
 {

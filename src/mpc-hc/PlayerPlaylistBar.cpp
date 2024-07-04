@@ -1496,38 +1496,68 @@ bool CPlayerPlaylistBar::SelectFileInPlaylist(LPCTSTR filename)
 
 bool CPlayerPlaylistBar::DeleteFileInPlaylist(POSITION pos, bool recycle)
 {
+    auto& s = AfxGetAppSettings();
+    CString filename = m_pl.GetAt(pos).m_fns.GetHead();
+    bool candeletefile = false;
+    bool folderPlayNext = false;
+    bool noconfirm = false;
+    if (!PathUtils::IsURL(filename)) {
+        if (IsWindows10OrGreater()) {
+            // show prompt, because Windows might not ask for confirmation
+            CString msg;
+            msg.Format(L"Move file to recycle bin?\n\n%s", filename.GetString());
+            if (AfxMessageBox(msg, MB_ICONQUESTION | MB_YESNO, 0) == IDYES) {
+                candeletefile = true;
+                noconfirm = true;
+            } else {
+                return false;
+            }
+        } else {
+            candeletefile = true;
+        }
+        folderPlayNext = (m_pl.GetCount() == 1 && (s.nCLSwitches & CLSW_PLAYNEXT || s.eAfterPlayback == CAppSettings::AfterPlayback::PLAY_NEXT));
+    }
+    
     bool isplaying = false;
-    bool folderPlayNext = (m_pl.GetCount() == 1 && AfxGetAppSettings().eAfterPlayback == CAppSettings::AfterPlayback::PLAY_NEXT); //only one item in pl, so we are looping by folder, not pl
     if (pos == m_pl.GetPos()) {
         isplaying = true;
-        // close file to release the file handle
-        m_pMainFrame->SendMessage(WM_COMMAND, ID_FILE_CLOSEMEDIA);
     }
-
-    CString filename = m_pl.GetAt(pos).m_fns.GetHead();
-    int listPos = FindItem(pos);
 
     // Get position of next file
     POSITION nextpos = pos;
     if (isplaying) {
         m_pl.GetNext(nextpos);
+        if (nextpos == nullptr && m_pl.GetCount() > 1) {
+            nextpos = m_pl.GetHeadPosition();
+        }
     }
 
-    // Delete file
-    if (SUCCEEDED(FileDelete(filename, m_pMainFrame->m_hWnd, recycle))) {
-        // remove selected from playlist
+    // remove selected from playlist
+    int listPos = FindItem(pos);
+    if (m_pl.RemoveAt(pos)) {
         m_list.DeleteItem(listPos);
         m_list.RedrawItems(listPos, m_list.GetItemCount() - 1);
-        m_pl.RemoveAt(pos);
         SavePlaylist();
-        // Continue with next file
-        if (isplaying) {
-            if (folderPlayNext) {
-                m_pMainFrame->DoAfterPlaybackEvent(); //we know this will call PLAY_NEXT, which should do normal folder looping
-            } else if (nextpos || AfxGetAppSettings().bLoopFolderOnPlayNextFile) {
-                m_pl.SetPos(nextpos);
-                m_pMainFrame->OpenCurPlaylistItem();
-            }
+    }
+    if (isplaying && !folderPlayNext && nextpos) {
+        m_pl.SetPos(nextpos);
+    }
+
+    if (isplaying) {
+        // close file to release the file handle
+        m_pMainFrame->SendMessage(WM_COMMAND, ID_FILE_CLOSEMEDIA);
+    }
+
+    if (candeletefile) {
+        FileDelete(filename, m_pMainFrame->m_hWnd, true, noconfirm);
+    }
+
+    // Continue with next file
+    if (isplaying) {
+        if (folderPlayNext) {
+            m_pMainFrame->DoAfterPlaybackEvent();
+        } else if (nextpos) {
+            m_pMainFrame->OpenCurPlaylistItem();
         }
     }
 
