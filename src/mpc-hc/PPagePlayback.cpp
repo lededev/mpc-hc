@@ -232,6 +232,7 @@ void CPPagePlayback::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
         UpdateData();
         ((CMainFrame*)GetParentFrame())->SetBalance(m_nBalance); // see prev note...
     }
+    themedDialogToolTip.RedrawIfVisible(); //if the scroll is caused by a wheel or arrows, the default tooltip may be active due to hover, in which case, we want to update
 
     SetModified();
 

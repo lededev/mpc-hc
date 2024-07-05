@@ -96,4 +96,5 @@ protected:
     afx_msg void OnLinkAlphaSlidersChanged();
     afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
     void AdjustDynamicWidgets();
+    afx_msg BOOL OnToolTipNotify(UINT id, NMHDR* pNMHDR, LRESULT* pResult);
 };

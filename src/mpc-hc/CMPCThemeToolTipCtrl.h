@@ -24,6 +24,7 @@ private:
     bool useFlickerHelper, basicMode;
     CMPCThemeToolTipCtrlHelper* helper;
     void makeHelper();
+    CRect lastDrawRect;
 public:
     CMPCThemeToolTipCtrl();
     virtual ~CMPCThemeToolTipCtrl();
@@ -31,6 +32,7 @@ public:
     static void drawText(CDC& dc, CMPCThemeToolTipCtrl* tt, CRect& rect, bool calcRect = false);
     static void paintTT(CDC& dc, CMPCThemeToolTipCtrl* tt);
     void SetHoverPosition(CWnd* parent);
+    void RedrawIfVisible();
     DECLARE_MESSAGE_MAP()
     afx_msg void OnPaint();
     afx_msg BOOL OnEraseBkgnd(CDC* pDC);

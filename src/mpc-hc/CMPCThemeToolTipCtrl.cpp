@@ -65,7 +65,9 @@ void CMPCThemeToolTipCtrl::drawText(CDC& dc, CMPCThemeToolTipCtrl* tt, CRect& re
         dc.DrawTextW(text, rect, DT_LEFT | DT_WORDBREAK | DT_NOPREFIX | calcStyle);
     }
     rect.InflateRect(6, 2); //when calculating, put it back
-
+    if (!calcStyle) {
+        tt->lastDrawRect = rect;
+    }
 
     dc.SelectObject(pOldFont);
 }
@@ -148,6 +150,19 @@ void CMPCThemeToolTipCtrl::makeHelper()
     helper->ShowWindow(SW_SHOWNOACTIVATE);
 }
 
+void CMPCThemeToolTipCtrl::RedrawIfVisible() {
+    if (::IsWindow(m_hWnd) && IsWindowVisible()) {
+        CWindowDC dc(this);
+        CRect wr;
+        drawText(dc, this, wr, true);
+        if (wr != lastDrawRect) {
+            Update();
+        } else {
+            RedrawWindow();
+        }
+
+    }
+}
 
 BEGIN_MESSAGE_MAP(CMPCThemeToolTipCtrl::CMPCThemeToolTipCtrlHelper, CWnd)
     ON_WM_PAINT()
