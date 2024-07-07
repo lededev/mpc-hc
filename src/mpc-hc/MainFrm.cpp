@@ -21535,7 +21535,7 @@ bool CMainFrame::ProcessYoutubeDLURL(CString url, bool append, bool replace)
         } else {
             short_url = ShortenURL(url, targetlen, true);
         }
-        CString ydl_src = url;
+        CString ydl_src = stream.webpage_url.IsEmpty() ? url : stream.webpage_url;
         if (url == filenames.GetHead()) {
             // Processed URL is same as input, can happen for DASH manifest files. Clear source URL to avoid reprocessing.
             ydl_src = _T("");

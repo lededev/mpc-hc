@@ -809,10 +809,6 @@ bool CYoutubeDLInstance::GetHttpStreams(CAtlList<YDLStreamURL>& streams, YDLPlay
                 YDL_LOG(_T("Playlist entry %d"), i);
                 const Value& entry = entries[i];
 
-                if (entry.HasMember(_T("title")) && !entry[_T("title")].IsNull()) {
-                    stream.title = entry[_T("title")].GetString();
-                }
-
                 if (!entry.HasMember(_T("formats")) || entry[_T("formats")].IsNull()) {
                     if (entry.HasMember(_T("url")) && !entry[_T("url")].IsNull()) {
                         stream.video_url = entry[_T("url")].GetString();
@@ -822,6 +818,13 @@ bool CYoutubeDLInstance::GetHttpStreams(CAtlList<YDLStreamURL>& streams, YDLPlay
                         }
                     }
                     continue;
+                }
+
+                if (entry.HasMember(_T("title")) && !entry[_T("title")].IsNull()) {
+                    stream.title = entry[_T("title")].GetString();
+                }
+                if (entry.HasMember(_T("webpage_url")) && !entry[_T("webpage_url")].IsNull()) {
+                    stream.webpage_url = entry[_T("webpage_url")].GetString();
                 }
 
                 if (filterVideo(entry[_T("formats")], ydl_sd, s.iYDLMaxHeight, s.bYDLAudioOnly)) {
