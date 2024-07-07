@@ -66,6 +66,7 @@ protected:
     void EnableThemedDialogTooltips(CDialog* wnd);
     void PlaceThemedDialogTooltip(UINT_PTR nID);
     void RelayThemedDialogTooltip(MSG* pMsg);
+    void RedrawDialogTooltipIfVisible();
     static bool metricsNeedCalculation;
 public:
     static bool getFontByFace(CFont& font, CWnd *wnd, wchar_t* fontName, int size, LONG weight = FW_REGULAR);

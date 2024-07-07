@@ -182,7 +182,18 @@ void CMPCThemeUtil::EnableThemedDialogTooltips(CDialog* wnd)
     } else {
         wnd->EnableToolTips(TRUE);
     }
+}
 
+void CMPCThemeUtil::RedrawDialogTooltipIfVisible() {
+    if (AppIsThemeLoaded() && themedDialogToolTip.m_hWnd) {
+        themedDialogToolTip.RedrawIfVisible();
+    } else {
+        AFX_MODULE_THREAD_STATE* pModuleThreadState = AfxGetModuleThreadState();
+        CToolTipCtrl* pToolTip = pModuleThreadState->m_pToolTip;
+        if (pToolTip && ::IsWindow(pToolTip->m_hWnd) && pToolTip->IsWindowVisible()) {
+            pToolTip->Update();
+        }
+    }
 }
 
 void CMPCThemeUtil::PlaceThemedDialogTooltip(UINT_PTR nID)

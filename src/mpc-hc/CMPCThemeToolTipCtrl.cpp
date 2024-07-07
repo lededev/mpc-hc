@@ -160,7 +160,6 @@ void CMPCThemeToolTipCtrl::RedrawIfVisible() {
         } else {
             RedrawWindow();
         }
-
     }
 }
 
