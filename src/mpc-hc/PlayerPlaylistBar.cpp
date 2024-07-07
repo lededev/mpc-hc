@@ -1484,10 +1484,18 @@ bool CPlayerPlaylistBar::SelectFileInPlaylist(LPCTSTR filename)
     POSITION pos = m_pl.GetHeadPosition();
     while (pos) {
         CPlaylistItem& pli = m_pl.GetAt(pos);
-        if (pli.FindFile(filename)) {
-            m_pl.SetPos(pos);
-            EnsureVisible(pos);
-            return true;
+        if (pli.m_bYoutubeDL) {
+            if (pli.m_ydlSourceURL.CompareNoCase(filename) == 0) {
+                m_pl.SetPos(pos);
+                EnsureVisible(pos);
+                return true;
+            }
+        } else {
+            if (pli.m_fns.GetHead().CompareNoCase(filename) == 0) {
+                m_pl.SetPos(pos);
+                EnsureVisible(pos);
+                return true;
+            }
         }
         m_pl.GetNext(pos);
     }
