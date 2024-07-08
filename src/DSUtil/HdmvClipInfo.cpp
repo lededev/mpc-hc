@@ -527,7 +527,7 @@ bool CHdmvClipInfo::ReadMeta(LPCTSTR strFolder, CAtlList<BDMVMeta>& meta)
                 fclose(f);
 
                 XMLElement* rootNote(doc.RootElement());
-                if (!strcmp(rootNote->Name(), "disclib")) {
+                if (rootNote && !strcmp(rootNote->Name(), "disclib")) {
                     XMLElement* discinfo = rootNote->FirstChildElement("di:discinfo");
                     if (discinfo != NULL) {
                         XMLElement* title = discinfo->FirstChildElement("di:title");
