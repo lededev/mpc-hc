@@ -2915,6 +2915,13 @@ LRESULT CMainFrame::OnGraphNotify(WPARAM wParam, LPARAM lParam)
             TRACE(_T("--> CMainFrame::OnGraphNotify on thread: %lu; event: 0x%08x (%ws)\n"), GetCurrentThreadId(), evCode, GetEventString(evCode));
         }
 #endif
+        CString str;
+        if (m_fCustomGraph) {
+            if (EC_BG_ERROR == evCode) {
+                str = CString((char*)evParam1);
+            }
+        }
+        hr = m_pME->FreeEventParams(evCode, evParam1, evParam2);
 
         switch (evCode) {
             case EC_PAUSED:
@@ -3244,8 +3251,6 @@ LRESULT CMainFrame::OnGraphNotify(WPARAM wParam, LPARAM lParam)
                 break;
             case EC_BG_ERROR:
                 if (m_fCustomGraph) {
-                    CString str = CString((char*)evParam1);
-                    hr = m_pME->FreeEventParams(evCode, evParam1, evParam2);
                     SendMessage(WM_COMMAND, ID_FILE_CLOSEMEDIA);
                     m_closingmsg = !str.IsEmpty() ? str : CString(_T("Unspecified graph error"));
                     m_wndPlaylistBar.SetCurValid(false);
@@ -3281,8 +3286,6 @@ LRESULT CMainFrame::OnGraphNotify(WPARAM wParam, LPARAM lParam)
                 UpdateCachedMediaState();
                 TRACE(_T("Unhandled graph event\n"));
         }
-
-        hr = m_pME->FreeEventParams(evCode, evParam1, evParam2);
     }
 
     return hr;
