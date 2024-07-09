@@ -3281,9 +3281,11 @@ LRESULT CMainFrame::OnGraphNotify(WPARAM wParam, LPARAM lParam)
                 UpdateCachedMediaState();
                 TRACE(_T("Unhandled graph event\n"));
         }
+
+        hr = m_pME->FreeEventParams(evCode, evParam1, evParam2);
     }
 
-    return m_pME->FreeEventParams(evCode, evParam1, evParam2);
+    return hr;
 }
 
 LRESULT CMainFrame::OnResetDevice(WPARAM wParam, LPARAM lParam)
