@@ -67,7 +67,6 @@ void CMPCThemeStatusBar::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
     dc.Attach(lpDrawItemStruct->hDC);
     CRect rect(&lpDrawItemStruct->rcItem);
     int item = lpDrawItemStruct->itemID;
-    rect.left += 4;
     dc.SetBkColor(CMPCTheme::StatusBarBGColor);
     dc.SetTextColor(CMPCTheme::TextFGColor);
     CFont font;
@@ -75,6 +74,7 @@ void CMPCThemeStatusBar::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
         dc.SelectObject(&font);
     }
     dc.FillSolidRect(rect, CMPCTheme::StatusBarBGColor);
+    rect.left += 4;
     dc.DrawTextW(texts[item], rect, DT_NOPREFIX);
     if (item < numParts - 1) { //draw a separator
         CRect separator(rect.right, rect.top, rect.right + 1, rect.bottom);
@@ -96,7 +96,19 @@ void CMPCThemeStatusBar::OnNcPaint()
         GetWindowRect(rcWindow);
         ScreenToClient(rcWindow);
         rcWindow.OffsetRect(-rcWindow.TopLeft());
+        CStatusBarCtrl& ctrl = GetStatusBarCtrl();
+
+        int nHorz, nVert, nSpacing;
+        GetStatusBarCtrl().GetBorders(nHorz, nVert, nSpacing);
+        for (int item = 0; item < numParts; item++) { //don't touch the status bar elements; they are painted in DrawItem
+            CRect rc;
+            if (GetRect(item, rc)) {
+                rc.DeflateRect(1, 1, item < numParts - 1 ? 0 : 1, 1); //the rects provided to DrawItem exclude the border
+                dc.ExcludeClipRect(rc);
+            }
+        }
         dc.FillSolidRect(rcWindow, CMPCTheme::StatusBarBGColor);
+        dc.SelectClipRgn(nullptr);
     }
 }
 

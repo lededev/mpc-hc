@@ -10,7 +10,7 @@
 // This file is part of ResizableLib
 // https://github.com/ppescher/resizablelib
 //
-// Copyright (C) 2000-2015 by Paolo Messina
+// Copyright (C) 2000-2024 by Paolo Messina
 // mailto:ppescher@hotmail.com
 //
 // The contents of this file are subject to the Artistic License 2.0
@@ -52,26 +52,26 @@ private:
 	BOOL m_bSavePage;
 
 	// layout vars
-public: //mpc-hc for inherited functions
-    LRESULT m_nCallbackID;
+	LRESULT m_nCallbackID;
 	CSize m_sizePageTL, m_sizePageBR;
 	BOOL m_bLayoutDone;
 
 	// internal status
 	CString m_sSection;			// section name (identifies a parent window)
 
+	// cached tab rects
+	mutable CRect m_rectLastPage, m_rectLastAjustedPage, m_rectLastTabMargins;
+
 // Operations
 public:
 
 // Overrides
+	virtual BOOL OnInitDialog();
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CResizableSheet)
-	public:
-	virtual BOOL OnInitDialog();
 	protected:
 	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 	//}}AFX_VIRTUAL
-	protected:
 
 // Implementation
 public:
@@ -80,8 +80,9 @@ public:
 // used internally
 private:
 	void PrivateConstruct();
-public://mpc-hc inheritance
+
 	BOOL IsWizard() const;
+	CRect AdjustTabRects(CRect &rectPage) const;
 
 // callable from derived classes
 protected:

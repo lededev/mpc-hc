@@ -31,11 +31,30 @@ BEGIN_MESSAGE_MAP(CMPCThemeEdit, CEdit)
     ON_WM_HSCROLL()
     ON_WM_KEYDOWN()
     ON_WM_WINDOWPOSCHANGED()
+    ON_REGISTERED_MESSAGE(WMU_RESIZESUPPORT, ResizeSupport)
 END_MESSAGE_MAP()
+
+bool CMPCThemeEdit::IsScrollable() {
+    return 0 != (GetStyle() & (WS_VSCROLL | WS_HSCROLL));
+}
+
+//this message is sent by resizablelib
+//we prevent clipping for multi-line edits due to using regions which conflict with resizablelib clipping
+LRESULT CMPCThemeEdit::ResizeSupport(WPARAM wParam, LPARAM lParam) {
+    if (AppNeedsThemedControls() && IsScrollable()) {
+        if (wParam == RSZSUP_QUERYPROPERTIES) {
+            LPRESIZEPROPERTIES props = (LPRESIZEPROPERTIES)lParam;
+            props->bAskClipping = false;
+            props->bCachedLikesClipping = false;
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
 
 void CMPCThemeEdit::OnWindowPosChanged(WINDOWPOS* lpwndpos) {
     if (AppNeedsThemedControls()) {
-        if (themedSBHelper && 0 != (GetStyle() & (WS_VSCROLL | WS_HSCROLL))) {
+        if (themedSBHelper && IsScrollable()) {
             themedSBHelper->OnWindowPosChanged();
         }
     }
@@ -59,10 +78,12 @@ void CMPCThemeEdit::PreSubclassWindow()
     }
 }
 
+
+
 void CMPCThemeEdit::OnNcPaint()
 {
     if (AppNeedsThemedControls()) {
-        if (0 != (GetStyle() & (WS_VSCROLL | WS_HSCROLL))) {  //scrollable edit will be treated like a window, not a field
+        if (IsScrollable()) {  //scrollable edit will be treated like a window, not a field
             if (nullptr != themedSBHelper) {
                 themedSBHelper->themedNcPaintWithSB();
             } else {

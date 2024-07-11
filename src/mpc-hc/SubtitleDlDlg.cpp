@@ -431,8 +431,6 @@ void CSubtitleDlDlg::OnSize(UINT nType, int cx, int cy)
 {
     __super::OnSize(nType, cx, cy);
 
-    ArrangeLayout();
-
     if (m_status && m_progress) {
         // Reposition the progress control correctly!
         CRect statusRect, buttonRect;
@@ -443,7 +441,17 @@ void CSubtitleDlDlg::OnSize(UINT nType, int cx, int cy)
         m_status.SetParts(2, parts);
         m_status.GetRect(1, &statusRect);
         statusRect.DeflateRect(1, 1, 1, 1);
-        m_progress.SetWindowPos(&wndTop, statusRect.left, statusRect.top, statusRect.Width(), statusRect.Height(),  SWP_NOACTIVATE | SWP_NOZORDER);
+        m_progress.SetWindowPos(nullptr, statusRect.left, statusRect.top, statusRect.Width(), statusRect.Height(),  SWP_NOACTIVATE | SWP_NOZORDER);
+    }
+    if (m_status && AppIsThemeLoaded()) {
+        //m_status currently set up to draw a gripper, but doesn't play nice with theme until it gets invalidated
+        //style 0x103 from mpc-hc.rc = SBARS_SIZEGRIP | CCS_TOP | CCS_NOMOVEY ??
+        if (m_status.GetStyle() & SBARS_SIZEGRIP) { 
+            CRect statusRect;
+            m_status.GetClientRect(statusRect);
+            statusRect.left = statusRect.right - GetSystemMetrics(SM_CXVSCROLL);
+            m_status.InvalidateRect(statusRect);
+        }
     }
 }
 

@@ -14,11 +14,6 @@ public:
     void fulfillThemeReqs();
     virtual INT_PTR DoModal(); //override to handle RTL without using SetWindowLongPtr
 
-    //for ResizableSheet
-    mutable CRect lastPageRect, lastMarginRect, lastAdjustedPageRect;
-    virtual BOOL CalcSizeExtra(HWND hWndChild, const CSize& sizeChild, CSize& sizeExtra);
-    virtual BOOL ArrangeLayoutCallback(LAYOUTINFO& layout) const;
-
     bool isModal;
     DECLARE_MESSAGE_MAP()
 public:

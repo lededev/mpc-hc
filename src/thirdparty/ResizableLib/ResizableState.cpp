@@ -3,7 +3,7 @@
 // This file is part of ResizableLib
 // https://github.com/ppescher/resizablelib
 //
-// Copyright (C) 2000-2015 by Paolo Messina
+// Copyright (C) 2000-2024 by Paolo Messina
 // mailto:ppescher@hotmail.com
 //
 // The contents of this file are subject to the Artistic License 2.0
@@ -105,9 +105,9 @@ LPCTSTR CResizableState::GetStateStore() const
  *  @return The return value is @a TRUE if settings have been successfully
  *          stored, @a FALSE otherwise.
  */
+// MPC-HC custom code--adds LPCTSTR szValue
 BOOL CResizableState::WriteState(LPCTSTR szId, LPCTSTR szValue, LPCTSTR szState)
 {
-	// MPC-HC custom code
 	return AfxGetApp()->WriteProfileString(szId, szValue, szState);
 }
 
@@ -124,9 +124,9 @@ BOOL CResizableState::WriteState(LPCTSTR szId, LPCTSTR szValue, LPCTSTR szState)
  *  @return The return value is @a TRUE if settings have been successfully
  *          retrieved, @a FALSE otherwise.
  */
+// MPC-HC custom code--adds LPCTSTR szValue
 BOOL CResizableState::ReadState(LPCTSTR szId, LPCTSTR szValue, CString &rsState)
 {
-	// MPC-HC custom code
 	rsState = AfxGetApp()->GetProfileString(szId, szValue);
 	return !rsState.IsEmpty();
 }

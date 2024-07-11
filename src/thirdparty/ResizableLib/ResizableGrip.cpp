@@ -3,7 +3,7 @@
 // This file is part of ResizableLib
 // https://github.com/ppescher/resizablelib
 //
-// Copyright (C) 2000-2015 by Paolo Messina
+// Copyright (C) 2000-2024 by Paolo Messina
 // mailto:ppescher@hotmail.com
 //
 // The contents of this file are subject to the Artistic License 2.0
@@ -235,10 +235,8 @@ LRESULT CResizableGrip::CSizeGrip::WindowProc(UINT message,
 				BeginPaint(&ps) : CDC::FromHandle((HDC)wParam);
 
 			// select bitmaps
-			CBitmap *pOldGrip, *pOldMask;
-
-			pOldGrip = m_dcGrip.SelectObject(&m_bmGrip);
-			pOldMask = m_dcMask.SelectObject(&m_bmMask);
+			CBitmap *pOldGrip = m_dcGrip.SelectObject(&m_bmGrip);
+			CBitmap *pOldMask = m_dcMask.SelectObject(&m_bmMask);
 
 			// obtain original grip bitmap, make the mask and prepare masked bitmap
 			CScrollBar::WindowProc(message, (WPARAM)m_dcGrip.GetSafeHdc(), lParam);

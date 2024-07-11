@@ -3,7 +3,7 @@
 // This file is part of ResizableLib
 // https://github.com/ppescher/resizablelib
 //
-// Copyright (C) 2000-2015 by Paolo Messina
+// Copyright (C) 2000-2024 by Paolo Messina
 // mailto:ppescher@hotmail.com
 //
 // The contents of this file are subject to the Artistic License 2.0
@@ -54,27 +54,27 @@ typedef struct tagANCHOR
 } ANCHOR, *PANCHOR, *LPANCHOR;
 
 /*! @defgroup ConstAnchors Alignment Constants
- *  Define common layout alignment constants for anchor points.
+ *  Declare common layout alignment constants for anchor points.
  *  @{
  */
 	//! Anchor to the top-left corner
-	const ANCHOR TOP_LEFT(0, 0);
+	extern const ANCHOR TOP_LEFT;
 	//! Anchor to the top edge and center horizontally
-	const ANCHOR TOP_CENTER(50, 0);
+	extern const ANCHOR TOP_CENTER;
 	//! Anchor to the top-right corner
-	const ANCHOR TOP_RIGHT(100, 0);
+	extern const ANCHOR TOP_RIGHT;
 	//! Anchor to the left edge and center vertically
-	const ANCHOR MIDDLE_LEFT(0, 50);
+	extern const ANCHOR MIDDLE_LEFT;
 	//! Anchor to the center
-	const ANCHOR MIDDLE_CENTER(50, 50);
+	extern const ANCHOR MIDDLE_CENTER;
 	//! Anchor to the right edge and center vertically
-	const ANCHOR MIDDLE_RIGHT(100, 50);
+	extern const ANCHOR MIDDLE_RIGHT;
 	//! Anchor to the bottom-left corner
-	const ANCHOR BOTTOM_LEFT(0, 100);
+	extern const ANCHOR BOTTOM_LEFT;
 	//! Anchor to the bottom edge and center horizontally
-	const ANCHOR BOTTOM_CENTER(50, 100);
+	extern const ANCHOR BOTTOM_CENTER;
 	//! Anchor to the bottom-right corner
-	const ANCHOR BOTTOM_RIGHT(100, 100);
+	extern const ANCHOR BOTTOM_RIGHT;
 // @}
 
 //! @brief Holds a control layout settings
@@ -207,7 +207,7 @@ protected:
 	//@{
 	//! @brief Add anchor points for all the remaining controls to the layout
 	void AddAllOtherAnchors(ANCHOR anchorTopLeft, ANCHOR anchorBottomRight);
-	
+
 	void AddAllOtherAnchors(ANCHOR anchor)
 	{
 		AddAllOtherAnchors(anchor, anchor);
