@@ -34,8 +34,10 @@ CString GetYDLExePath() {
         CString appdir = PathUtils::GetProgramPath(false);
         if (CPath(appdir + _T("\\yt-dlp.exe")).FileExists()) {
             ydlpath = _T("yt-dlp.exe");
-        } else {
+        } else if (CPath(appdir + _T("\\youtube-dl.exe")).FileExists()) {
             ydlpath = _T("youtube-dl.exe");
+        } else {
+            ydlpath = _T("yt-dlp.exe");
         }
     } else {
         ydlpath = s.sYDLExePath;
