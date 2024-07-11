@@ -24,6 +24,7 @@
 #include "VolumeCtrl.h"
 #include "AppSettings.h"
 #include "CMPCTheme.h"
+#include "CMPCThemeUtil.h"
 #undef SubclassWindow
 
 
@@ -100,6 +101,8 @@ BEGIN_MESSAGE_MAP(CVolumeCtrl, CSliderCtrl)
     ON_WM_MOUSEMOVE()
     ON_WM_LBUTTONUP()
     ON_WM_MOUSELEAVE()
+    ON_WM_PAINT()
+    ON_WM_ERASEBKGND()
 END_MESSAGE_MAP()
 
 // CVolumeCtrl message handlers
@@ -147,30 +150,12 @@ void CVolumeCtrl::OnNMCustomdraw(NMHDR* pNMHDR, LRESULT* pResult)
                         dpiWindow.Override(GetSafeHwnd());
 
                         CRect r(pNMCD->rc);
-                        if (!modernStyle) {
-                            r.DeflateRect(0, dpiWindow.ScaleFloorY(6), 0, dpiWindow.ScaleFloorY(6));
-                            dc.FillSolidRect(r, CMPCTheme::ScrollBGColor);
-                            CBrush fb;
-                            fb.CreateSolidBrush(CMPCTheme::NoBorderColor);
-                            dc.FrameRect(r, &fb);
-                            fb.DeleteObject();
-                        } else {
-                            r.DeflateRect(0, dpiWindow.ScaleFloorY(3), 0, dpiWindow.ScaleFloorY(2));
-                            CRect filledRect, unfilledRect;
-                            filledRect = r;
-                            filledRect.right = r.left + lround(r.Width() * float(GetPos()) / 100);
-                            dc.FillSolidRect(&filledRect, CMPCTheme::ScrollProgressColor);
-                            if (filledRect.right < r.right) { //do not fill bg if already full
-                                unfilledRect = r;
-                                unfilledRect.left = filledRect.right;
-                                dc.FillSolidRect(&unfilledRect, CMPCTheme::ScrollBGColor);
-                            }
-
-                            CBrush fb;
-                            fb.CreateSolidBrush(CMPCTheme::NoBorderColor);
-                            dc.FrameRect(r, &fb);
-                            fb.DeleteObject();
-                        }
+                        r.DeflateRect(0, dpiWindow.ScaleFloorY(6), 0, dpiWindow.ScaleFloorY(6));
+                        dc.FillSolidRect(r, CMPCTheme::ScrollBGColor);
+                        CBrush fb;
+                        fb.CreateSolidBrush(CMPCTheme::NoBorderColor);
+                        dc.FrameRect(r, &fb);
+                        fb.DeleteObject();
                     } else {
                         CPen shadow;
                         CPen light;
@@ -199,21 +184,18 @@ void CVolumeCtrl::OnNMCustomdraw(NMHDR* pNMHDR, LRESULT* pResult)
                     COLORREF shadow = GetSysColor(COLOR_3DSHADOW);
                     COLORREF light = GetSysColor(COLOR_3DHILIGHT);
                     if (usetheme) {
-                        if (!modernStyle) {
-                            CBrush fb;
-                            if (m_bDrag) {
-                                dc.FillSolidRect(r, CMPCTheme::ScrollThumbDragColor);
-                            } else if (m_bHover) {
-                                dc.FillSolidRect(r, CMPCTheme::ScrollThumbHoverColor);
-                            } else {
-                                dc.FillSolidRect(r, CMPCTheme::ScrollThumbColor);
-                            }
-                            fb.CreateSolidBrush(CMPCTheme::NoBorderColor);
-                            dc.FrameRect(r, &fb);
-                            fb.DeleteObject();
+                        CBrush fb;
+                        if (m_bDrag) {
+                            dc.FillSolidRect(r, CMPCTheme::ScrollThumbDragColor);
+                        } else if (m_bHover) {
+                            dc.FillSolidRect(r, CMPCTheme::ScrollThumbHoverColor);
+                        } else {
+                            dc.FillSolidRect(r, CMPCTheme::ScrollThumbColor);
                         }
+                        fb.CreateSolidBrush(CMPCTheme::NoBorderColor);
+                        dc.FrameRect(r, &fb);
+                        fb.DeleteObject();
                     } else {
-
                         dc.Draw3dRect(&r, light, 0);
                         r.DeflateRect(0, 0, 1, 1);
                         dc.Draw3dRect(&r, light, shadow);
@@ -295,11 +277,18 @@ void CVolumeCtrl::OnSetFocus(CWnd* pOldWnd)
 
 void CVolumeCtrl::HScroll(UINT nSBCode, UINT nPos)
 {
-    AfxGetAppSettings().nVolume = GetPos();
+    auto &s = AfxGetAppSettings();
+    auto oldVolume = s.nVolume;
+    s.nVolume = GetPos();
 
     CFrameWnd* pFrame = GetParentFrame();
     if (pFrame && pFrame != GetParent()) {
         pFrame->PostMessage(WM_HSCROLL, MAKEWPARAM(static_cast<WORD>(nPos), static_cast<WORD>(nSBCode)), reinterpret_cast<LPARAM>(m_hWnd));
+        if (s.nVolume != oldVolume) {
+            CRect r;
+            getCustomChannelRect(r);
+            InvalidateRect(r); //needed to redraw the volume text
+        }
     }
 }
 
@@ -433,4 +422,69 @@ void CVolumeCtrl::OnMouseLeave()
 {
     checkHover(CPoint(-1 - 1));
     CSliderCtrl::OnMouseLeave();
+}
+
+
+void CVolumeCtrl::OnPaint() {
+    if (m_fSelfDrawn && AppIsThemeLoaded() && modernStyle) {
+        DpiHelper dpiWindow;
+        dpiWindow.Override(GetSafeHwnd());
+
+        CPaintDC dc(this);
+        CRect r, cr;
+        GetClientRect(cr);
+
+        CDC dcMem;
+        CBitmap bmMem;
+        CRect memRect = { 0, 0, cr.right, cr.bottom };
+        CMPCThemeUtil::initMemDC(&dc, dcMem, bmMem, memRect);
+
+        dcMem.FillSolidRect(&memRect, CMPCTheme::PlayerBGColor);
+        getCustomChannelRect(r);
+        //r.DeflateRect(0, dpiWindow.ScaleFloorY(3), 0, dpiWindow.ScaleFloorY(2));
+        r.OffsetRect(-cr.TopLeft());
+
+        CRect filledRect, unfilledRect;
+        filledRect = r;
+        filledRect.right = r.left + lround(r.Width() * float(GetPos()) / 100);
+        dcMem.FillSolidRect(&filledRect, CMPCTheme::ScrollProgressColor);
+
+        if (filledRect.right < r.right) { //do not fill bg if already full
+            unfilledRect = r;
+            unfilledRect.left = filledRect.right;
+            dcMem.FillSolidRect(&unfilledRect, CMPCTheme::ScrollBGColor);
+        }
+
+        CBrush fb;
+        fb.CreateSolidBrush(CMPCTheme::NoBorderColor);
+        dcMem.FrameRect(r, &fb);
+        fb.DeleteObject();
+
+        dcMem.SetTextColor(CMPCTheme::TextFGColor);
+        CFont f;
+        LOGFONT lf = { 0 };
+        lf.lfHeight = r.Height();
+        lf.lfQuality = CLEARTYPE_QUALITY;
+        wcscpy_s(lf.lfFaceName, L"Calibri");
+        f.CreateFontIndirectW(&lf);
+        CFont* oldFont = (CFont*)dcMem.SelectObject(&f);
+        int oldMode = dcMem.SetBkMode(TRANSPARENT);
+        CStringW str;
+        str.Format(IDS_VOLUME, GetPos());
+        dcMem.DrawTextW(str, r, DT_CENTER | DT_VCENTER | DT_SINGLELINE | DT_END_ELLIPSIS | DT_NOPREFIX);
+        dcMem.SelectObject(oldFont);
+        dcMem.SetBkMode(oldMode);
+
+        CMPCThemeUtil::flushMemDC(&dc, dcMem, memRect);
+    } else {
+        __super::OnPaint(); //can trigger OnNMCustomdraw
+    }
+}
+
+BOOL CVolumeCtrl::OnEraseBkgnd(CDC* pDC) {
+    if (m_fSelfDrawn && AppIsThemeLoaded() && modernStyle) {
+        return TRUE;
+    } else {
+        return CSliderCtrl::OnEraseBkgnd(pDC);
+    }
 }

@@ -5,7 +5,7 @@
 #undef SubclassWindow
 
 CMPCThemeSliderCtrl::CMPCThemeSliderCtrl()
-    : m_bDrag(false), m_bHover(false)
+    : m_bDrag(false), m_bHover(false), lockToZero(false)
 {
 
 }
@@ -32,6 +32,7 @@ BEGIN_MESSAGE_MAP(CMPCThemeSliderCtrl, CSliderCtrl)
     ON_WM_MOUSEMOVE()
     ON_WM_LBUTTONUP()
     ON_WM_MOUSELEAVE()
+    ON_WM_MOUSEWHEEL()
 END_MESSAGE_MAP()
 
 
@@ -156,4 +157,45 @@ void CMPCThemeSliderCtrl::OnMouseLeave()
 {
     checkHover(CPoint(-1, -1));
     CSliderCtrl::OnMouseLeave();
+}
+
+
+void CMPCThemeSliderCtrl::SendScrollMsg(WORD wSBcode, WORD wHiWPARAM /*= 0*/) {
+    ASSERT(::IsWindow(m_hWnd));
+    CWnd* m_pParent = GetParent();
+    if (m_pParent && ::IsWindow(m_pParent->m_hWnd)) {
+        bool isVert = GetStyle() & TBS_VERT;
+        m_pParent->SendMessage(isVert ? WM_VSCROLL : WM_HSCROLL, MAKELONG(wSBcode, wHiWPARAM), (LPARAM)m_hWnd);
+    }
+}
+
+BOOL CMPCThemeSliderCtrl::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt) {
+    if (lockToZero) {
+        WORD wSBcode = 0xFFFF;
+        int dir = 1;
+        if (zDelta >= WHEEL_DELTA) {
+            wSBcode = SB_LINEUP;
+        } else if (zDelta <= -WHEEL_DELTA) {
+            wSBcode = SB_LINEDOWN;
+            dir = -1;
+            zDelta = -zDelta;
+        }
+        if (wSBcode != 0xFFFF) {
+            int scrollIncrememt = (GetRangeMax() - GetRangeMin()) / 50;
+            do {
+                SendScrollMsg(wSBcode);
+                int curPos = GetPos();
+                int newPos = curPos + dir * scrollIncrememt;
+                if (abs(newPos) < abs(scrollIncrememt) && SGN(newPos) != SGN(curPos)) { //we crossed zero and are in between +/- scrollIncrement
+                    newPos = 0;
+                }
+                SetPos(newPos);
+            } while ((zDelta -= WHEEL_DELTA) >= WHEEL_DELTA);
+            SendScrollMsg(SB_ENDSCROLL);
+        }
+
+        return 1;	// Message was processed. (was 0, but per https://msdn.microsoft.com/en-us/data/eff58fe7(v=vs.85) should be 1 if scrolling enabled
+    } else {
+        return CSliderCtrl::OnMouseWheel(nFlags, zDelta, pt);
+    }
 }
