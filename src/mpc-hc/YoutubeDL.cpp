@@ -90,6 +90,10 @@ bool CYoutubeDLInstance::Run(CString url)
         args.Append(_T(" --ignore-errors --no-playlist"));
     }
     args.Append(_T(" \"") + url + _T("\""));
+    WCHAR lpszTempPath[MAX_PATH] = { 0 };
+    if (GetTempPathW(MAX_PATH, lpszTempPath)) {
+        args.AppendFormat(_T(" -P temp:\"%s\""), lpszTempPath);
+    }
 
     ZeroMemory(&proc_info, sizeof(PROCESS_INFORMATION));
     ZeroMemory(&startup_info, sizeof(STARTUPINFO));
