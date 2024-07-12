@@ -9442,11 +9442,7 @@ void CMainFrame::FilterSettings(CComPtr<IUnknown> pUnk, CWnd* parent) {
     CComPropertySheet ps(IDS_PROPSHEET_PROPERTIES);
 
     CComQIPtr<IBaseFilter> pBF = pUnk;
-    if (!pBF) {
-        return;
-    }
     CLSID clsid = GetCLSID(pBF);
-
     CFGFilterLAV::LAVFILTER_TYPE LAVFilterType = CFGFilterLAV::INVALID;
     bool bIsInternalLAV = CFGFilterLAV::IsInternalInstance(pBF, &LAVFilterType);
 
