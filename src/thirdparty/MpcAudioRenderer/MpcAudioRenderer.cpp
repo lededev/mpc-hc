@@ -2633,7 +2633,7 @@ HRESULT CMpcAudioRenderer::SelectFormat(const WAVEFORMATEX* pwfx, WAVEFORMATEXTE
 	WORD nChannels      = 0;
 	DWORD dwChannelMask = 0;
 
-	if (m_bUseSystemLayoutChannels) {
+	if (m_bUseSystemLayoutChannels && m_pAudioClient) {
 		// to get the number of channels and channel mask quite simple call IAudioClient::GetMixFormat()
 		WAVEFORMATEX *pDeviceFormat = nullptr;
 		if (SUCCEEDED(m_pAudioClient->GetMixFormat(&pDeviceFormat)) && pDeviceFormat) {
