@@ -61,6 +61,10 @@ void CMPCThemeScrollBarHelper::setWindowRegionExclusive(HRGN h) {
 void CMPCThemeScrollBarHelper::hideNativeScrollBars()
 {
 
+    if (!CMPCThemeUtil::IsWindowVisibleAndRendered(window)) {
+        return;
+    }
+
     bool windowChanged = helperInfo.UpdateHelperInfo(window);
 
     ScrollBarHelperInfo& i = helperInfo;

@@ -109,6 +109,7 @@ public:
     static void fulfillThemeReqs(CProgressCtrl* ctl);
     static void enableWindows10DarkFrame(CWnd* window);
     static void AdjustDynamicWidgetPair(CWnd* window, int left, int right, WidgetPairType lType = WidgetPairAuto, WidgetPairType rType = WidgetPairAuto);
+    static bool IsWindowVisibleAndRendered(CWnd* window);
 
     void PreDoModalRTL(LPPROPSHEETHEADERW m_psh);
 

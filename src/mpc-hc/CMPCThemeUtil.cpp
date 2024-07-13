@@ -1243,3 +1243,17 @@ void CMPCThemeUtil::AdjustDynamicWidgetPair(CWnd* window, int leftWidget, int ri
         }
     }
 }
+
+bool CMPCThemeUtil::IsWindowVisibleAndRendered(CWnd* window) {
+    if (!window || !IsWindow(window->m_hWnd) || !window->IsWindowVisible()) {
+        return false;
+    } else {
+        CRect r;
+        HDC hdc = GetWindowDC(window->m_hWnd);
+        GetClipBox(hdc, &r);
+        if (r.IsRectEmpty()) {
+            return false;
+        }
+    }
+    return true;
+}
