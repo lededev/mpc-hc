@@ -13922,7 +13922,7 @@ void CMainFrame::OpenDVD(OpenDVDData* pODD)
     WCHAR buff[MAX_PATH];
     ULONG len = 0;
     if (SUCCEEDED(hr = m_pDVDI->GetDVDDirectory(buff, _countof(buff), &len))) {
-        pODD->title = CString(CStringW(buff)).Trim(_T("\\"));
+        pODD->title = CString(CStringW(buff)).TrimRight(_T("\\"));
     }
 
     if (s.fKeepHistory) {
