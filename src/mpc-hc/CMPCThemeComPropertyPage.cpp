@@ -20,6 +20,8 @@ BOOL CMPCThemeComPropertyPage::OnInitDialog()
 
     if (dialogClsid == CLSID_MPCVR) {
         fulfillThemeReqs(CMPCThemeUtil::SpecialThemeCases::ExternalPropertyPageWithDefaultButton);
+    } else if (dialogClsid == CLSID_Generic_WDM_FilterProxy) {
+        fulfillThemeReqs(CMPCThemeUtil::SpecialThemeCases::ExternalPropertyPageWithAnalogCaptureSliders);
     } else {
         fulfillThemeReqs();
     }

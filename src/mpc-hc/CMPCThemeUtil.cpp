@@ -108,6 +108,13 @@ void CMPCThemeUtil::fulfillThemeReqs(CWnd* wnd, SpecialThemeCases specialCase /*
                             tChild->MoveWindow(wr);
                         }
                         makeThemed(pObject, tChild);
+                        if (ExternalPropertyPageWithAnalogCaptureSliders == specialCase && 0x416 == GetDlgCtrlID(tChild->m_hWnd)) {
+                            CStringW str;
+                            pObject->GetWindowTextW(str);
+                            str.Replace(L" \r\n ", L"\r\n"); //this prevents double-wrapping due to the space wrapping before the carriage return
+                            pObject->SetWindowTextW(str);
+                            pObject->ModifyStyle(0, TBS_DOWNISLEFT);
+                        }
                     }
                 } else if (0 == _tcsicmp(windowClass, WC_EDIT)) {
                     CMPCThemeEdit* pObject = DEBUG_NEW CMPCThemeEdit();
@@ -117,6 +124,7 @@ void CMPCThemeUtil::fulfillThemeReqs(CWnd* wnd, SpecialThemeCases specialCase /*
                     makeThemed(pObject, tChild);
                 } else if (0 == _tcsicmp(windowClass, _T("#32770"))) { //dialog class
                     CMPCThemeDialog* pObject = DEBUG_NEW CMPCThemeDialog(windowTitle == "");
+                    pObject->SetSpecialCase(specialCase);
                     makeThemed(pObject, tChild);
                 } else if (0 == _tcsicmp(windowClass, WC_COMBOBOX)) {
                     CMPCThemeComboBox* pObject = DEBUG_NEW CMPCThemeComboBox();
@@ -124,6 +132,9 @@ void CMPCThemeUtil::fulfillThemeReqs(CWnd* wnd, SpecialThemeCases specialCase /*
                 } else if (0 == _tcsicmp(windowClass, TRACKBAR_CLASS)) {
                     CMPCThemeSliderCtrl* pObject = DEBUG_NEW CMPCThemeSliderCtrl();
                     makeThemed(pObject, tChild);
+                    if (ExternalPropertyPageWithAnalogCaptureSliders == specialCase) {
+                        pObject->ModifyStyle(0, TBS_DOWNISLEFT);
+                    }
                 } else if (0 == _tcsicmp(windowClass, WC_TABCONTROL)) {
                     CMPCThemeTabCtrl* pObject = DEBUG_NEW CMPCThemeTabCtrl();
                     makeThemed(pObject, tChild);
@@ -1239,6 +1250,39 @@ void CMPCThemeUtil::AdjustDynamicWidgetPair(CWnd* window, int leftWidget, int ri
             }
             if (r != cr) {
                 rightW->MoveWindow(r);
+            }
+        }
+    }
+}
+
+std::map<int, int> CMPCThemeUtil::AnalogCaptureDevice_SliderIDToEditID = {
+    { 0x3EA, 0x3F1 },
+    { 0x3E8, 0x3F2 },
+    { 0x3E9, 0x3F3 },
+    { 0x3EB, 0x3F4 },
+    { 0x3EC, 0x3F5 },
+    { 0x3ED, 0x3F6 },
+    { 0x3EF, 0x3F7 },
+    { 0x3F0, 0x3F8 },
+    { 0x7D0, 0x403 },
+    { 0x402, 0x406 },
+    { 0x400, 0x404 },
+    { 0x401, 0x405 },
+    { 0x3F8, 0x3F9 },
+    { 0x3FB, 0x3FC },
+    { 0x3FE, 0x3FF },
+};
+
+void CMPCThemeUtil::UpdateAnalogCaptureDeviceEdit(CSliderCtrl* slider, CDialog* parent, UINT nPos) {
+    if (slider && ::IsWindow(slider->m_hWnd) && parent && ::IsWindow(parent->m_hWnd)) {
+        int sliderID = GetDlgCtrlID(slider->m_hWnd);
+        if (AnalogCaptureDevice_SliderIDToEditID.count(sliderID)) {
+            CEdit* edit = DYNAMIC_DOWNCAST(CEdit, parent->GetDlgItem(AnalogCaptureDevice_SliderIDToEditID[sliderID]));
+            if (edit) {
+                CStringW editText;
+                editText.Format(L"%d", nPos);
+                edit->SetWindowTextW(editText);
+                slider->SetPos(nPos);
             }
         }
     }
