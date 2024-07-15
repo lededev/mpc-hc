@@ -598,6 +598,7 @@ protected:
     void OpenSetupInfoBar(bool bClear = true);
     void UpdateChapterInInfoBar();
     void OpenSetupStatsBar();
+    void CheckSelectedAudioStream();
     void OpenSetupStatusBar();
     void OpenSetupCaptureBar();
     void OpenSetupWindowTitle(bool reset = false);
