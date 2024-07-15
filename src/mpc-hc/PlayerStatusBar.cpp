@@ -151,26 +151,30 @@ void CPlayerStatusBar::EventCallback(MpcEvent ev)
 
 void CPlayerStatusBar::Relayout()
 {
-    BITMAP bm {};
-    if (m_bm.m_hObject) {
-        m_bm.GetBitmap(&bm);
-    }
-
+    const CAppSettings& s = AfxGetAppSettings();
     CString str;
     CRect r, r2;
 
     GetClientRect(r);
 
+    if (s.bShowAudioFormatInStatusbar) {
+        r.DeflateRect(8, 4, 8, 4);
+    } else {
+        BITMAP bm{};
+        if (m_bm.m_hObject) {
+            m_bm.GetBitmap(&bm);
+        }
 #if 0
-    if (m_type.GetIcon()) {
-        r2.SetRect(6, r.top + 4, 6 + m_pMainFrame->m_dpi.ScaleX(16), r.bottom - 4);
-        m_type.MoveWindow(r2);
-    }
+        if (m_type.GetIcon()) {
+            r2.SetRect(6, r.top + 4, 6 + m_pMainFrame->m_dpi.ScaleX(16), r.bottom - 4);
+            m_type.MoveWindow(r2);
+        }
 
-    r.DeflateRect(11 + m_pMainFrame->m_dpi.ScaleX(16), 5, bm.bmWidth + 8, 4);
+        r.DeflateRect(11 + m_pMainFrame->m_dpi.ScaleX(16), 5, bm.bmWidth + 8, 4);
 #else
-    r.DeflateRect(8, 5, bm.bmWidth + 8, 4);
+        r.DeflateRect(8, 4, bm.bmWidth + 8, 4);
 #endif
+    }
 
     if (CDC* pDC = m_time.GetDC()) {
         CFont* pOld = pDC->SelectObject(&m_time.GetFont());
