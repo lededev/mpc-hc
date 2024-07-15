@@ -248,8 +248,8 @@ CAppSettings::CAppSettings()
     , bShowLangInStatusbar(false)
     , bShowFPSInStatusbar(false)
     , bShowABMarksInStatusbar(false)
-    , bShowVideoInfoInStatusbar(false)
-    , bShowAudioFormatInStatusbar(false)
+    , bShowVideoInfoInStatusbar(true)
+    , bShowAudioFormatInStatusbar(true)
 #if USE_LIBASS
     , bRenderSSAUsingLibass(false)
     , bRenderSRTUsingLibass(false)
@@ -2169,8 +2169,8 @@ void CAppSettings::LoadSettings()
     bShowLangInStatusbar = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_SHOW_LANG_STATUSBAR, FALSE);
     bShowFPSInStatusbar = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_SHOW_FPS_STATUSBAR, FALSE);
     bShowABMarksInStatusbar = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_SHOW_ABMARKS_STATUSBAR, FALSE);
-    bShowVideoInfoInStatusbar = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_SHOW_VIDEOINFO_STATUSBAR, FALSE);
-    bShowAudioFormatInStatusbar = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_SHOW_AUDIOFORMAT_STATUSBAR, FALSE);
+    bShowVideoInfoInStatusbar = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_SHOW_VIDEOINFO_STATUSBAR, TRUE);
+    bShowAudioFormatInStatusbar = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_SHOW_AUDIOFORMAT_STATUSBAR, TRUE);
     
     bAddLangCodeWhenSaveSubtitles = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_ADD_LANGCODE_WHEN_SAVE_SUBTITLES, FALSE);
     bUseTitleInRecentFileList = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_USE_TITLE_IN_RECENT_FILE_LIST, TRUE);
