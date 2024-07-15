@@ -14481,6 +14481,7 @@ void CMainFrame::OpenSetupStatusBar()
         }
 
 
+        UINT audiobitmapid = IDB_AUDIOTYPE_NOAUDIO;
         int nChannels = 0;
         int audiostreamcount = 0;
         m_loadedAudioTrackIndex = -1;
@@ -14551,18 +14552,47 @@ void CMainFrame::OpenSetupStatusBar()
                 }
             }
         }
+        if (audiostreamcount == 0 && !m_pAudioSwitcherSS) { // Fallback
+            BeginEnumFilters(m_pGB, pEF, pBF) {
+                CComQIPtr<IBasicAudio> pBA = pBF; // implemented by audio renderers
+                bool notrenderer = false;
+
+                BeginEnumPins(pBF, pEP, pPin) {
+                    if (S_OK == m_pGB->IsPinDirection(pPin, PINDIR_INPUT) && S_OK == m_pGB->IsPinConnected(pPin)) {
+                        AM_MEDIA_TYPE mt;
+                        if (SUCCEEDED(pPin->ConnectionMediaType(&mt))) {
+                            if (mt.majortype == MEDIATYPE_Audio && mt.formattype == FORMAT_WaveFormatEx) {
+                                notrenderer = !pBA;
+                                audiostreamcount = 1;
+                                nChannels = UpdateSelectedAudioStreamInfo(-1, &mt, -1);
+                                break;
+                            } else if (mt.majortype == MEDIATYPE_Midi) {
+                                nChannels = 1;
+                                break;
+                            }
+                        }
+                    }
+                }
+                EndEnumPins;
+
+                if (nChannels > 0 && notrenderer) { // prefer audio decoder above renderer
+                    break;
+                }
+            }
+            EndEnumFilters;
+        }
+
         if (audiostreamcount == 0) {
             m_loadedAudioTrackIndex = -1;
             UpdateSelectedAudioStreamInfo(-1, nullptr, -1);
         }
-
-        UINT id = IDB_AUDIOTYPE_NOAUDIO;
+        
         if (nChannels >= 2) {
-            id = IDB_AUDIOTYPE_STEREO;
+            audiobitmapid = IDB_AUDIOTYPE_STEREO;
         } else if (nChannels == 1) {
-            id = IDB_AUDIOTYPE_MONO;
+            audiobitmapid = IDB_AUDIOTYPE_MONO;
         }
-        m_wndStatusBar.SetStatusBitmap(id);
+        m_wndStatusBar.SetStatusBitmap(audiobitmapid);
     }
 }
 
