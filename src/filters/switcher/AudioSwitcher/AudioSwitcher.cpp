@@ -116,11 +116,15 @@ STDMETHODIMP CAudioSwitcherFilter::NonDelegatingQueryInterface(REFIID riid, void
 HRESULT CAudioSwitcherFilter::CheckMediaType(const CMediaType* pmt)
 {
     if (pmt->majortype == MEDIATYPE_Audio && pmt->formattype == FORMAT_WaveFormatEx && pmt->pbFormat) {
-        WORD wBitsPerSample = ((WAVEFORMATEX*)pmt->pbFormat)->wBitsPerSample;
-        WORD wFormatTag = ((WAVEFORMATEX*)pmt->pbFormat)->wFormatTag;
-        WORD nChannels = ((WAVEFORMATEX*)pmt->pbFormat)->nChannels;
-        if (nChannels > 2 && wFormatTag != WAVE_FORMAT_EXTENSIBLE) {
+        WAVEFORMATEX* wfe = (WAVEFORMATEX*)pmt->pbFormat;
+        WORD wBitsPerSample = wfe->wBitsPerSample;
+        WORD wFormatTag = wfe->wFormatTag;
+        if (wfe->nChannels > 2 && wFormatTag != WAVE_FORMAT_EXTENSIBLE) {
             return VFW_E_INVALIDMEDIATYPE; // iviaudio tries to fool us
+        }
+        if (wfe->nSamplesPerSec == 0) {
+            ASSERT(false);
+            return VFW_E_INVALIDMEDIATYPE;
         }
         if (wBitsPerSample == 8 || wBitsPerSample == 16 || wBitsPerSample == 24 || wBitsPerSample == 32) {
             if (wFormatTag == WAVE_FORMAT_PCM || wFormatTag == WAVE_FORMAT_IEEE_FLOAT || wFormatTag == WAVE_FORMAT_DOLBY_AC3_SPDIF || wFormatTag == WAVE_FORMAT_EXTENSIBLE) {
