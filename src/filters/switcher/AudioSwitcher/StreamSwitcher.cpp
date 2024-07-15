@@ -1515,8 +1515,28 @@ STDMETHODIMP CStreamSwitcherFilter::Info(long lIndex, AM_MEDIA_TYPE** ppmt, DWOR
                 bFound = true;
 
                 if (ppmt) {
-                    // ToDo: if upstream filter is a decoder, then use audio mediatype of input pin of decoder
-                    *ppmt = CreateMediaType(&m_pInput->CurrentMediaType());
+                    bool found = false;
+                    CComPtr<IPin> pPinUpstream;
+                    if (SUCCEEDED(m_pInput->ConnectedTo(&pPinUpstream)) && pPinUpstream) {
+                        // find audio input pin of upstream filter
+                        if (CComQIPtr<IBaseFilter> pBF = GetFilterFromPin(pPinUpstream)) {
+                            BeginEnumPins(pBF, pEP, pPin) {
+                                CMediaTypeEx mt;
+                                PIN_DIRECTION dir;
+                                if (SUCCEEDED(pPin->QueryDirection(&dir)) && dir == PINDIR_INPUT && SUCCEEDED(pPin->ConnectionMediaType(&mt))) {
+                                    if (mt.majortype == MEDIATYPE_Audio) {
+                                        *ppmt = CreateMediaType(&mt);
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            EndEnumPins;
+                        }
+                    }
+                    if (!found) {
+                        *ppmt = CreateMediaType(&m_pInput->CurrentMediaType());
+                    }
                 }
 
                 if (pdwFlags) {
