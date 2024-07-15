@@ -746,8 +746,12 @@ void Rasterizer::CreateWidenedRegionFast(int rx, int ry)
     CAtlList<CEllipseCenterGroup> centerGroups;
     std::vector<SpanEndPoint> wideSpanEndPoints;
 
-    wideSpanEndPoints.reserve(10);
-    m_pOutlineData->mWideOutline.reserve(m_pOutlineData->mOutline.size() + m_pOutlineData->mOutline.size() / 2);
+    try {
+        wideSpanEndPoints.reserve(10);
+        m_pOutlineData->mWideOutline.reserve(m_pOutlineData->mOutline.size() + m_pOutlineData->mOutline.size() / 2);
+    } catch (...) {
+        return;
+    }
 
     auto flushLines = [&](int yStart, int yStop, tSpanBuffer & dst) {
         for (int y = yStart; y < yStop; y++) {
