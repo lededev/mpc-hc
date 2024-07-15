@@ -14567,7 +14567,9 @@ void CMainFrame::OpenSetupStatusBar()
                                 nChannels = UpdateSelectedAudioStreamInfo(-1, &mt, -1);
                                 break;
                             } else if (mt.majortype == MEDIATYPE_Midi) {
-                                nChannels = 1;
+                                notrenderer = true;
+                                audiostreamcount = 1;
+                                nChannels = UpdateSelectedAudioStreamInfo(-1, &mt, -1);
                                 break;
                             }
                         }
