@@ -720,9 +720,9 @@ void CFileAssoc::CheckIconsAssoc()
     DWORD dwEvent;
     VERIFY(CoWaitForMultipleHandles(0, INFINITE, 1, &hEvent, &dwEvent) == S_OK);
     m_checkIconsAssocInactiveEvent.Reset();
-    std::thread(
-        [this] { CheckIconsAssocThread(); }
-    ).detach();
+    try {
+        std::thread([this] { CheckIconsAssocThread(); }).detach();
+    } catch (...) {}
 }
 
 bool CFileAssoc::ShowWindowsAssocDialog() const
