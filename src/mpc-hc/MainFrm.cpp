@@ -3918,19 +3918,15 @@ void CMainFrame::OnUpdatePlayerStatus(CCmdUI* pCmdUI)
             }
             if (s.bShowABMarksInStatusbar) {
                 if (abRepeat) {
-                    msg.Append(_T("\u2001[A-B "));
-                    if(abRepeat.positionA) {
-                        CString timeMarkA = ReftimeToString2(abRepeat.positionA);
-                        msg.Append(timeMarkA.GetString());
+                    REFERENCE_TIME actualB = abRepeat.positionB;
+                    if (actualB == 0) {
+                        REFERENCE_TIME start = 0;
+                        m_wndSeekBar.GetRange(start, actualB);
                     }
-                    if(abRepeat.positionB) {
-                        if(abRepeat.positionA) {
-                            msg.AppendChar(_T(' '));
-                        }
-                        CString timeMarkB = ReftimeToString2(abRepeat.positionB);
-                        msg.AppendFormat(_T("> %s"), timeMarkB.GetString());
-                    }
-                    msg.Append(_T("]"));
+                    bool showhours = (actualB >= 35995000000) || (abRepeat.positionA >= 35995000000);
+                    CString timeMarkA = showhours ? ReftimeToString2(abRepeat.positionA) : ReftimeToString3(abRepeat.positionA);
+                    CString timeMarkB = showhours ? ReftimeToString2(actualB) : ReftimeToString3(actualB);
+                    msg.AppendFormat(_T("\u2001[A-B %s > %s]"), timeMarkA.GetString(), timeMarkB.GetString());
                 }
             }
         }
@@ -15247,29 +15243,25 @@ bool CMainFrame::OpenMediaPrivate(CAutoPtr<OpenMediaData> pOMD)
                 abRepeat = reloadABRepeat;
                 reloadABRepeat = ABRepeat();
             }
+
             auto* pMRU = &AfxGetAppSettings().MRU;
-            if (m_bRememberFilePos) { // Check if we want to remember the position
-                // Always update the file positions list so that the position
-                // is correctly saved but only restore the remembered position
-                // if no explicit start time was already set.
-                if (pMRU->rfe_array.GetCount()) {
-                    if (!rtPos) {
-                        rtPos = pMRU->GetCurrentFilePosition();
-                        if (rtPos >= rtDur || rtDur - rtPos < 50000000LL) {
-                            rtPos = 0;
-                        }
-                    }
-                    if (!abRepeat) {
-                        abRepeat = pMRU->GetCurrentABRepeat();
+            if (pMRU->rfe_array.GetCount()) {
+                if (!rtPos && m_bRememberFilePos) {
+                    rtPos = pMRU->GetCurrentFilePosition();
+                    if (rtPos >= rtDur || rtDur - rtPos < 50000000LL) {
+                        rtPos = 0;
                     }
                 }
-            }
-            if (s.fKeepHistory && s.bRememberTrackSelection && pMRU->rfe_array.GetCount()) {
-                if (m_loadedAudioTrackIndex == -1) {
-                    m_loadedAudioTrackIndex = pMRU->GetCurrentAudioTrack();
+                if (!abRepeat && s.fKeepHistory && s.fRememberFilePos) {
+                    abRepeat = pMRU->GetCurrentABRepeat();
                 }
-                if (m_loadedSubtitleTrackIndex == -1) {
-                    m_loadedSubtitleTrackIndex = pMRU->GetCurrentSubtitleTrack();
+                if (s.fKeepHistory && s.bRememberTrackSelection) {
+                    if (m_loadedAudioTrackIndex == -1) {
+                        m_loadedAudioTrackIndex = pMRU->GetCurrentAudioTrack();
+                    }
+                    if (m_loadedSubtitleTrackIndex == -1) {
+                        m_loadedSubtitleTrackIndex = pMRU->GetCurrentSubtitleTrack();
+                    }
                 }
             }
 
