@@ -1255,35 +1255,10 @@ void CMPCThemeUtil::AdjustDynamicWidgetPair(CWnd* window, int leftWidget, int ri
     }
 }
 
-std::map<int, int> CMPCThemeUtil::AnalogCaptureDevice_SliderIDToEditID = {
-    { 0x3EA, 0x3F1 },
-    { 0x3E8, 0x3F2 },
-    { 0x3E9, 0x3F3 },
-    { 0x3EB, 0x3F4 },
-    { 0x3EC, 0x3F5 },
-    { 0x3ED, 0x3F6 },
-    { 0x3EF, 0x3F7 },
-    { 0x3F0, 0x3F8 },
-    { 0x7D0, 0x403 },
-    { 0x402, 0x406 },
-    { 0x400, 0x404 },
-    { 0x401, 0x405 },
-    { 0x3F8, 0x3F9 },
-    { 0x3FB, 0x3FC },
-    { 0x3FE, 0x3FF },
-};
-
-void CMPCThemeUtil::UpdateAnalogCaptureDeviceEdit(CSliderCtrl* slider, CDialog* parent, UINT nPos) {
-    if (slider && ::IsWindow(slider->m_hWnd) && parent && ::IsWindow(parent->m_hWnd)) {
-        int sliderID = GetDlgCtrlID(slider->m_hWnd);
-        if (AnalogCaptureDevice_SliderIDToEditID.count(sliderID)) {
-            CEdit* edit = DYNAMIC_DOWNCAST(CEdit, parent->GetDlgItem(AnalogCaptureDevice_SliderIDToEditID[sliderID]));
-            if (edit) {
-                CStringW editText;
-                editText.Format(L"%d", nPos);
-                edit->SetWindowTextW(editText);
-                slider->SetPos(nPos);
-            }
+void CMPCThemeUtil::UpdateAnalogCaptureDeviceSlider(CScrollBar* pScrollBar) {
+    if (pScrollBar && ::IsWindow(pScrollBar->m_hWnd)) {
+        if (CSliderCtrl* slider = DYNAMIC_DOWNCAST(CSliderCtrl, pScrollBar)) {
+            slider->SendMessage(WM_KEYUP, VK_LEFT, 1); //does not move the slider, only forces current position to be registered
         }
     }
 }
