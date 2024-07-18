@@ -915,6 +915,7 @@ public:
     // menu item handlers
 
     INT_PTR DoFileDialogWithLastFolder(CFileDialog& fd, CStringW& lastPath);
+    void OpenDVDOrBD(CStringW path);
 
     afx_msg void OnFileOpenQuick();
     afx_msg void OnFileOpenmedia();

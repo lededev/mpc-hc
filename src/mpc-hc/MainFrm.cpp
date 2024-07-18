@@ -4968,6 +4968,20 @@ int CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
     return 0;
 }
 
+void CMainFrame::OpenDVDOrBD(CStringW path) {
+    if (!path.IsEmpty()) {
+        AfxGetAppSettings().strDVDPath = path;
+        if (!OpenBD(path)) {
+            CAutoPtr<OpenDVDData> p(DEBUG_NEW OpenDVDData());
+            p->path = path;
+            p->path.Replace(_T('/'), _T('\\'));
+            p->path = ForceTrailingSlash(p->path);
+
+            OpenMedia(p);
+        }
+    }
+}
+
 void CMainFrame::OnFileOpendvd()
 {
     if ((GetLoadState() == MLS::LOADING) || IsD3DFullScreenMode()) {
@@ -4993,18 +5007,7 @@ void CMainFrame::OnFileOpendvd()
             return;
         }
     }
-
-    if (!path.IsEmpty()) {
-        s.strDVDPath = path;
-        if (!OpenBD(path)) {
-            CAutoPtr<OpenDVDData> p(DEBUG_NEW OpenDVDData());
-            p->path = path;
-            p->path.Replace(_T('/'), _T('\\'));
-            p->path = ForceTrailingSlash(p->path);
-
-            OpenMedia(p);
-        }
-    }
+    OpenDVDOrBD(path);
 }
 
 void CMainFrame::OnFileOpendevice()
@@ -5040,7 +5043,8 @@ void CMainFrame::OnFileOpenOpticalDisk(UINT nID)
     for (TCHAR drive = _T('A'); drive <= _T('Z'); drive++) {
         CAtlList<CString> sl;
 
-        switch (GetOpticalDiskType(drive, sl)) {
+        OpticalDiskType_t discType = GetOpticalDiskType(drive, sl);
+        switch (discType) {
             case OpticalDisk_Audio:
             case OpticalDisk_VideoCD:
             case OpticalDisk_DVDVideo:
@@ -5052,16 +5056,19 @@ void CMainFrame::OnFileOpenOpticalDisk(UINT nID)
         }
 
         if (nID == 0) {
-            SendMessage(WM_COMMAND, ID_FILE_CLOSEMEDIA);
-            SetForegroundWindow();
+            if (OpticalDisk_BD == discType || OpticalDisk_DVDVideo == discType) {
+                OpenDVDOrBD(CStringW(drive) + L":\\");
+            } else {
+                SendMessage(WM_COMMAND, ID_FILE_CLOSEMEDIA);
+                SetForegroundWindow();
 
-            if (IsIconic()) {
-                ShowWindow(SW_RESTORE);
+                if (IsIconic()) {
+                    ShowWindow(SW_RESTORE);
+                }
+
+                m_wndPlaylistBar.Open(sl, true);
+                OpenCurPlaylistItem();
             }
-
-            m_wndPlaylistBar.Open(sl, true);
-            OpenCurPlaylistItem();
-
             break;
         }
     }
