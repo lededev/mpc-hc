@@ -25,6 +25,7 @@
 #include "tinyxml2/library/tinyxml2.h"
 #include <regex>
 #include "FileHandle.h"
+#include "ISOLang.h"
 using namespace tinyxml2;
 
 CHdmvClipInfo::CHdmvClipInfo()
@@ -66,6 +67,32 @@ BYTE CHdmvClipInfo::ReadByte()
     VERIFY(ReadFile(m_hFile, &bVal, sizeof(bVal), &dwRead, nullptr));
 
     return bVal;
+}
+
+BOOL CHdmvClipInfo::Skip(LONGLONG nLen) {
+    LARGE_INTEGER newPos = {};
+    newPos.QuadPart = nLen;
+    return SetFilePointerEx(m_hFile, newPos, nullptr, FILE_CURRENT);
+}
+
+BOOL CHdmvClipInfo::GetPos(LONGLONG& Pos) {
+    LARGE_INTEGER curPos = {};
+    const BOOL bRet = SetFilePointerEx(m_hFile, curPos, &curPos, FILE_CURRENT);
+    Pos = curPos.QuadPart;
+
+    return bRet;
+}
+BOOL CHdmvClipInfo::SetPos(LONGLONG Pos, DWORD dwMoveMethod/* = FILE_BEGIN*/) {
+    LARGE_INTEGER newPos = {};
+    newPos.QuadPart = Pos;
+    return SetFilePointerEx(m_hFile, newPos, nullptr, dwMoveMethod);
+}
+
+HRESULT CHdmvClipInfo::ReadLang(Stream& s) {
+    ReadBuffer((BYTE*)s.m_LanguageCode, 3);
+    s.m_LCID = ISOLang::ISO6392ToLcid(s.m_LanguageCode);
+
+    return S_OK;
 }
 
 void CHdmvClipInfo::ReadBuffer(BYTE* pBuff, DWORD nLen)
@@ -256,7 +283,170 @@ LPCTSTR CHdmvClipInfo::Stream::Format()
     }
 }
 
-HRESULT CHdmvClipInfo::ReadPlaylist(CString strPlaylistFile, REFERENCE_TIME& rtDuration, CAtlList<PlaylistItem>& Playlist)
+HRESULT CHdmvClipInfo::ReadStreamInfo() {
+    BYTE len = ReadByte();
+    LONGLONG Pos = 0;
+    GetPos(Pos);
+
+    Stream s;
+    const BYTE stream_type = ReadByte();
+    switch (stream_type) {
+    case 1:
+        s.m_PID = ReadShort();
+        break;
+    case 2:
+    case 4:
+        ReadShort();
+        s.m_PID = ReadShort();
+        break;
+    case 3:
+        ReadByte();
+        s.m_PID = ReadShort();
+        break;
+    }
+
+    if (!SetPos(Pos + len)) {
+        return E_FAIL;
+    }
+
+    len = ReadByte();
+    GetPos(Pos);
+
+    for (const auto& stream : stn.m_Streams) {
+        if (s.m_PID == stream.m_PID) {
+            return SetPos(Pos + len) ? S_OK : E_FAIL;
+        }
+    }
+
+    s.m_Type = (PES_STREAM_TYPE)ReadByte();
+    switch (s.m_Type) {
+    case VIDEO_STREAM_MPEG1:
+    case VIDEO_STREAM_MPEG2:
+    case VIDEO_STREAM_H264:
+    case MVC_H264:
+    case VIDEO_STREAM_HEVC:
+    case VIDEO_STREAM_VC1: {
+        const BYTE Temp = ReadByte();
+        s.m_VideoFormat = (BDVM_VideoFormat)(Temp >> 4);
+        s.m_FrameRate = (BDVM_FrameRate)(Temp & 0xf);
+    }
+                         break;
+    case AUDIO_STREAM_MPEG1:
+    case AUDIO_STREAM_MPEG2:
+    case AUDIO_STREAM_LPCM:
+    case AUDIO_STREAM_AC3:
+    case AUDIO_STREAM_DTS:
+    case AUDIO_STREAM_AC3_TRUE_HD:
+    case AUDIO_STREAM_AC3_PLUS:
+    case AUDIO_STREAM_DTS_HD:
+    case AUDIO_STREAM_DTS_HD_MASTER_AUDIO:
+    case SECONDARY_AUDIO_AC3_PLUS:
+    case SECONDARY_AUDIO_DTS_HD: {
+        const BYTE Temp = ReadByte();
+        s.m_ChannelLayout = (BDVM_ChannelLayout)(Temp >> 4);
+        s.m_SampleRate = (BDVM_SampleRate)(Temp & 0xF);
+
+        ReadLang(s);
+    }
+                               break;
+    case PRESENTATION_GRAPHICS_STREAM:
+    case INTERACTIVE_GRAPHICS_STREAM:
+        ReadLang(s);
+        break;
+    case SUBTITLE_STREAM:
+        ReadByte(); // bd_char_code
+        ReadLang(s);
+        break;
+    }
+
+    stn.m_Streams.emplace_back(s);
+
+    return SetPos(Pos + len) ? S_OK : E_FAIL;
+}
+
+HRESULT CHdmvClipInfo::ReadSTNInfo() {
+    ReadShort(); // length
+    ReadShort(); // reserved_for_future_use
+
+    stn.num_video = ReadByte(); // number of Primary Video Streams
+    stn.num_audio = ReadByte(); // number of Primary Audio Streams
+    stn.num_pg = ReadByte(); // number of Presentation Graphic Streams
+    stn.num_ig = ReadByte(); // number of Interactive Graphic Streams
+    stn.num_secondary_audio = ReadByte(); // number of Secondary Audio Streams
+    stn.num_secondary_video = ReadByte(); // number of Secondary Video Streams
+    stn.num_pip_pg = ReadByte(); // number of Presentation Graphic Streams
+
+    Skip(5); // reserved_for_future_use
+
+    for (BYTE i = 0; i < stn.num_video; i++) {
+        if (FAILED(ReadStreamInfo())) {
+            return E_FAIL;
+        }
+    }
+
+    for (BYTE i = 0; i < stn.num_audio; i++) {
+        if (FAILED(ReadStreamInfo())) {
+            return E_FAIL;
+        }
+    }
+
+    for (BYTE i = 0; i < (stn.num_pg + stn.num_pip_pg); i++) {
+        if (FAILED(ReadStreamInfo())) {
+            return E_FAIL;
+        }
+    }
+
+    for (BYTE i = 0; i < stn.num_ig; i++) {
+        if (FAILED(ReadStreamInfo())) {
+            return E_FAIL;
+        }
+    }
+
+    for (BYTE i = 0; i < stn.num_secondary_audio; i++) {
+        if (FAILED(ReadStreamInfo())) {
+            return E_FAIL;
+        }
+
+        // Secondary Audio Extra Attributes
+        const BYTE num_secondary_audio_extra = ReadByte();
+        ReadByte();
+        if (num_secondary_audio_extra) {
+            Skip(num_secondary_audio_extra);
+            if (num_secondary_audio_extra % 2) {
+                ReadByte();
+            }
+        }
+    }
+
+    for (BYTE i = 0; i < stn.num_secondary_video; i++) {
+        if (FAILED(ReadStreamInfo())) {
+            return E_FAIL;
+        }
+
+        // Secondary Video Extra Attributes
+        const BYTE num_secondary_video_extra = ReadByte();
+        ReadByte();
+        if (num_secondary_video_extra) {
+            Skip(num_secondary_video_extra);
+            if (num_secondary_video_extra % 2) {
+                ReadByte();
+            }
+        }
+
+        const BYTE num_pip_pg_extra = ReadByte();
+        ReadByte();
+        if (num_pip_pg_extra) {
+            Skip(num_pip_pg_extra);
+            if (num_pip_pg_extra % 2) {
+                ReadByte();
+            }
+        }
+    }
+
+    return S_OK;
+}
+
+HRESULT CHdmvClipInfo::ReadPlaylist(CString strPlaylistFile, REFERENCE_TIME& rtDuration, HdmvPlaylist& Playlist)
 {
     CPath Path(strPlaylistFile);
     rtDuration = 0;
@@ -280,6 +470,10 @@ HRESULT CHdmvClipInfo::ReadPlaylist(CString strPlaylistFile, REFERENCE_TIME& rtD
         if ((memcmp(Buff, "0300", 4) != 0) && (memcmp(Buff, "0200", 4) != 0) && (memcmp(Buff, "0100", 4) != 0)) {
             return CloseFile(VFW_E_INVALID_FILE_FORMAT);
         }
+
+        LARGE_INTEGER size = {};
+        GetFileSizeEx(m_hFile, &size);
+        Playlist.m_mpls_size = size.QuadPart;
 
         LARGE_INTEGER Pos;
         unsigned short nPlaylistItems;
@@ -308,6 +502,7 @@ HRESULT CHdmvClipInfo::ReadPlaylist(CString strPlaylistFile, REFERENCE_TIME& rtD
                 return CloseFile(VFW_E_INVALID_FILE_FORMAT);
             }
             ReadBuffer(Buff, 3);
+            const BYTE is_multi_angle = (Buff[1] >> 4) & 0x1;
 
             dwTemp = ReadDword();
             Item.m_rtIn = 20000i64 * dwTemp / 90; // Carefull : 32->33 bits!
@@ -317,15 +512,61 @@ HRESULT CHdmvClipInfo::ReadPlaylist(CString strPlaylistFile, REFERENCE_TIME& rtD
 
             rtDuration += (Item.m_rtOut - Item.m_rtIn);
 
-            if (Playlist.Find(Item) != nullptr) {
+            Skip(8);		// mpls uo
+            ReadByte();
+            ReadByte();		// still mode
+            ReadShort();	// still time
+            BYTE angle_count = 1;
+            if (is_multi_angle) {
+                angle_count = ReadByte();
+                if (angle_count < 1) {
+                    angle_count = 1;
+                }
+                ReadByte();
+            }
+            for (BYTE j = 1; j < angle_count; j++) {
+                Skip(9);    // M2TS file name
+                ReadByte(); // stc_id
+            }
+
+            // stn
+            ReadSTNInfo();
+
+            if (Playlist.contains(Item)) {
                 bDuplicate = true;
             }
-            Playlist.AddTail(Item);
+            Playlist.emplace_back(Item);
 
             //TRACE(_T("File : %s, Duration : %s, Total duration  : %s\n"), strTemp, ReftimeToString (rtOut - rtIn), ReftimeToString (rtDuration));
         }
 
         CloseFile(S_OK);
+        if (!stn.m_Streams.empty()) {
+			for (const auto& stream : stn.m_Streams) {
+                switch (stream.m_VideoFormat) {
+                case BDVM_VideoFormat_480i:
+                case BDVM_VideoFormat_480p:
+                    Playlist.m_max_video_res = std::max(Playlist.m_max_video_res, 480u);
+                    break;
+                case BDVM_VideoFormat_576i:
+                case BDVM_VideoFormat_576p:
+                    Playlist.m_max_video_res = std::max(Playlist.m_max_video_res, 576u);
+                    break;
+                case BDVM_VideoFormat_720p:
+                    Playlist.m_max_video_res = std::max(Playlist.m_max_video_res, 720u);
+                    break;
+                case BDVM_VideoFormat_1080i:
+                case BDVM_VideoFormat_1080p:
+                    Playlist.m_max_video_res = std::max(Playlist.m_max_video_res, 1080u);
+                    break;
+                case BDVM_VideoFormat_2160p:
+                    Playlist.m_max_video_res = std::max(Playlist.m_max_video_res, 2160u);
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
         return bDuplicate ? S_FALSE : S_OK;
     }
 
@@ -405,16 +646,16 @@ HRESULT CHdmvClipInfo::ReadChapters(CString strPlaylistFile, CAtlList<CHdmvClipI
 
 #define MIN_LIMIT 3
 
-HRESULT CHdmvClipInfo::FindMainMovie(LPCTSTR strFolder, CString& strPlaylistFile, CAtlList<PlaylistItem>& MainPlaylist, CAtlList<PlaylistItem>& MPLSPlaylists)
+HRESULT CHdmvClipInfo::FindMainMovie(LPCTSTR strFolder, CString& strPlaylistFile, HdmvPlaylist& MainPlaylist, HdmvPlaylist& MPLSPlaylists)
 {
     HRESULT hr = E_FAIL;
 
     CString strPath(strFolder);
     CString strFilter;
 
-    MPLSPlaylists.RemoveAll();
+    MPLSPlaylists.clear();
 
-    CAtlList<PlaylistItem> Playlist;
+    HdmvPlaylist Playlist;
     WIN32_FIND_DATA fd;
     ZeroMemory(&fd, sizeof(WIN32_FIND_DATA));
 
@@ -426,31 +667,64 @@ HRESULT CHdmvClipInfo::FindMainMovie(LPCTSTR strFolder, CString& strPlaylistFile
 
     HANDLE hFind = FindFirstFile(strFilter, &fd);
     if (hFind != INVALID_HANDLE_VALUE) {
+        std::vector<HdmvPlaylist> PlaylistArray;
+
         REFERENCE_TIME rtMax = 0;
         REFERENCE_TIME rtCurrent;
         CString strCurrentPlaylist;
+        __int64 mpls_size_max = 0;
+        unsigned max_video_res = 0u;
         do {
             strCurrentPlaylist.Format(_T("%sPLAYLIST\\%s"), strPath.GetString(), fd.cFileName);
-            Playlist.RemoveAll();
+            Playlist.clear();
 
             // Main movie shouldn't have duplicate M2TS filename...
             if (ReadPlaylist(strCurrentPlaylist, rtCurrent, Playlist) == S_OK) {
-                if (rtCurrent > rtMax) {
+                if ((rtCurrent > rtMax && Playlist.m_max_video_res >= max_video_res)
+                    || (rtCurrent == rtMax && Playlist.m_mpls_size > mpls_size_max)
+                    || ((rtCurrent < rtMax && rtCurrent >= rtMax / 2) && Playlist.m_max_video_res > max_video_res)) {
                     rtMax = rtCurrent;
+                    mpls_size_max = Playlist.m_mpls_size;
+                    max_video_res = Playlist.m_max_video_res;
                     strPlaylistFile = strCurrentPlaylist;
-                    MainPlaylist.RemoveAll();
-                    POSITION pos = Playlist.GetHeadPosition();
-                    while (pos) {
-                        MainPlaylist.AddTail(Playlist.GetNext(pos));
-                    }
+                    MainPlaylist.clear();
+                    MainPlaylist.insert(std::end(MainPlaylist), std::begin(Playlist), std::end(Playlist));
                     hr = S_OK;
                 }
+
                 if (rtCurrent >= (REFERENCE_TIME)MIN_LIMIT * 600000000) {
+                    // Search duplicate playlists ...
+                    bool duplicate = false;
+                    if (!MPLSPlaylists.empty()) {
+                        for (const auto& item : PlaylistArray) {
+                            if (item.size() != Playlist.size()) {
+                                continue;
+                            }
+
+                            duplicate = true;
+                            for (size_t i = 0; i < item.size() && duplicate; i++) {
+                                if (item[i] == Playlist[i]) {
+                                    continue;
+                                }
+
+                                duplicate = false;
+                            }
+
+                            if (duplicate) {
+                                duplicate = (item.m_mpls_size == Playlist.m_mpls_size);
+                            }
+                        }
+                    }
+                    if (duplicate) {
+                        continue;
+                    }
+
                     PlaylistItem Item;
                     Item.m_strFileName = strCurrentPlaylist;
                     Item.m_rtIn = 0;
                     Item.m_rtOut = rtCurrent;
-                    MPLSPlaylists.AddTail(Item);
+                    MPLSPlaylists.emplace_back(Item);
+                    PlaylistArray.emplace_back(Playlist);
                 }
 
             }
@@ -459,15 +733,8 @@ HRESULT CHdmvClipInfo::FindMainMovie(LPCTSTR strFolder, CString& strPlaylistFile
         FindClose(hFind);
     }
 
-    if (MPLSPlaylists.GetCount() > 1) {
-        // bubble sort
-        for (size_t j = 0; j < MPLSPlaylists.GetCount(); j++) {
-            for (size_t i = 0; i < MPLSPlaylists.GetCount() - 1; i++) {
-                if (MPLSPlaylists.GetAt(MPLSPlaylists.FindIndex(i)).Duration() < MPLSPlaylists.GetAt(MPLSPlaylists.FindIndex(i + 1)).Duration()) {
-                    MPLSPlaylists.SwapElements(MPLSPlaylists.FindIndex(i), MPLSPlaylists.FindIndex(i + 1));
-                }
-            }
-        }
+    if (MPLSPlaylists.size() > 1) {
+        std::sort(MPLSPlaylists.begin(), MPLSPlaylists.end(), std::greater<PlaylistItem>());
     }
 
     return hr;

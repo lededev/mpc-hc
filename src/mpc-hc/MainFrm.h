@@ -1347,7 +1347,7 @@ public:
     // TODO: refactor it outside of MainFrm
     GUID GetTimeFormat();
 
-    CAtlList<CHdmvClipInfo::PlaylistItem> m_MPLSPlaylist;
+    CHdmvClipInfo::HdmvPlaylist m_MPLSPlaylist;
     bool m_bIsBDPlay;
     bool OpenBD(CString Path);
     bool m_bHasBDMeta;

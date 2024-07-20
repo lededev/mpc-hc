@@ -10533,11 +10533,9 @@ void CMainFrame::OnNavigateJumpTo(UINT nID)
     if (GetPlaybackMode() == PM_FILE) {
         int id = nID - ID_NAVIGATE_JUMPTO_SUBITEM_START;
 
-        if (id < (int)m_MPLSPlaylist.GetCount() && m_MPLSPlaylist.GetCount() > 1) {
-            POSITION pos = m_MPLSPlaylist.GetHeadPosition();
+        if (id < (int)m_MPLSPlaylist.size() && m_MPLSPlaylist.size() > 1) {
             int idx = 0;
-            while (pos) {
-                CHdmvClipInfo::PlaylistItem Item = m_MPLSPlaylist.GetNext(pos);
+            for (auto &Item : m_MPLSPlaylist) {
                 if (idx == id) {
                     m_bIsBDPlay = true;
                     m_wndPlaylistBar.Empty();
@@ -10551,8 +10549,8 @@ void CMainFrame::OnNavigateJumpTo(UINT nID)
             }
         }
 
-        if (m_MPLSPlaylist.GetCount() > 1) {
-            id -= (int)m_MPLSPlaylist.GetCount();
+        if (m_MPLSPlaylist.size() > 1) {
+            id -= (int)m_MPLSPlaylist.size();
         }
 
         if (m_pCB->ChapGetCount() > 1) {
@@ -16459,12 +16457,10 @@ void CMainFrame::SetupJumpToSubMenus(CMenu* parentMenu /*= nullptr*/, int iInser
     };
 
     if (GetPlaybackMode() == PM_FILE) {
-        if (m_MPLSPlaylist.GetCount() > 1) {
+        if (m_MPLSPlaylist.size() > 1) {
             menuStartRadioSection();
-            POSITION pos = m_MPLSPlaylist.GetHeadPosition();
-            while (pos) {
+            for (auto& Item : m_MPLSPlaylist) {
                 UINT flags = MF_BYCOMMAND | MF_STRING | MF_ENABLED;
-                CHdmvClipInfo::PlaylistItem Item = m_MPLSPlaylist.GetNext(pos);
                 CString time = _T("[") + ReftimeToString2(Item.Duration()) + _T("]");
                 CString name = PathUtils::StripPathOrUrl(Item.m_strFileName);
 
@@ -18586,7 +18582,7 @@ void CMainFrame::OpenMedia(CAutoPtr<OpenMediaData> pOMD)
 
     // clear BD playlist if we are not currently opening something from it
     if (!m_bIsBDPlay) {
-        m_MPLSPlaylist.RemoveAll();
+        m_MPLSPlaylist.clear();
         m_LastOpenBDPath = _T("");
     }
     m_bIsBDPlay = false;
@@ -20888,7 +20884,7 @@ bool CMainFrame::OpenBD(CString Path)
 {
     CHdmvClipInfo ClipInfo;
     CString strPlaylistFile;
-    CAtlList<CHdmvClipInfo::PlaylistItem> MainPlaylist;
+    CHdmvClipInfo::HdmvPlaylist MainPlaylist;
 
 #if INTERNAL_SOURCEFILTER_MPEG
     const CAppSettings& s = AfxGetAppSettings();

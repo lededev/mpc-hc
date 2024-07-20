@@ -22,6 +22,7 @@
 
 #include "Mpeg2Def.h"
 #include <atlcoll.h>
+#include <vector>
 
 enum BDVM_VideoFormat {
     BDVM_VideoFormat_Unknown = 0,
@@ -31,7 +32,8 @@ enum BDVM_VideoFormat {
     BDVM_VideoFormat_1080i   = 4,
     BDVM_VideoFormat_720p    = 5,
     BDVM_VideoFormat_1080p   = 6,
-    BDVM_VideoFormat_576p    = 7
+    BDVM_VideoFormat_576p    = 7,
+    BDVM_VideoFormat_2160p   = 8,
 };
 
 enum BDVM_FrameRate {
@@ -102,6 +104,15 @@ public:
         bool operator == (const PlaylistItem& pi) const {
             return pi.m_strFileName == m_strFileName;
         }
+        bool operator >(const PlaylistItem& pi) const {
+            return Duration() > pi.Duration();
+        }
+    };
+    class HdmvPlaylist : public std::vector<PlaylistItem> {
+    public:
+        __int64 m_mpls_size = 0;
+        unsigned m_max_video_res = 0u;
+        bool contains(PlaylistItem& pli) { return std::find(begin(), end(), pli) != end(); }
     };
 
     enum PlaylistMarkType {
@@ -132,8 +143,10 @@ public:
     size_t GetStreamNumber() { return m_Streams.GetCount(); };
     Stream* GetStreamByIndex(size_t nIndex) { return (nIndex < m_Streams.GetCount()) ? &m_Streams[nIndex] : nullptr; };
 
-    HRESULT FindMainMovie(LPCTSTR strFolder, CString& strPlaylistFile, CAtlList<PlaylistItem>& MainPlaylist, CAtlList<PlaylistItem>& MPLSPlaylists);
-    HRESULT ReadPlaylist(CString strPlaylistFile, REFERENCE_TIME& rtDuration, CAtlList<PlaylistItem>& Playlist);
+    HRESULT FindMainMovie(LPCTSTR strFolder, CString& strPlaylistFile, HdmvPlaylist& MainPlaylist, HdmvPlaylist& MPLSPlaylists);
+    HRESULT ReadStreamInfo();
+    HRESULT ReadSTNInfo();
+    HRESULT ReadPlaylist(CString strPlaylistFile, REFERENCE_TIME& rtDuration, HdmvPlaylist& Playlist);
     HRESULT ReadChapters(CString strPlaylistFile, CAtlList<CHdmvClipInfo::PlaylistItem>& PlaylistItems, CAtlList<PlaylistChapter>& Chapters);
     bool ReadMeta(LPCTSTR strFolder, CAtlList<BDMVMeta>& meta);
 
@@ -144,13 +157,33 @@ private:
     HANDLE m_hFile;
 
     CAtlArray<Stream> m_Streams;
+    typedef std::vector<Stream> Streams;
+    struct {
+        BYTE num_video = 0;
+        BYTE num_audio = 0;
+        BYTE num_pg = 0;
+        BYTE num_ig = 0;
+        BYTE num_secondary_audio = 0;
+        BYTE num_secondary_video = 0;
+        BYTE num_pip_pg = 0;
+
+        Streams m_Streams;
+    } stn;
+
+
     bool m_bIsHdmv;
 
     DWORD ReadDword();
     short ReadShort();
     BYTE ReadByte();
+
+    BOOL    Skip(LONGLONG nLen);
+    BOOL    GetPos(LONGLONG& Pos);
+    BOOL    SetPos(LONGLONG Pos, DWORD dwMoveMethod = FILE_BEGIN);
+
     void ReadBuffer(BYTE* pBuff, DWORD nLen);
 
+    HRESULT ReadLang(Stream& s);
     HRESULT ReadProgramInfo();
     HRESULT CloseFile(HRESULT hr);
 };
