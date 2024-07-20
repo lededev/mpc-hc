@@ -339,6 +339,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
     ON_UPDATE_COMMAND_UI(ID_FILE_SAVE_IMAGE, OnUpdateFileSaveImage)
     ON_COMMAND(ID_FILE_SAVE_IMAGE_AUTO, OnFileSaveImageAuto)
     ON_UPDATE_COMMAND_UI(ID_FILE_SAVE_IMAGE_AUTO, OnUpdateFileSaveImage)
+    ON_COMMAND(ID_CMDLINE_SAVE_THUMBNAILS, OnCmdLineSaveThumbnails)
     ON_COMMAND(ID_FILE_SAVE_THUMBNAILS, OnFileSaveThumbnails)
     ON_UPDATE_COMMAND_UI(ID_FILE_SAVE_THUMBNAILS, OnUpdateFileSaveThumbnails)
     ON_COMMAND(ID_FILE_SUBTITLES_LOAD, OnFileSubtitlesLoad)
@@ -4098,23 +4099,32 @@ LRESULT CMainFrame::OnFilePostOpenmedia(WPARAM wParam, LPARAM lParam)
     // OnPlayPlay()/OnPlayPause() will take care of that
     m_bDelaySetOutputRect = false;
 
-    // start playback if requested
-    m_bFirstPlay = true;
-    const auto uModeChangeDelay = s.autoChangeFSMode.uDelay * 1000;
-    if (!(s.nCLSwitches & CLSW_OPEN) && (s.nLoops > 0)) {
-        if (m_bOpeningInAutochangedMonitorMode && uModeChangeDelay) {
-            m_timerOneTime.Subscribe(TimerOneTimeSubscriber::DELAY_PLAYPAUSE_AFTER_AUTOCHANGE_MODE,
-                                     std::bind(&CMainFrame::OnPlayPlay, this), uModeChangeDelay);
+    bool checkPlayback = true;
+    if (s.nCLSwitches & CLSW_THUMBNAILS) {
+        SendMessageW(WM_COMMAND, ID_CMDLINE_SAVE_THUMBNAILS);
+        s.nCLSwitches &= ~CLSW_THUMBNAILS;
+        checkPlayback = s.nCLSwitches & (CLSW_PLAY | CLSW_OPEN); //unless they requested to open or play, we will not open the video after thumbnail
+    }
+
+    if (checkPlayback) {
+        // start playback if requested
+        m_bFirstPlay = true;
+        const auto uModeChangeDelay = s.autoChangeFSMode.uDelay * 1000;
+        if (!(s.nCLSwitches & CLSW_OPEN) && (s.nLoops > 0)) {
+            if (m_bOpeningInAutochangedMonitorMode && uModeChangeDelay) {
+                m_timerOneTime.Subscribe(TimerOneTimeSubscriber::DELAY_PLAYPAUSE_AFTER_AUTOCHANGE_MODE,
+                    std::bind(&CMainFrame::OnPlayPlay, this), uModeChangeDelay);
+            } else {
+                OnPlayPlay();
+            }
         } else {
-            OnPlayPlay();
-        }
-    } else {
-        // OnUpdatePlayPauseStop() will decide if we can pause the media
-        if (m_bOpeningInAutochangedMonitorMode && uModeChangeDelay) {
-            m_timerOneTime.Subscribe(TimerOneTimeSubscriber::DELAY_PLAYPAUSE_AFTER_AUTOCHANGE_MODE,
-                                     [this] { OnCommand(ID_PLAY_PAUSE, 0); }, uModeChangeDelay);
-        } else {
-            OnCommand(ID_PLAY_PAUSE, 0);
+            // OnUpdatePlayPauseStop() will decide if we can pause the media
+            if (m_bOpeningInAutochangedMonitorMode && uModeChangeDelay) {
+                m_timerOneTime.Subscribe(TimerOneTimeSubscriber::DELAY_PLAYPAUSE_AFTER_AUTOCHANGE_MODE,
+                    [this] { OnCommand(ID_PLAY_PAUSE, 0); }, uModeChangeDelay);
+            } else {
+                OnCommand(ID_PLAY_PAUSE, 0);
+            }
         }
     }
     s.nCLSwitches &= ~CLSW_OPEN;
@@ -6331,6 +6341,34 @@ void CMainFrame::OnUpdateFileSaveImage(CCmdUI* pCmdUI)
 {
     OAFilterState fs = GetMediaState();
     pCmdUI->Enable(GetLoadState() == MLS::LOADED && !m_fAudioOnly && (fs == State_Paused || fs == State_Running));
+}
+
+void CMainFrame::OnCmdLineSaveThumbnails()
+{
+    CAppSettings& s = AfxGetAppSettings();
+
+    /* Check if a compatible renderer is being used */
+    if (!IsRendererCompatibleWithSaveImage()) {
+        return;
+    }
+
+    CPlaylistItem pli;
+    if (!m_wndPlaylistBar.GetCur(pli, true)) {
+        return;
+    }
+
+    CPath psrc(m_wndPlaylistBar.GetCurFileName(true));
+    psrc.RemoveFileSpec();
+    psrc.Combine(psrc, MakeSnapshotFileName(TRUE));
+
+    s.iThumbRows = std::clamp(s.iThumbRows, 1, 40);
+    s.iThumbCols = std::clamp(s.iThumbCols, 1, 16);
+    s.iThumbWidth = std::clamp(s.iThumbWidth, 256, 3840);
+
+    CString path = (LPCTSTR)psrc;
+
+    SaveThumbnails(path);
+
 }
 
 void CMainFrame::OnFileSaveThumbnails()

@@ -2617,6 +2617,8 @@ void CAppSettings::ParseCommandLine(CAtlList<CString>& cmdln)
                 abRepeat.positionA = 10000i64 * ConvertTimeToMSec(cmdln.GetNext(pos));
             } else if (sw == L"ab_end" && pos) {
                 abRepeat.positionB = 10000i64 * ConvertTimeToMSec(cmdln.GetNext(pos));
+            } else if (sw == L"thumbnails") {
+                nCLSwitches |= CLSW_THUMBNAILS;
             } else {
                 nCLSwitches |= CLSW_HELP | CLSW_UNRECOGNIZEDSWITCH;
             }

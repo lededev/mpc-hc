@@ -4159,6 +4159,11 @@ BEGIN
     IDS_AG_DEFAULT          "Default"
 END
 
+STRINGTABLE
+BEGIN
+    IDS_CMD_THUMBNAILS      "/thumbnails\tCreate thumbnails"
+END
+
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
