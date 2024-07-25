@@ -117,6 +117,7 @@
 #define IDS_RS_CAPTURE_DEINTERLACE          _T("CaptureDeinterlace")
 #define IDS_RS_PAUSE_WHILE_DRAGGING_SEEKBAR _T("PauseWhileDraggingSeekbar")
 #define IDS_RS_CONFIRM_FILE_DELETE          _T("ConfirmFileDelete")
+#define IDS_RS_LIBASS_FOR_SRT               _T("UseLibassForSRT")
 
 // Audio
 #define IDS_RS_VOLUME                       _T("Volume")

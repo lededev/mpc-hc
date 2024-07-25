@@ -65,7 +65,6 @@ private:
     int m_iRelativeTo;
 #if USE_LIBASS
     int iRenderSSAUsingLibass;
-    int iRenderSRTUsingLibass;
 #endif
 
     void AskColor(int i);

@@ -234,6 +234,7 @@ private:
         CAPTURE_DEINTERLACE,
         PAUSE_WHILE_DRAGGING_SEEKBAR,
         CONFIRM_FILE_DELETE,
+        LIBASS_FOR_SRT,
     };
 
     enum {
