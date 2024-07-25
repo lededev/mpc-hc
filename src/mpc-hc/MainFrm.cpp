@@ -5367,14 +5367,16 @@ bool CMainFrame::GetDIB(BYTE** ppData, long& size, bool fSilent)
     if (!ppData) {
         return false;
     }
+    if (GetLoadState() == MLS::LOADED || m_fAudioOnly) {
+        return false;
+    }
+    OAFilterState fs = GetMediaState();
+    if (fs != State_Paused && fs != State_Running) {
+        return false;
+    }
 
     *ppData = nullptr;
     size = 0;
-    OAFilterState fs = GetMediaState();
-
-    if (!(GetLoadState() == MLS::LOADED && !m_fAudioOnly && (fs == State_Paused || fs == State_Running))) {
-        return false;
-    }
 
     if (fs == State_Running && !m_pCAP) {
         MediaControlPause(true); // wait for completion
