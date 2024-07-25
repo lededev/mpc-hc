@@ -229,14 +229,7 @@ void CWord::Transform(CPoint org)
 {
     if ((fabs(m_style.fontAngleX) > 0.000001) || (fabs(m_style.fontAngleY) > 0.000001) || (fabs(m_style.fontAngleZ) > 0.000001) ||
         (fabs(m_style.fontShiftX) > 0.000001) || (fabs(m_style.fontShiftY) > 0.000001)) {
-#if defined(_M_IX86_FP) && _M_IX86_FP < 2
-        if (!m_bUseSSE2) {
-            Transform_C(org);
-        } else
-#endif
-        {
-            Transform_SSE2(org);
-        }
+        Transform_SSE2(org);
     } else if ((fabs(m_style.fontScaleX - 100) > 0.000001) || (fabs(m_style.fontScaleY - 100) > 0.000001)) {
         Transform_quick(org);
     }
@@ -284,6 +277,7 @@ bool CWord::CreateOpaqueBox()
     return !!m_pOpaqueBox;
 }
 
+#if 0
 void CWord::Transform_C(const CPoint& org)
 {
     const double scalex = m_style.fontScaleX / 100.0;
@@ -330,9 +324,11 @@ void CWord::Transform_C(const CPoint& org)
         mpPathPoints[i].y = std::lround(y) + org.y;
     }
 }
+#endif
 
 void CWord::Transform_quick(const CPoint& org)
 {
+    // ToDo: rewrite using intrisics similar to Transform_SSE2
     const double scalex = m_style.fontScaleX / 100.0;
     const double scaley = m_style.fontScaleY / 100.0;
 
