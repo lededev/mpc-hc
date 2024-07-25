@@ -5087,8 +5087,13 @@ void CMainFrame::OnFileOpenOpticalDisk(UINT nID)
 void CMainFrame::OnFileRecycle()
 {
     // check if a file is playing
-    if (GetPlaybackMode() != PM_FILE) {
+    if (GetLoadState() != MLS::LOADED || GetPlaybackMode() != PM_FILE) {
         return;
+    }
+
+    OAFilterState fs = GetMediaState();
+    if (fs == State_Running) {
+        MediaControlPause(true);
     }
 
     m_wndPlaylistBar.DeleteFileInPlaylist(m_wndPlaylistBar.m_pl.GetPos());

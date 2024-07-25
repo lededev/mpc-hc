@@ -1509,9 +1509,9 @@ bool CPlayerPlaylistBar::DeleteFileInPlaylist(POSITION pos, bool recycle)
     CString filename = m_pl.GetAt(pos).m_fns.GetHead();
     bool candeletefile = false;
     bool folderPlayNext = false;
-    bool noconfirm = false;
+    bool noconfirm = !s.bConfirmFileDelete;
     if (!PathUtils::IsURL(filename)) {
-        if (IsWindows10OrGreater()) {
+        if (!noconfirm && IsWindows10OrGreater()) {
             // show prompt, because Windows might not ask for confirmation
             CString msg;
             msg.Format(L"Move file to recycle bin?\n\n%s", filename.GetString());

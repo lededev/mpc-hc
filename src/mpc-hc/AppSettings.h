@@ -975,6 +975,8 @@ public:
     int iMouseLeftUpDelay;
 
     bool bCaptureDeinterlace;
+    bool bConfirmFileDelete;
+
 private:
     struct FilterKey {
         CString name;

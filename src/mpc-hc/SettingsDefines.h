@@ -115,7 +115,8 @@
 #define IDS_RS_USE_FREETYPE                 _T("UseFreetype")
 #define IDS_RS_USE_MEDIAINFO_LOAD_FILE_DURATION _T("UseMediainfoLoadFileDuration")
 #define IDS_RS_CAPTURE_DEINTERLACE          _T("CaptureDeinterlace")
-#define IDS_RS_PAUSE_WHILE_DRAGGING_SEEKBAR  _T("PauseWhileDraggingSeekbar")
+#define IDS_RS_PAUSE_WHILE_DRAGGING_SEEKBAR _T("PauseWhileDraggingSeekbar")
+#define IDS_RS_CONFIRM_FILE_DELETE          _T("ConfirmFileDelete")
 
 // Audio
 #define IDS_RS_VOLUME                       _T("Volume")
