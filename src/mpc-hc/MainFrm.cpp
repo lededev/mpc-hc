@@ -21535,6 +21535,7 @@ bool CMainFrame::ProcessYoutubeDLURL(CString url, bool append, bool replace)
     CAtlList<CString> filenames;
     CYoutubeDLInstance ydl;
     CYoutubeDLInstance::YDLPlaylistInfo listinfo;
+    CString useragent;
 
     m_sydlLastProcessURL = url;
 
@@ -21543,7 +21544,7 @@ bool CMainFrame::ProcessYoutubeDLURL(CString url, bool append, bool replace)
     if (!ydl.Run(url)) {
         return false;
     }
-    if (!ydl.GetHttpStreams(streams, listinfo)) {
+    if (!ydl.GetHttpStreams(streams, listinfo, useragent)) {
         return false;
     }
 

@@ -272,6 +272,7 @@ struct YDLStreamDetails {
     bool pref_lang;
     int video_score;
     int audio_score;
+    CString useragent;
 };
 
 #define YDL_EXTRA_LOGGING 0
@@ -462,7 +463,10 @@ bool GetYDLStreamDetails(const Value& format, YDLStreamDetails& details, bool re
     }
     if (format.HasMember(_T("language_preference")) && !format[_T("language_preference")].IsNull()) {
         details.pref_lang = format[_T("language_preference")].GetInt() > 0;
-    } 
+    }
+    if (format.HasMember(_T("http_headers")) && format[_T("http_headers")].HasMember(_T("User-Agent"))) {
+        details.useragent = CString(format[_T("http_headers")][_T("User-Agent")].GetString());
+    }
 
     details.has_audio = !details.acodec.IsEmpty() && details.acodec != _T("none");
     details.has_video = !details.vcodec.IsEmpty() && details.vcodec != _T("none") || (details.width > 0) || (details.height > 0);
@@ -728,7 +732,7 @@ bool filterAudio(const Value& formats, YDLStreamDetails& ydl_sd)
     return found;
 }
 
-bool CYoutubeDLInstance::GetHttpStreams(CAtlList<YDLStreamURL>& streams, YDLPlaylistInfo& info)
+bool CYoutubeDLInstance::GetHttpStreams(CAtlList<YDLStreamURL>& streams, YDLPlaylistInfo& info, CString& useragent)
 {
     CString url;
     CString extractor;
@@ -796,10 +800,12 @@ bool CYoutubeDLInstance::GetHttpStreams(CAtlList<YDLStreamURL>& streams, YDLPlay
                 }
             }
             streams.AddTail(stream);
+            useragent = ydl_sd.useragent;
         } else if (filterAudio(pJSON->d[_T("formats")], ydl_sd)) {
             stream.audio_url = ydl_sd.url;
             stream.video_url = _T("");
             streams.AddTail(stream);
+            useragent = ydl_sd.useragent;
         }
     } else {
         if (pJSON->d.HasMember(_T("id")) && !pJSON->d[_T("id")].IsNull()) info.id = pJSON->d[_T("id")].GetString();
@@ -858,10 +864,16 @@ bool CYoutubeDLInstance::GetHttpStreams(CAtlList<YDLStreamURL>& streams, YDLPlay
                         }
                     }
                     streams.AddTail(stream);
+                    if (i == 0) {
+                        useragent = ydl_sd.useragent;
+                    }
                 } else if (filterAudio(entry[_T("formats")], ydl_sd)) {
                     stream.audio_url = ydl_sd.url;
                     stream.video_url = _T("");
                     streams.AddTail(stream);
+                    if (i == 0) {
+                        useragent = ydl_sd.useragent;
+                    }
                 }
             }
         }

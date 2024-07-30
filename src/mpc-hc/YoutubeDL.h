@@ -93,7 +93,7 @@ public:
     };
 
     bool Run(CString url);
-    bool GetHttpStreams(CAtlList<YDLStreamURL>& streams, YDLPlaylistInfo& info);
+    bool GetHttpStreams(CAtlList<YDLStreamURL>& streams, YDLPlaylistInfo& info, CString& useragent);
     static bool isPrefer(CAtlList<CString>& list, CString& lang);
 
 private:
