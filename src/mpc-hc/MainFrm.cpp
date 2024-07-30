@@ -21600,18 +21600,18 @@ bool CMainFrame::ProcessYoutubeDLURL(CString url, bool append, bool replace)
         }
         title.Format(_T("%s%s%s"), static_cast<LPCWSTR>(epiid), static_cast<LPCWSTR>(season), static_cast<LPCWSTR>(title));
         if (i == 0) f_title = title;
-        int targetlen = title.GetLength() > 100 ? 50 : 150 - title.GetLength();
-        CString short_url;
-        if (streams.GetCount() > 1 && !stream.webpage_url.IsEmpty()) {
-            short_url = ShortenURL(stream.webpage_url, targetlen, true);
-        } else {
-            short_url = ShortenURL(url, targetlen, true);
-        }
+
         CString ydl_src = stream.webpage_url.IsEmpty() ? url : stream.webpage_url;
-        if (url == filenames.GetHead()) {
+        if (i == 0) m_sydlLastProcessURL = ydl_src;
+
+        int targetlen = title.GetLength() > 100 ? 50 : 150 - title.GetLength();
+        CString short_url = ShortenURL(ydl_src, targetlen, true);
+        
+        if (ydl_src == filenames.GetHead()) {
             // Processed URL is same as input, can happen for DASH manifest files. Clear source URL to avoid reprocessing.
             ydl_src = _T("");
         }
+
         if (replace) {
             m_wndPlaylistBar.ReplaceCurrentItem(filenames, nullptr, title + " (" + short_url + ")", ydl_src, useragent, _T(""), &stream.subtitles);
             break;
@@ -21623,7 +21623,7 @@ bool CMainFrame::ProcessYoutubeDLURL(CString url, bool append, bool replace)
     if (s.fKeepHistory) {
         auto* mru = &s.MRU;
         RecentFileEntry r;
-        mru->LoadMediaHistoryEntryFN(url, r);
+        mru->LoadMediaHistoryEntryFN(m_sydlLastProcessURL, r);
         if (streams.GetCount() > 1) {
             auto h = streams.GetHead();
             if (!h.series.IsEmpty()) {
