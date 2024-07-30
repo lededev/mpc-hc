@@ -16891,7 +16891,13 @@ void CMainFrame::SetupRecentFilesSubMenu()
                     }
                     int targetlen = 150 - title.GetLength();
                     if (PathUtils::IsURL(p)) {
-                        p.Format(_T("%s (%s)"), static_cast<LPCWSTR>(title), static_cast<LPCWSTR>(ShortenURL(p, targetlen, true)));
+                        if (title.Right(1) == L')') {
+                            // probably already contains shorturl
+                            p = title;
+                        } else {
+                            CString shorturl = ShortenURL(p, targetlen, true);
+                            p.Format(_T("%s (%s)"), static_cast<LPCWSTR>(title), static_cast<LPCWSTR>(shorturl));
+                        }
                     } else {
                         CString fn = PathUtils::StripPathOrUrl(p);
                         if (fn.GetLength() > targetlen) { // If file name is too long, cut middle part.
