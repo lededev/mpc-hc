@@ -11071,7 +11071,6 @@ void CMainFrame::OnRecentFile(UINT nID)
     CloseMediaBeforeOpen();
 
     if (fns.GetCount() == 1 && CanSendToYoutubeDL(r.fns.GetHead())) {
-        SendMessage(WM_COMMAND, ID_FILE_CLOSEMEDIA);
         if (ProcessYoutubeDLURL(fns.GetHead(), false)) {
             OpenCurPlaylistItem();
             return;
