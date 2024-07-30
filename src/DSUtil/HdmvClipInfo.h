@@ -78,26 +78,26 @@ public:
         Stream() {
             ZeroMemory(this, sizeof(*this));
         }
-        short m_PID;
-        PES_STREAM_TYPE m_Type;
-        char m_LanguageCode[4];
-        LCID m_LCID;
+        short m_PID = 0;
+        PES_STREAM_TYPE m_Type = INVALID;
+        char m_LanguageCode[4] = {0};
+        LCID m_LCID = 0;
 
         // Valid for video types
-        BDVM_VideoFormat m_VideoFormat;
-        BDVM_FrameRate m_FrameRate;
-        BDVM_AspectRatio m_AspectRatio;
+        BDVM_VideoFormat m_VideoFormat = BDVM_VideoFormat_Unknown;
+        BDVM_FrameRate m_FrameRate = BDVM_FrameRate_Unknown;
+        BDVM_AspectRatio m_AspectRatio = BDVM_AspectRatio_Unknown;
         // Valid for audio types
-        BDVM_ChannelLayout m_ChannelLayout;
-        BDVM_SampleRate m_SampleRate;
+        BDVM_ChannelLayout m_ChannelLayout = BDVM_ChannelLayout_Unknown;
+        BDVM_SampleRate m_SampleRate = BDVM_SampleRate_Unknown;
 
         LPCTSTR Format();
     };
 
     struct PlaylistItem {
         CString m_strFileName;
-        REFERENCE_TIME m_rtIn;
-        REFERENCE_TIME m_rtOut;
+        REFERENCE_TIME m_rtIn = 0;
+        REFERENCE_TIME m_rtOut = 0;
 
         REFERENCE_TIME Duration() const { return m_rtOut - m_rtIn; }
 
@@ -122,11 +122,11 @@ public:
     };
 
     struct PlaylistChapter {
-        short            m_nPlayItemId;
-        PlaylistMarkType m_nMarkType;
-        REFERENCE_TIME   m_rtTimestamp;
-        short            m_nEntryPID;
-        REFERENCE_TIME   m_rtDuration;
+        short            m_nPlayItemId = 0;
+        PlaylistMarkType m_nMarkType = Reserved;
+        REFERENCE_TIME   m_rtTimestamp = 0;
+        short            m_nEntryPID = 0;
+        REFERENCE_TIME   m_rtDuration = 0;
     };
 
     struct BDMVMeta {
