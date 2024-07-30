@@ -12975,7 +12975,14 @@ void CMainFrame::OpenCreateGraphObject(OpenMediaData* pOMD)
         m_fCustomGraph = m_fShockwaveGraph;
 
         if (!m_fCustomGraph) {
-            m_pGB = DEBUG_NEW CFGManagerPlayer(_T("CFGManagerPlayer"), nullptr, m_pVideoWnd->m_hWnd);
+            CFGManagerPlayer* fgm = DEBUG_NEW CFGManagerPlayer(_T("CFGManagerPlayer"), nullptr, m_pVideoWnd->m_hWnd);
+            if (!pOpenFileData->useragent.IsEmpty()) {
+                fgm->SetUserAgent(pOpenFileData->useragent);
+            }
+            if (!pOpenFileData->referrer.IsEmpty()) {
+                fgm->SetReferrer(pOpenFileData->referrer);
+            }
+            m_pGB = fgm;
 
             if (m_pGB && m_bUseSeekPreview) {
                 // build graph for preview
@@ -21609,10 +21616,10 @@ bool CMainFrame::ProcessYoutubeDLURL(CString url, bool append, bool replace)
             ydl_src = _T("");
         }
         if (replace) {
-            m_wndPlaylistBar.ReplaceCurrentItem(filenames, nullptr, title + " (" + short_url + ")", ydl_src, _T(""), &stream.subtitles);
+            m_wndPlaylistBar.ReplaceCurrentItem(filenames, nullptr, title + " (" + short_url + ")", ydl_src, useragent, _T(""), &stream.subtitles);
             break;
         } else {
-            m_wndPlaylistBar.Append(filenames, false, nullptr, title + " (" + short_url + ")", ydl_src, _T(""), &stream.subtitles);
+            m_wndPlaylistBar.Append(filenames, false, nullptr, title + " (" + short_url + ")", ydl_src, useragent, _T(""), &stream.subtitles);
         }
     }
 

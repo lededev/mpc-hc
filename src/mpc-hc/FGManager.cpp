@@ -43,6 +43,7 @@
 #include <ksproxy.h>
 #include <mpconfig.h>
 #include <mvrInterfaces.h>
+#include "../src/thirdparty/LAVFilters/src/include/IURLSourceFilterLAV.h"
 
 #include <initguid.h>
 #include "moreuuids.h"
@@ -67,6 +68,8 @@ CFGManager::CFGManager(LPCTSTR pName, LPUNKNOWN pUnk, HWND hWnd, bool IsPreview)
     , m_override()
     , m_deadends()
     , m_aborted(false)
+    , m_useragent()
+    , m_referrer()
 {
     m_pUnkInner.CoCreateInstance(CLSID_FilterGraph, GetOwner());
     m_pFM.CoCreateInstance(CLSID_FilterMapper2);
@@ -409,7 +412,8 @@ HRESULT CFGManager::EnumSourceFilters(LPCWSTR lpcwstrFileName, CFGFilterList& fl
 
 HRESULT CFGManager::AddSourceFilter(CFGFilter* pFGF, LPCWSTR lpcwstrFileName, LPCWSTR lpcwstrFilterName, IBaseFilter** ppBF)
 {
-    TRACE(_T("FGM: AddSourceFilter trying '%s'\n"), CStringFromGUID(pFGF->GetCLSID()).GetString());
+    CLSID clsid = pFGF->GetCLSID();
+    TRACE(_T("FGM: AddSourceFilter trying '%s'\n"), CStringFromGUID(clsid).GetString());
 
     CheckPointer(lpcwstrFileName, E_POINTER);
     CheckPointer(ppBF, E_POINTER);
@@ -429,7 +433,7 @@ HRESULT CFGManager::AddSourceFilter(CFGFilter* pFGF, LPCWSTR lpcwstrFileName, LP
         return E_NOINTERFACE;
     }
 
-    if (pFGF->GetCLSID() == __uuidof(CRARFileSource) && m_entryRFS.GetLength() > 0) {
+    if (clsid == __uuidof(CRARFileSource) && m_entryRFS.GetLength() > 0) {
         CComPtr<CRARFileSource> rfs = static_cast<CRARFileSource*>(pBF.p);
         std::wstring preselectedRarFileEntry(m_entryRFS.GetBuffer());
         rfs->SetPreselectedRarFileEntry(preselectedRarFileEntry);
@@ -440,39 +444,55 @@ HRESULT CFGManager::AddSourceFilter(CFGFilter* pFGF, LPCWSTR lpcwstrFileName, LP
     }
 
     const AM_MEDIA_TYPE* pmt = nullptr;
-
-    CMediaType mt;
-    const CAtlList<GUID>& types = pFGF->GetTypes();
-    if (types.GetCount() == 2 && (types.GetHead() != GUID_NULL || types.GetTail() != GUID_NULL)) {
-        mt.majortype = types.GetHead();
-        mt.subtype = types.GetTail();
-        pmt = &mt;
-    }
-
-    // sometimes looping with AviSynth
-    if (FAILED(hr = pFSF->Load(lpcwstrFileName, pmt))) {
-        RemoveFilter(pBF);
-        return hr;
-    }
-
-    // doh :P
-    BeginEnumMediaTypes(GetFirstPin(pBF, PINDIR_OUTPUT), pEMT, pmt2) {
-        static const GUID guid1 =
-        { 0x640999A0, 0xA946, 0x11D0, { 0xA5, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } };
-        static const GUID guid2 =
-        { 0x640999A1, 0xA946, 0x11D0, { 0xA5, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } };
-        static const GUID guid3 =
-        { 0xD51BD5AE, 0x7548, 0x11CF, { 0xA5, 0x20, 0x00, 0x80, 0xC7, 0x7E, 0xF5, 0x8A } };
-
-        if (pmt2->subtype == guid1 || pmt2->subtype == guid2 || pmt2->subtype == guid3) {
-            RemoveFilter(pBF);
-            pFGF = DEBUG_NEW CFGFilterRegistry(CLSID_NetShowSource);
-            hr = AddSourceFilter(pFGF, lpcwstrFileName, lpcwstrFilterName, ppBF);
-            delete pFGF;
-            return hr;
+    if (clsid == GUID_LAVSplitterSource) {
+        CComQIPtr<IURLSourceFilterLAV> pSFL = pBF;
+        if (pSFL && (!m_useragent.IsEmpty() || !m_referrer.IsEmpty())) {
+            // ToDo: set strings
+            hr = pSFL->LoadURL(lpcwstrFileName, m_useragent, m_referrer);
+            if (FAILED(hr)) {
+                RemoveFilter(pBF);
+                return hr;
+            }
+        } else {
+            hr = pFSF->Load(lpcwstrFileName, pmt);
+            if (FAILED(hr)) {
+                RemoveFilter(pBF);
+                return hr;
+            }
         }
+    } else {
+        CMediaType mt;
+        const CAtlList<GUID>& types = pFGF->GetTypes();
+        if (types.GetCount() == 2 && (types.GetHead() != GUID_NULL || types.GetTail() != GUID_NULL)) {
+            mt.majortype = types.GetHead();
+            mt.subtype = types.GetTail();
+            pmt = &mt;
+        }
+        
+        hr = pFSF->Load(lpcwstrFileName, pmt);
+        if (FAILED(hr) || m_aborted) { // sometimes looping with AviSynth
+            RemoveFilter(pBF);
+            return m_aborted ? E_ABORT : hr;
+        }
+
+        BeginEnumMediaTypes(GetFirstPin(pBF, PINDIR_OUTPUT), pEMT, pmt2) {
+            static const GUID guid1 =
+            { 0x640999A0, 0xA946, 0x11D0, { 0xA5, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } }; // ASX file Parser
+            static const GUID guid2 =
+            { 0x640999A1, 0xA946, 0x11D0, { 0xA5, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } }; // ASX v.2 file Parser
+            static const GUID guid3 =
+            { 0xD51BD5AE, 0x7548, 0x11CF, { 0xA5, 0x20, 0x00, 0x80, 0xC7, 0x7E, 0xF5, 0x8A } }; // XML Playlist
+
+            if (pmt2->subtype == guid1 || pmt2->subtype == guid2 || pmt2->subtype == guid3) {
+                RemoveFilter(pBF);
+                pFGF = DEBUG_NEW CFGFilterRegistry(CLSID_NetShowSource);
+                hr = AddSourceFilter(pFGF, lpcwstrFileName, lpcwstrFilterName, ppBF);
+                delete pFGF;
+                return hr;
+            }
+        }
+        EndEnumMediaTypes(pmt2);
     }
-    EndEnumMediaTypes(pmt2);
 
     *ppBF = pBF.Detach();
 

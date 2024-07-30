@@ -36,8 +36,6 @@ class CPlaylistItem
 public:
     UINT m_id;
     CString m_label;
-    bool m_bYoutubeDL;
-    CString m_ydlSourceURL;
     CAtlList<CString> m_fns;
     CAtlList<CString> m_subs;
     enum type_t { file, device } m_type;
@@ -50,6 +48,9 @@ public:
     CString m_cue_filename;
     int m_cue_index;
     CString m_cover;
+    bool m_bYoutubeDL;
+    CString m_ydlSourceURL;
+    CString m_useragent;
     CAtlList<CYoutubeDLInstance::YDLSubInfo> m_ydl_subs;
 
     bool m_fInvalid;

@@ -44,12 +44,13 @@ CPlaylistItem::CPlaylistItem()
     , m_subs()
     , m_fInvalid(false)
     , m_label(_T(""))
-    , m_bYoutubeDL(false)
-    , m_ydlSourceURL(_T(""))
     , m_cue(false)
     , m_cue_filename(_T(""))
     , m_cue_index(0)
     , m_cover(_T(""))
+    , m_bYoutubeDL(false)
+    , m_ydlSourceURL(_T(""))
+    , m_useragent(_T(""))
     , m_ydl_subs()
     , inlineEditMaxWidth(0)
 {
@@ -83,12 +84,13 @@ CPlaylistItem& CPlaylistItem::operator=(const CPlaylistItem& pli)
         m_country = pli.m_country;
         m_posNextShuffle = pli.m_posNextShuffle;
         m_posPrevShuffle = pli.m_posPrevShuffle;
-        m_bYoutubeDL = pli.m_bYoutubeDL;
-        m_ydlSourceURL = pli.m_ydlSourceURL;
         m_cue = pli.m_cue;
         m_cue_filename = pli.m_cue_filename;
         m_cue_index = pli.m_cue_index;
         m_cover = pli.m_cover;
+        m_bYoutubeDL = pli.m_bYoutubeDL;
+        m_ydlSourceURL = pli.m_ydlSourceURL;
+        m_useragent = pli.m_useragent;
         m_ydl_subs.RemoveAll();
         m_ydl_subs.AddHeadList(&pli.m_ydl_subs);
     }

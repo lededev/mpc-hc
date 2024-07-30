@@ -110,6 +110,8 @@ public:
     REFERENCE_TIME rtStart;
     ABRepeat abRepeat;
     bool bAddToRecent;
+    CString useragent;
+    CString referrer;
 };
 
 class OpenDVDData : public OpenMediaData

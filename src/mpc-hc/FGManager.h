@@ -66,6 +66,9 @@ protected:
 
     BOOL m_ignoreVideo;
 
+    CString m_useragent;
+    CString m_referrer;
+
     static bool CheckBytes(HANDLE hFile, CString chkbytes);
 
     HRESULT EnumSourceFilters(LPCWSTR lpcwstrFileName, CFGFilterList& fl);
@@ -128,6 +131,9 @@ public:
     HRESULT RenderRFSFileEntry(LPCWSTR lpcwstrFileName, LPCWSTR lpcwstrPlayList, CStringW entryRFS);
     bool PreviewSupportsRotation() { return m_bPreviewSupportsRotation; }
     static CUnknown* WINAPI GetMpcAudioRendererInstance(LPUNKNOWN lpunk, HRESULT* phr);
+
+    void SetUserAgent(CString ua) { m_useragent = ua; };
+    void SetReferrer(CString ref) { m_referrer = ref; };
 
     DECLARE_IUNKNOWN;
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void** ppv);
