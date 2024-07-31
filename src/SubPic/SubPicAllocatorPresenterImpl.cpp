@@ -90,6 +90,9 @@ void CSubPicAllocatorPresenterImpl::InitMaxSubtitleTextureSize(int maxSizeX, int
             m_maxSubtitleTextureSize.cy = maxSizeY;
         }
     }
+#if DEBUG_OVERRIDE_TEXTURE_SIZE
+    m_maxSubtitleTextureSize = CSize(DEBUG_OVERRIDE_TEXTURE_SIZE_WIDTH, DEBUG_OVERRIDE_TEXTURE_SIZE_HEIGHT);
+#endif
     m_curSubtitleTextureSize = m_maxSubtitleTextureSize;
     TRACE(_T("CSubPicAllocatorPresenterImpl::InitMaxSubtitleTextureSize %dx%d\n"), m_maxSubtitleTextureSize.cx, m_maxSubtitleTextureSize.cy);
 }

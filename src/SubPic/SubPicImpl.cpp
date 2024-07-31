@@ -346,6 +346,9 @@ STDMETHODIMP CSubPicAllocatorImpl::NonDelegatingQueryInterface(REFIID riid, void
 
 STDMETHODIMP CSubPicAllocatorImpl::SetCurSize(SIZE cursize)
 {
+#if DEBUG_OVERRIDE_TEXTURE_SIZE
+    cursize = CSize(DEBUG_OVERRIDE_TEXTURE_SIZE_WIDTH, DEBUG_OVERRIDE_TEXTURE_SIZE_HEIGHT);
+#endif
     if (m_cursize != cursize) {
         TRACE(_T("CSubPicAllocatorImpl::SetCurSize: %dx%d\n"), cursize.cx, cursize.cy);
         m_cursize = cursize;
@@ -356,7 +359,11 @@ STDMETHODIMP CSubPicAllocatorImpl::SetCurSize(SIZE cursize)
 
 STDMETHODIMP CSubPicAllocatorImpl::SetCurVidRect(RECT curvidrect)
 {
+#if DEBUG_OVERRIDE_TEXTURE_SIZE
+    m_curvidrect = CRect(CPoint(0, 0), CSize(DEBUG_OVERRIDE_TEXTURE_SIZE_WIDTH, DEBUG_OVERRIDE_TEXTURE_SIZE_HEIGHT));
+#else
     m_curvidrect = curvidrect;
+#endif
     return S_OK;
 }
 

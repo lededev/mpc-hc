@@ -26,6 +26,11 @@
 #include "CoordGeom.h"
 #include "strmif.h"
 
+// to force rendering subs at a specific size
+#define DEBUG_OVERRIDE_TEXTURE_SIZE 0
+#define DEBUG_OVERRIDE_TEXTURE_SIZE_WIDTH 2560
+#define DEBUG_OVERRIDE_TEXTURE_SIZE_HEIGHT 1440
+
 #pragma pack(push, 1)
 struct SubPicDesc {
     int type;

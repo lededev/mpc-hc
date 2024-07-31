@@ -369,6 +369,11 @@ STDMETHODIMP CDX11SubPicAllocator::ChangeDevice(IUnknown* pDev)
 STDMETHODIMP CDX11SubPicAllocator::SetMaxTextureSize(SIZE MaxTextureSize)
 {
 	CAutoLock cAutoLock(this);
+
+#if DEBUG_OVERRIDE_TEXTURE_SIZE
+    maxTextureSize = CSize(DEBUG_OVERRIDE_TEXTURE_SIZE_WIDTH, DEBUG_OVERRIDE_TEXTURE_SIZE_HEIGHT);
+#endif
+
 	if (m_maxsize != MaxTextureSize) {
 		ClearCache();
 		m_maxsize = MaxTextureSize;
