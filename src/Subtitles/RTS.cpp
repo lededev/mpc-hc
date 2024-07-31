@@ -231,7 +231,7 @@ void CWord::Transform(CPoint org)
         (fabs(m_style.fontShiftX) > 0.000001) || (fabs(m_style.fontShiftY) > 0.000001)) {
         Transform_SSE2(org);
     } else if ((fabs(m_style.fontScaleX - 100) > 0.000001) || (fabs(m_style.fontScaleY - 100) > 0.000001)) {
-        Transform_quick(org);
+        Transform_quick_SSE2(org);
     }
 }
 
@@ -326,23 +326,76 @@ void CWord::Transform_C(const CPoint& org)
 }
 #endif
 
-void CWord::Transform_quick(const CPoint& org)
+#if 0
+void CWord::Transform_quick_C(const CPoint& org)
 {
-    // ToDo: rewrite using intrisics similar to Transform_SSE2
     const double scalex = m_style.fontScaleX / 100.0;
     const double scaley = m_style.fontScaleY / 100.0;
 
-    double dOrgX = static_cast<double>(org.x);
-    double dOrgY = static_cast<double>(org.y);
     for (ptrdiff_t i = 0; i < mPathPoints; i++) {
-        double x, y;
-
-        x = scalex * mpPathPoints[i].x - dOrgX;
-        y = scaley * mpPathPoints[i].y - dOrgY;
+        double x = scalex * mpPathPoints[i].x;
+        double y = scaley * mpPathPoints[i].y;
 
         // round to integer
-        mpPathPoints[i].x = std::lround(x) + org.x;
-        mpPathPoints[i].y = std::lround(y) + org.y;
+        mpPathPoints[i].x = std::lround(x);
+        mpPathPoints[i].y = std::lround(y);
+    }
+}
+#endif
+
+void CWord::Transform_quick_SSE2(const CPoint& org)
+{
+    const __m128 __xscale = _mm_set_ps1((float)(m_style.fontScaleX / 100.0));
+    const __m128 __yscale = _mm_set_ps1((float)(m_style.fontScaleY / 100.0));
+
+    int mPathPointsD4 = mPathPoints / 4;
+    int mPathPointsM4 = mPathPoints % 4;
+
+    for (ptrdiff_t i = 0; i < mPathPointsD4 + 1; i++) {
+        __m128 __pointx, __pointy;
+        // we can't use load .-.
+        if (i != mPathPointsD4) {
+            __pointx = _mm_set_ps((float)mpPathPoints[4 * i + 0].x, (float)mpPathPoints[4 * i + 1].x, (float)mpPathPoints[4 * i + 2].x, (float)mpPathPoints[4 * i + 3].x);
+            __pointy = _mm_set_ps((float)mpPathPoints[4 * i + 0].y, (float)mpPathPoints[4 * i + 1].y, (float)mpPathPoints[4 * i + 2].y, (float)mpPathPoints[4 * i + 3].y);
+        } else { // last cycle
+            switch (mPathPointsM4) {
+            default:
+            case 0:
+                continue;
+            case 1:
+                __pointx = _mm_set_ps((float)mpPathPoints[4 * i + 0].x, 0, 0, 0);
+                __pointy = _mm_set_ps((float)mpPathPoints[4 * i + 0].y, 0, 0, 0);
+                break;
+            case 2:
+                __pointx = _mm_set_ps((float)mpPathPoints[4 * i + 0].x, (float)mpPathPoints[4 * i + 1].x, 0, 0);
+                __pointy = _mm_set_ps((float)mpPathPoints[4 * i + 0].y, (float)mpPathPoints[4 * i + 1].y, 0, 0);
+                break;
+            case 3:
+                __pointx = _mm_set_ps((float)mpPathPoints[4 * i + 0].x, (float)mpPathPoints[4 * i + 1].x, (float)mpPathPoints[4 * i + 2].x, 0);
+                __pointy = _mm_set_ps((float)mpPathPoints[4 * i + 0].y, (float)mpPathPoints[4 * i + 1].y, (float)mpPathPoints[4 * i + 2].y, 0);
+                break;
+            }
+        }
+
+        // scale
+        __pointx = _mm_mul_ps(__pointx, __xscale);
+        __pointy = _mm_mul_ps(__pointy, __yscale);
+
+        // round to integer
+        __m128i __pointxRounded = _mm_cvtps_epi32(__pointx);
+        __m128i __pointyRounded = _mm_cvtps_epi32(__pointy);
+
+        if (i == mPathPointsD4) { // last cycle
+            for (int k = 0; k < mPathPointsM4; k++) {
+                mpPathPoints[i * 4 + k].x = __pointxRounded.m128i_i32[3 - k];
+                mpPathPoints[i * 4 + k].y = __pointyRounded.m128i_i32[3 - k];
+            }
+        } else {
+            for (int k = 0; k < 4; k++) {
+                mpPathPoints[i * 4 + k].x = __pointxRounded.m128i_i32[3 - k];
+                mpPathPoints[i * 4 + k].y = __pointyRounded.m128i_i32[3 - k];
+            }
+        }
     }
 }
 

@@ -133,7 +133,8 @@ class CWord : public Rasterizer
 
     void Transform_C(const CPoint& org);
     void Transform_SSE2(const CPoint& org);
-    void Transform_quick(const CPoint& org);
+    void Transform_quick_C(const CPoint& org);
+    void Transform_quick_SSE2(const CPoint& org);
     bool CreateOpaqueBox();
 
 protected:
