@@ -4825,3 +4825,7 @@ msgstr ""
 msgctxt "IDS_AG_DEFAULT"
 msgid "Default"
 msgstr "Implicit"
+
+msgctxt "IDS_CMD_THUMBNAILS"
+msgid "/thumbnails\tCreate thumbnails"
+msgstr ""

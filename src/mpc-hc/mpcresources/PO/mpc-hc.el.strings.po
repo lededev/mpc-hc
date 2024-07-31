@@ -4943,3 +4943,7 @@ msgstr "Επαναφορά"
 msgctxt "IDS_AG_DEFAULT"
 msgid "Default"
 msgstr "Προεπιλογή"
+
+msgctxt "IDS_CMD_THUMBNAILS"
+msgid "/thumbnails\tCreate thumbnails"
+msgstr ""

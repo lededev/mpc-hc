@@ -4778,3 +4778,7 @@ msgstr "초기화"
 msgctxt "IDS_AG_DEFAULT"
 msgid "Default"
 msgstr "기본값"
+
+msgctxt "IDS_CMD_THUMBNAILS"
+msgid "/thumbnails\tCreate thumbnails"
+msgstr ""

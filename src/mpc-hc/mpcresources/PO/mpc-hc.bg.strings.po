@@ -4899,3 +4899,7 @@ msgstr "Изчистване"
 msgctxt "IDS_AG_DEFAULT"
 msgid "Default"
 msgstr "По подразбиране"
+
+msgctxt "IDS_CMD_THUMBNAILS"
+msgid "/thumbnails\tCreate thumbnails"
+msgstr ""

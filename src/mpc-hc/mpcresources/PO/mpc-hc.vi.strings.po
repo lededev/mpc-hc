@@ -4888,3 +4888,7 @@ msgstr "Cài đặt lại"
 msgctxt "IDS_AG_DEFAULT"
 msgid "Default"
 msgstr "Mặc định"
+
+msgctxt "IDS_CMD_THUMBNAILS"
+msgid "/thumbnails\tCreate thumbnails"
+msgstr ""

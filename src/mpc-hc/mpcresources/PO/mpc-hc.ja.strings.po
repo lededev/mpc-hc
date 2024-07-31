@@ -4783,3 +4783,7 @@ msgstr "リセット"
 msgctxt "IDS_AG_DEFAULT"
 msgid "Default"
 msgstr "既定"
+
+msgctxt "IDS_CMD_THUMBNAILS"
+msgid "/thumbnails\tCreate thumbnails"
+msgstr ""

@@ -4911,3 +4911,7 @@ msgstr "Reimposta"
 msgctxt "IDS_AG_DEFAULT"
 msgid "Default"
 msgstr "Predefinito"
+
+msgctxt "IDS_CMD_THUMBNAILS"
+msgid "/thumbnails\tCreate thumbnails"
+msgstr ""

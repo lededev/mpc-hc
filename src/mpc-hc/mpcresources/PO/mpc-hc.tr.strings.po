@@ -4922,3 +4922,7 @@ msgstr "Sıfırla"
 msgctxt "IDS_AG_DEFAULT"
 msgid "Default"
 msgstr "Varsayılan"
+
+msgctxt "IDS_CMD_THUMBNAILS"
+msgid "/thumbnails\tCreate thumbnails"
+msgstr ""

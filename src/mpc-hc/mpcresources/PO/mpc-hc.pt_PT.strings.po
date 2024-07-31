@@ -4918,3 +4918,7 @@ msgstr "Repor"
 msgctxt "IDS_AG_DEFAULT"
 msgid "Default"
 msgstr "Por defeito"
+
+msgctxt "IDS_CMD_THUMBNAILS"
+msgid "/thumbnails\tCreate thumbnails"
+msgstr ""

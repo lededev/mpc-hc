@@ -4897,3 +4897,7 @@ msgstr ""
 msgctxt "IDS_AG_DEFAULT"
 msgid "Default"
 msgstr "За замовчуванням"
+
+msgctxt "IDS_CMD_THUMBNAILS"
+msgid "/thumbnails\tCreate thumbnails"
+msgstr ""

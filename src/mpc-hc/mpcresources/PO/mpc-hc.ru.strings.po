@@ -4892,3 +4892,7 @@ msgstr "Сброс"
 msgctxt "IDS_AG_DEFAULT"
 msgid "Default"
 msgstr "По умолчанию"
+
+msgctxt "IDS_CMD_THUMBNAILS"
+msgid "/thumbnails\tCreate thumbnails"
+msgstr ""

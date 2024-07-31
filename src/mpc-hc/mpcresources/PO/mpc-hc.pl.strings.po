@@ -4914,3 +4914,7 @@ msgstr "Resetuj"
 msgctxt "IDS_AG_DEFAULT"
 msgid "Default"
 msgstr "Domyślny"
+
+msgctxt "IDS_CMD_THUMBNAILS"
+msgid "/thumbnails\tCreate thumbnails"
+msgstr ""

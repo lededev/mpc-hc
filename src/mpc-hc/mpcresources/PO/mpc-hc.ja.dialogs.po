@@ -1074,10 +1074,6 @@ msgctxt "IDD_PPAGESUBSTYLE_IDC_CHECK2"
 msgid "Use libass for SSA/ASS"
 msgstr "SSA/ASS に libass を使用する"
 
-msgctxt "IDD_PPAGESUBSTYLE_IDC_CHECK3"
-msgid "Use libass for SRT"
-msgstr "SRT に libass を使用する"
-
 msgctxt "IDD_PPAGEINTERNALFILTERS_IDC_STATIC"
 msgid ""
 "If you would like to use the stand-alone versions of these filters or "

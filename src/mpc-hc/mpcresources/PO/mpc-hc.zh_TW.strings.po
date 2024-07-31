@@ -4741,3 +4741,7 @@ msgstr "重設"
 msgctxt "IDS_AG_DEFAULT"
 msgid "Default"
 msgstr "預設值"
+
+msgctxt "IDS_CMD_THUMBNAILS"
+msgid "/thumbnails\tCreate thumbnails"
+msgstr ""

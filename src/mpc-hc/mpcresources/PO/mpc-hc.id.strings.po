@@ -4887,3 +4887,7 @@ msgstr "Setel Ulang"
 msgctxt "IDS_AG_DEFAULT"
 msgid "Default"
 msgstr "Bawaan"
+
+msgctxt "IDS_CMD_THUMBNAILS"
+msgid "/thumbnails\tCreate thumbnails"
+msgstr ""
