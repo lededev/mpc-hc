@@ -2369,9 +2369,13 @@ bool CRenderedTextSubtitle::CreateSubFromSSATag(CSubtitle* sub, const SSATagsLis
             case SSA_blur:
                 if (!tag.paramsReal.IsEmpty()) {
                     double n = CalcAnimation(tag.paramsReal[0], style.fGaussianBlur, fAnimate);
-                    style.fGaussianBlur = (n < 0 ? 0 : n * sub->m_target_scale_y);
+                    style.fGaussianBlur = (n < 0 ? 0 : n);
                 } else {
                     style.fGaussianBlur = org.fGaussianBlur;
+                }
+                if (style.fGaussianBlur > 25.0) {
+                    style.fGaussianBlur = 25.0;
+                    TRACE(L"INSANE blur value !!!\n");
                 }
                 break;
             case SSA_bord:
@@ -3087,6 +3091,7 @@ CSubtitle* CRenderedTextSubtitle::GetSubtitle(int entry)
             tmp.shadowDepthX  *= 8.0;
             tmp.shadowDepthY  *= 8.0;
         }
+        tmp.fGaussianBlur *= sub->m_target_scale_y;
 
         if (m_nPolygon) {
             ParsePolygon(sub, str.Mid(iStart, iEnd - iStart), tmp);
