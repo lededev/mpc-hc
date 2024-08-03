@@ -17285,7 +17285,7 @@ bool CMainFrame::LoadSubtitle(CString fn, SubtitleInput* pSubInput /*= nullptr*/
             hFind = FindFirstFile(path + L"*.?t?", &fd);
             if (hFind != INVALID_HANDLE_VALUE) {
                 do {
-                    CStringW ext = GetFileExt(fd.cFileName);
+                    CStringW ext = GetFileExt(fd.cFileName).MakeLower();
                     if (ext == ".ttf" || ext == ".otf" || ext == ".ttc") {
                         m_FontInstaller.InstallTempFontFile(path + fd.cFileName);
                     }
