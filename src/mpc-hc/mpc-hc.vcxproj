@@ -47,6 +47,9 @@
     <UseOfMfc>Static</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -65,6 +68,9 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)bin\mpc-hc_x64\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release Lite|x64'">$(SolutionDir)bin\mpc-hc_x64 Lite\</OutDir>
     <TargetName Condition="'$(Platform)'=='x64'">$(ProjectName)64</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ResourceCompile>
@@ -126,8 +132,11 @@
   <ItemDefinitionGroup Condition="!$(Configuration.Contains('Lite'))">
     <Link>
       <AdditionalDependencies>RARFileSource.res;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/NODEFAULTLIB:library %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/NODEFAULTLIB:library /Force:MulTiple %(AdditionalOptions)</AdditionalOptions>
       <IgnoreAllDefaultLibraries Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</IgnoreAllDefaultLibraries>
+      <ForceFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ForceFileOutput>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">/FORCE:MULTIPLE %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
