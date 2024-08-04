@@ -1905,7 +1905,7 @@ BOOL CMPlayerCApp::InitInstance()
     m_mutexOneInstance.Create(nullptr, TRUE, MPC_WND_CLASS_NAME);
 
     if (GetLastError() == ERROR_ALREADY_EXISTS) {
-        if ((m_s->nCLSwitches & CLSW_ADD) || !(m_s->GetAllowMultiInst() || (m_s->nCLSwitches & (CLSW_NEW | CLSW_SLAVE)) || m_cmdln.IsEmpty())) {
+        if ((m_s->nCLSwitches & CLSW_ADD) || !(m_s->GetAllowMultiInst() || m_s->nCLSwitches & CLSW_NEW || m_cmdln.IsEmpty())) {
             DWORD res = WaitForSingleObject(m_mutexOneInstance.m_h, 5000);
             if (res == WAIT_OBJECT_0 || res == WAIT_ABANDONED) {
                 HWND hWnd = ::FindWindow(MPC_WND_CLASS_NAME, nullptr);
