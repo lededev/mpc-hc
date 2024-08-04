@@ -18857,6 +18857,19 @@ void CMainFrame::CloseMedia(bool bNextIsQueued/* = false*/)
 
         // abort current graph task
         if (m_pGB) {
+            if (!m_pAMOP) {
+                m_pAMOP = m_pGB;
+                if (!m_pAMOP) {
+                    BeginEnumFilters(m_pGB, pEF, pBF)
+                        if (m_pAMOP = pBF) {
+                            break;
+                        }
+                    EndEnumFilters;
+                }
+            }
+            if (m_pAMOP) {
+                m_pAMOP->AbortOperation();
+            }
             m_pGB->Abort(); // TODO: lock on graph objects somehow, this is not thread safe
         }
         if (m_pGB_preview) {
