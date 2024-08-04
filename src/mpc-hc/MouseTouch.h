@@ -130,6 +130,8 @@ protected:
     void InternalOnDestroy();
 public:
     BOOL OnMouseHWheelImpl(UINT nFlags, short zDelta, const CPoint& point);
+private:
+    void posToClipbd(const CPoint& point);
 };
 
 class CMouseWnd : public CWnd, public CMouse

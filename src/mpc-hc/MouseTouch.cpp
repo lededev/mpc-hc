@@ -447,6 +447,10 @@ void CMouse::InternalOnMButtonDown(UINT nFlags, const CPoint& point)
     SetCursor(nFlags, point);
     //all mouse commands operate on UP
     //OnButton(wmcmd::MDOWN, point);
+    OnButton(wmcmd::MDOWN, point);
+    if (GetKeyState(VK_CONTROL) & 0x8000) {
+        posToClipbd(point);
+    }
 }
 void CMouse::InternalOnMButtonUp(UINT nFlags, const CPoint& point)
 {
@@ -459,6 +463,17 @@ void CMouse::InternalOnMButtonDblClk(UINT nFlags, const CPoint& point)
     SetCursor(nFlags, point);
     OnButton(wmcmd::MDOWN, point);
     OnButton(wmcmd::MDBLCLK, point);
+    posToClipbd(point);
+}
+
+void CMouse::posToClipbd(const CPoint& point)
+{
+    const auto vp = GetVideoPoint(point);
+    CString ps;
+    ps.Format(_T("!x=%d:y=%d #temp pos"), vp.x, vp.y);
+    auto & StatusBar = m_pMainFrame->m_wndStatusBar;
+    StatusBar.toClipboard(ps);
+    StatusBar.ShowToast(ps);
 }
 
 // Right button
