@@ -622,7 +622,7 @@ void CPlayerStatusBar::CopyTimeToClipboard(btn_t btn)
     }
 
     if (btn != LEFT_BTN) {
-        const WCHAR* btn_name[] = { _T("×ó"), _T("ÖÐ"), _T("ÓÒ") };
+        CString btn_name[] = { _T("×ó"), _T("ÖÐ"), _T("ÓÒ") };
         CString msg;
         msg.Format(_T("%s '%s' %s"), btn_name[btn % 3], ts, act);
         ShowToast(msg);
