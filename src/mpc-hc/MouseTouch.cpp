@@ -316,10 +316,7 @@ void CMouse::InternalOnLButtonDown(UINT nFlags, const CPoint& point)
 
     if (m_bLeftUpDelayed) {
         KillTimer(GetWnd(), (UINT_PTR)this);
-        if (bDouble) {
-            m_bLeftUpDelayed = false;
-            m_bLeftUpIgnoreNext = true;
-        } else {
+        if (!bDouble) {
             PerformDelayedLeftUp();
         }
     }
@@ -331,6 +328,16 @@ void CMouse::InternalOnLButtonDown(UINT nFlags, const CPoint& point)
             ret = OnButton(wmcmd::LDOWN, point);
         }
         if (bDouble) {
+            // perform the LeftUp command before double-click
+            // reason is that toggling fullscreen can move the video window, which can cause the LeftUp action to not be processed properly
+            // ToDo: rewrite code to trigger doubleclick at second LeftUp instead of LeftDown
+            if (m_bLeftUpDelayed) {
+                // the first LeftUp was delayed and then skipped, so skip second one as well
+                m_bLeftUpDelayed = false;
+            } else {
+                OnButton(wmcmd::LUP, point);
+            }
+            m_bLeftUpIgnoreNext = true;
             ret = OnButton(wmcmd::LDBLCLK, point) || ret;
         }
         if (!ret) {
