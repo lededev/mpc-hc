@@ -365,10 +365,10 @@ private:
     void RestoreDefaultWindowRect();
     CRect GetInvisibleBorderSize() const;
     CSize GetVideoOrArtSize(MINMAXINFO& mmi);
-    CSize GetZoomWindowSize(double dScale);
+    CSize GetZoomWindowSize(double dScale, bool ignore_video_size = false);
     bool GetWorkAreaRect(CRect& work);
     CRect GetZoomWindowRect(const CSize& size, bool ignoreSavedPosition = false);
-    void ZoomVideoWindow(double dScale = ZOOM_DEFAULT_LEVEL);
+    void ZoomVideoWindow(double dScale = ZOOM_DEFAULT_LEVEL, bool ignore_video_size = false);
     double GetZoomAutoFitScale();
 
     bool alwaysOnTopZOrderInitialized = false;
@@ -531,7 +531,7 @@ public:
     // Attributes
 public:
     bool m_fFullScreen;
-    bool m_fFirstFSAfterLaunchOnFS;
+    bool m_bNeedZoomAfterFullscreenExit;
     bool m_fStartInD3DFullscreen;
     bool m_fStartInFullscreenSeparate;
     bool m_bFullScreenWindowIsD3D;
