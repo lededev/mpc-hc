@@ -55,8 +55,6 @@ private:
     void Relayout();
     int m_initialWindowDPI = 0;
 
-    CString time_start;
-
 public:
     CPlayerStatusBar(CMainFrame* pMainFrame);
     virtual ~CPlayerStatusBar();
@@ -77,6 +75,7 @@ public:
     void CopyTimeToClipboard(btn_t btn = LEFT_BTN);
     void toClipboard(CString ts);
     void ShowToast(CString & msg);
+    CString time_start;
 
     CString PreparePathStatusMessage(CPath path);
 

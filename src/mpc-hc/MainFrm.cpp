@@ -3931,6 +3931,8 @@ void CMainFrame::OnUpdatePlayerStatus(CCmdUI* pCmdUI)
                 }
             }
             msg.AppendFormat(_T("[%d,%d]"), m_vpos.x, m_vpos.y);
+            if (m_wndStatusBar.time_start.GetLength())
+                msg.AppendFormat(_T("[s: %s]"), m_wndStatusBar.time_start.GetString());
         }
 
         m_wndStatusBar.SetStatusMessage(msg);

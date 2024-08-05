@@ -617,12 +617,16 @@ void CPlayerStatusBar::CopyTimeToClipboard(btn_t btn)
     if (btn != LEFT_BTN || GetKeyState(VK_CONTROL) & 0x8000) {
         toClipboard(ts);
         act = _T("已复制");
+        if (btn != LEFT_BTN)
+            time_start.Empty();
     }
 
-    const WCHAR * btn_name[] = { _T("左"), _T("中"), _T("右") };
-    CString msg;
-    msg.Format(_T("%s '%s' %s"), btn_name[btn % 3], ts, act);
-    ShowToast(msg);
+    if (btn != LEFT_BTN) {
+        const WCHAR* btn_name[] = { _T("左"), _T("中"), _T("右") };
+        CString msg;
+        msg.Format(_T("%s '%s' %s"), btn_name[btn % 3], ts, act);
+        ShowToast(msg);
+    }
 }
 
 void CPlayerStatusBar::OnLButtonDown(UINT nFlags, CPoint point)
