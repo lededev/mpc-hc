@@ -557,6 +557,7 @@ void COSD::InvalidateBitmapOSD()
     DrawDebug();
 
     if (m_pVMB) {
+        m_VMR9AlphaBitmap.dwFlags &= ~VMRBITMAP_DISABLE;
         m_pVMB->SetAlphaBitmap(&m_VMR9AlphaBitmap);
     } else if (m_pMFVMB) {
         m_pMFVMB->SetAlphaBitmap(&m_MFVAlphaBitmap);
@@ -762,7 +763,11 @@ void COSD::ClearMessage(bool hide)
         m_nMessagePos = OSD_NOMESSAGE;
     }
 
-    if (m_pMFVMB) {
+    if (m_pVMB) {
+        m_VMR9AlphaBitmap.dwFlags |= VMRBITMAP_DISABLE;
+        m_pVMB->UpdateAlphaBitmapParameters(&m_VMR9AlphaBitmap);
+        m_pMainFrame->RepaintVideo();
+    } else if (m_pMFVMB) {
         m_pMFVMB->ClearAlphaBitmap();
         DLog(L"IMFVideoMixerBitmap::ClearAlphaBitmap");
         m_pMainFrame->RepaintVideo(); //???

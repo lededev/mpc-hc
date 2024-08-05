@@ -73,7 +73,7 @@ class COSD : public CWnd
 
     CCritSec            m_Lock;
     CDC                 m_MemDC;
-    VMR9AlphaBitmap    m_VMR9AlphaBitmap = {};
+    VMR9AlphaBitmap     m_VMR9AlphaBitmap = {};
     MFVideoAlphaBitmap  m_MFVAlphaBitmap = {};
     BITMAP              m_BitmapInfo;
 
