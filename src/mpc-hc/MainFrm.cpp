@@ -5369,7 +5369,7 @@ bool CMainFrame::GetDIB(BYTE** ppData, long& size, bool fSilent)
     if (!ppData) {
         return false;
     }
-    if (GetLoadState() == MLS::LOADED || m_fAudioOnly) {
+    if (GetLoadState() != MLS::LOADED || m_fAudioOnly) {
         return false;
     }
     OAFilterState fs = GetMediaState();
