@@ -652,6 +652,8 @@ void CMouse::InternalOnMouseMove(UINT nFlags, const CPoint& point)
         MVRMove(nFlags, point);
     }
 
+    m_pMainFrame->VPos(GetVideoPoint(point));
+
     m_pMainFrame->UpdateControlState(CMainFrame::UPDATE_CONTROLS_VISIBILITY);
 }
 

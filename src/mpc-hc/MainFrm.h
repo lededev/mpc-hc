@@ -506,6 +506,8 @@ private:
     void OnDropFiles(CAtlList<CStringW>& slFiles, DROPEFFECT dropEffect) override;
     DROPEFFECT OnDropAccept(COleDataObject* pDataObject, DWORD dwKeyState, CPoint point) override;
 
+    CPoint m_vpos;
+
 public:
     void StartWebServer(int nPort);
     void StopWebServer();
@@ -522,6 +524,9 @@ public:
     }
     int GetVolume() {
         return m_wndToolBar.m_volctrl.GetPos();
+    }
+    void VPos(const CPoint& pos) {
+        m_vpos = pos;
     }
 
 public:

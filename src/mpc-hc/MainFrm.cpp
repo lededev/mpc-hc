@@ -3930,6 +3930,7 @@ void CMainFrame::OnUpdatePlayerStatus(CCmdUI* pCmdUI)
                     msg.AppendFormat(_T("\u2001[A-B %s > %s]"), timeMarkA.GetString(), timeMarkB.GetString());
                 }
             }
+            msg.AppendFormat(_T("[%d,%d]"), m_vpos.x, m_vpos.y);
         }
 
         m_wndStatusBar.SetStatusMessage(msg);

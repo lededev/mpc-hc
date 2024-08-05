@@ -84,22 +84,28 @@ BOOL CPlayerStatusBar::Create(CWnd* pParentWnd)
 {
     BOOL ret = CDialogBar::Create(pParentWnd, IDD_PLAYERSTATUSBAR, WS_CHILD | WS_VISIBLE | CBRS_ALIGN_BOTTOM, IDD_PLAYERSTATUSBAR);
 
-    CString tooltip = _T("左:保存开始时间(秒) 右:开始-结束时间(秒)到剪切板 中:当前精确时间及总时长到剪切板 Ctrl+左:保存并复制 SHIFT+左:等同右 ALT+左:等同中");
+    CString tooltip = _T(
+        "左:保存开始时间 右:开始-结束时间到剪切板 中:当前精确时间及总时长到剪切板\r\n"
+        "Ctrl+左:保存并复制 SHIFT+左:等同右 ALT+左:等同中\r\n"
+        "视频画面上双击中:复制画面鼠标位置坐标 Ctrl+中:等同双击"
+    );
     auto lpt = tooltip.GetBuffer();
     // Should never be RTLed
     ModifyStyleEx(WS_EX_LAYOUTRTL, WS_EX_NOINHERITLAYOUT);
     if (AppIsThemeLoaded()) {
         themedToolTip.Create(this, TTS_NOPREFIX | TTS_ALWAYSTIP);
         themedToolTip.SetDelayTime(TTDT_INITIAL, 0);
-        themedToolTip.SetDelayTime(TTDT_AUTOPOP, 2500);
+        themedToolTip.SetDelayTime(TTDT_AUTOPOP, 6000);
         themedToolTip.SetDelayTime(TTDT_RESHOW, 0);
+        themedToolTip.SetMaxTipWidth(480);
         themedToolTip.AddTool(&m_time, lpt/*IDS_TOOLTIP_REMAINING_TIME*/);
         themedToolTip.AddTool(&m_status, lpt);
     } else {
         m_tooltip.Create(this, TTS_NOPREFIX | TTS_ALWAYSTIP);
         m_tooltip.SetDelayTime(TTDT_INITIAL, 0);
-        m_tooltip.SetDelayTime(TTDT_AUTOPOP, 2500);
+        m_tooltip.SetDelayTime(TTDT_AUTOPOP, 6000);
         m_tooltip.SetDelayTime(TTDT_RESHOW, 0);
+        m_tooltip.SetMaxTipWidth(480);
         m_tooltip.AddTool(&m_time, lpt/*IDS_TOOLTIP_REMAINING_TIME*/);
         m_tooltip.AddTool(&m_status, lpt);
     }
