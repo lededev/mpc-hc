@@ -4073,7 +4073,7 @@ LRESULT CMainFrame::OnFilePostOpenmedia(WPARAM wParam, LPARAM lParam)
         PerformFlipRotate();
     }
 
-    bool go_fullscreen = s.fLaunchfullscreen && !m_fAudioOnly && !IsFullScreenMode() && lastSkipDirection == 0;
+    bool go_fullscreen = s.fLaunchfullscreen && !m_fAudioOnly && !IsFullScreenMode() && lastSkipDirection == 0 && !(s.nCLSwitches & CLSW_THUMBNAILS);
 
     // auto-zoom if requested
     if (IsWindowVisible() && s.fRememberZoomLevel && !IsFullScreenMode() && !IsZoomed() && !IsIconic() && !IsAeroSnapped()) {
@@ -4097,41 +4097,42 @@ LRESULT CMainFrame::OnFilePostOpenmedia(WPARAM wParam, LPARAM lParam)
     RecalcLayout();
     UpdateWindow();
 
-    MediaTransportControlSetMedia();
-
     // the window is repositioned and repainted, video renderer rect is ready to be set -
     // OnPlayPlay()/OnPlayPause() will take care of that
     m_bDelaySetOutputRect = false;
 
-    bool checkPlayback = true;
     if (s.nCLSwitches & CLSW_THUMBNAILS) {
+        MoveVideoWindow(false, true);
+        MediaControlPause(true);
         SendMessageW(WM_COMMAND, ID_CMDLINE_SAVE_THUMBNAILS);
-        s.nCLSwitches &= ~CLSW_THUMBNAILS;
-        checkPlayback = s.nCLSwitches & (CLSW_PLAY | CLSW_OPEN); //unless they requested to open or play, we will not open the video after thumbnail
+        m_bSettingUpMenus = false;
+        m_bRememberFilePos = false;
+        SendMessageW(WM_COMMAND, ID_FILE_EXIT);
+        return 0;
     }
 
-    if (checkPlayback) {
-        // start playback if requested
-        m_bFirstPlay = true;
-        const auto uModeChangeDelay = s.autoChangeFSMode.uDelay * 1000;
-        if (!(s.nCLSwitches & CLSW_OPEN) && (s.nLoops > 0)) {
-            if (m_bOpeningInAutochangedMonitorMode && uModeChangeDelay) {
-                m_timerOneTime.Subscribe(TimerOneTimeSubscriber::DELAY_PLAYPAUSE_AFTER_AUTOCHANGE_MODE,
-                    std::bind(&CMainFrame::OnPlayPlay, this), uModeChangeDelay);
-            } else {
-                OnPlayPlay();
-            }
+    MediaTransportControlSetMedia();
+
+    // start playback if requested
+    m_bFirstPlay = true;
+    const auto uModeChangeDelay = s.autoChangeFSMode.uDelay * 1000;
+    if (!(s.nCLSwitches & CLSW_OPEN) && (s.nLoops > 0)) {
+        if (m_bOpeningInAutochangedMonitorMode && uModeChangeDelay) {
+            m_timerOneTime.Subscribe(TimerOneTimeSubscriber::DELAY_PLAYPAUSE_AFTER_AUTOCHANGE_MODE,
+                std::bind(&CMainFrame::OnPlayPlay, this), uModeChangeDelay);
         } else {
-            // OnUpdatePlayPauseStop() will decide if we can pause the media
-            if (m_bOpeningInAutochangedMonitorMode && uModeChangeDelay) {
-                m_timerOneTime.Subscribe(TimerOneTimeSubscriber::DELAY_PLAYPAUSE_AFTER_AUTOCHANGE_MODE,
-                    [this] { OnCommand(ID_PLAY_PAUSE, 0); }, uModeChangeDelay);
-            } else {
-                OnCommand(ID_PLAY_PAUSE, 0);
-            }
+            OnPlayPlay();
+        }
+    } else {
+        // OnUpdatePlayPauseStop() will decide if we can pause the media
+        if (m_bOpeningInAutochangedMonitorMode && uModeChangeDelay) {
+            m_timerOneTime.Subscribe(TimerOneTimeSubscriber::DELAY_PLAYPAUSE_AFTER_AUTOCHANGE_MODE,
+                [this] { OnCommand(ID_PLAY_PAUSE, 0); }, uModeChangeDelay);
+        } else {
+            OnCommand(ID_PLAY_PAUSE, 0);
         }
     }
-    s.nCLSwitches &= ~CLSW_OPEN;
+    s.nCLSwitches &= ~CLSW_OPEN;  
 
     // Ensure the dynamically added menu items are updated
     SetupFiltersSubMenu();
@@ -5838,7 +5839,6 @@ void CMainFrame::SaveThumbnails(LPCTSTR fn)
     bool bWasStopped = (filterState == State_Stopped);
     if (filterState != State_Paused) {
         OnPlayPause();
-        UpdateCachedMediaState(); // wait for completion of the pause command
     }
 
     CSize szVideoARCorrected, szVideo, szAR;
@@ -11272,7 +11272,7 @@ void CMainFrame::SetDefaultFullscreenState()
 {
     CAppSettings& s = AfxGetAppSettings();
 
-    bool clGoFullscreen = !(s.nCLSwitches & CLSW_ADD) && (s.nCLSwitches & CLSW_FULLSCREEN);
+    bool clGoFullscreen = !(s.nCLSwitches & (CLSW_ADD | CLSW_THUMBNAILS)) && (s.nCLSwitches & CLSW_FULLSCREEN);
 
     if (clGoFullscreen && !s.slFiles.IsEmpty()) {
         // ignore fullscreen if all files are audio
@@ -11288,7 +11288,6 @@ void CMainFrame::SetDefaultFullscreenState()
             }
         }
     }
-
 
     if (clGoFullscreen) {
         if (s.IsD3DFullscreen()) {
@@ -12958,7 +12957,7 @@ void CMainFrame::OpenCreateGraphObject(OpenMediaData* pOMD)
     const CAppSettings& s = AfxGetAppSettings();
 
     m_pGB_preview = nullptr;
-    m_bUseSeekPreview = s.fUseSeekbarHover && s.fSeekPreview && m_wndPreView && ::IsWindow(m_wndPreView.m_hWnd);
+    m_bUseSeekPreview = s.fUseSeekbarHover && s.fSeekPreview && m_wndPreView && ::IsWindow(m_wndPreView.m_hWnd) && !(s.nCLSwitches & CLSW_THUMBNAILS);
     if (m_bUseSeekPreview) {
         if (OpenFileData* pFileData = dynamic_cast<OpenFileData*>(pOMD)) {
             CString fn = pFileData->fns.GetHead();
