@@ -305,6 +305,31 @@ bool CMainFrameControls::ToolbarsCoverVideo() const
                                            s.eHideFullscreenControlsPolicy != CAppSettings::HideFullscreenControlsPolicy::SHOW_NEVER);
 }
 
+bool CaptureIsForToolbar(CPlayerBar *bar) {
+    HWND capture = GetCapture();
+    if (capture == nullptr) {
+        return false;
+    } else if (capture == bar->m_hWnd) {
+        return true;
+    }
+
+    if (CWnd* pChildDialog = bar->GetWindow(GW_CHILD)) {
+        CWnd* pChild = pChildDialog->GetWindow(GW_CHILD);
+        while (pChild) {
+            if (CComboBox* cb = DYNAMIC_DOWNCAST(CComboBox, pChild)) {
+                COMBOBOXINFO cbi = { sizeof(COMBOBOXINFO) };
+                if (cb->GetComboBoxInfo(&cbi)) {
+                    if (cbi.hwndList == capture) {
+                        return true;
+                    }
+                }
+            }
+            pChild = pChild->GetNextWindow();
+        }
+    }
+    return false;
+}
+
 void CMainFrameControls::UpdateToolbarsVisibility()
 {
     ASSERT(GetCurrentThreadId() == AfxGetApp()->m_nThreadID);
@@ -631,7 +656,7 @@ void CMainFrameControls::UpdateToolbarsVisibility()
                     const auto panels = it->second; // copy
                     for (const auto panel : panels) {
                         auto pBar = m_panels[panel];
-                        if (!pBar->IsAutohidden() && GetCapture() != pBar->m_hWnd) {
+                        if (!pBar->IsAutohidden() && !CaptureIsForToolbar(pBar)) {
                             bRecalcLayout = true;
                             m_pMainFrame->ShowControlBar(pBar, FALSE, TRUE);
                             pBar->SetAutohidden(true);
