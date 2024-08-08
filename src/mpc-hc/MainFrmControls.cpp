@@ -305,11 +305,15 @@ bool CMainFrameControls::ToolbarsCoverVideo() const
                                            s.eHideFullscreenControlsPolicy != CAppSettings::HideFullscreenControlsPolicy::SHOW_NEVER);
 }
 
-bool CaptureIsForToolbar(CPlayerBar *bar) {
+bool ToolbarInputActive(CPlayerBar *bar) {
     HWND capture = GetCapture();
-    if (capture == nullptr) {
+    HWND focus = GetFocus();
+
+    if (capture == nullptr && focus == nullptr) {
         return false;
-    } else if (capture == bar->m_hWnd) {
+    }
+
+    if (capture == bar->m_hWnd) {
         return true;
     }
 
@@ -322,6 +326,10 @@ bool CaptureIsForToolbar(CPlayerBar *bar) {
                     if (cbi.hwndList == capture) {
                         return true;
                     }
+                }
+            } else if (CEdit* e = DYNAMIC_DOWNCAST(CEdit, pChild)) {
+                if (e->m_hWnd == focus) {
+                    return true;
                 }
             }
             pChild = pChild->GetNextWindow();
@@ -656,9 +664,10 @@ void CMainFrameControls::UpdateToolbarsVisibility()
                     const auto panels = it->second; // copy
                     for (const auto panel : panels) {
                         auto pBar = m_panels[panel];
-                        if (!pBar->IsAutohidden() && !CaptureIsForToolbar(pBar)) {
+                        if (!pBar->IsAutohidden() && !ToolbarInputActive(pBar) && !pBar->HasActivePopup()) {
                             bRecalcLayout = true;
                             m_pMainFrame->ShowControlBar(pBar, FALSE, TRUE);
+                            m_pMainFrame->RestoreFocus();
                             pBar->SetAutohidden(true);
                         }
                     }

@@ -347,6 +347,7 @@ struct Codec {
 };
 
 typedef CAtlArray<Codec> CCodecArray;
+class CPlayerCaptureBar;
 
 // CPlayerCaptureDialog dialog
 
@@ -356,6 +357,7 @@ class CPlayerCaptureDialog : public CMPCThemeResizableDialog
 
 private:
     CMainFrame* m_pMainFrame;
+    CPlayerCaptureBar* playerCaptureBar;
     bool m_bInitialized;
 
     CMPCThemeButton m_openFile;
@@ -441,7 +443,7 @@ public:
     CComPtr<IBaseFilter> m_pVidEnc, m_pAudEnc, m_pMux, m_pDst, m_pAudMux, m_pAudDst;
     CComPtr<IBaseFilter> m_pVidBuffer, m_pAudBuffer;
 
-    CPlayerCaptureDialog(CMainFrame* pMainFrame);
+    CPlayerCaptureDialog(CMainFrame* pMainFrame, CPlayerCaptureBar*);
     virtual ~CPlayerCaptureDialog();
 
     BOOL Create(CWnd* pParent = nullptr);

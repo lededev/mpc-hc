@@ -522,9 +522,10 @@ static int ShowPPage(CAtlArray<Codec>& codecs, const CComboBox& box, HWND hWnd =
 // CPlayerCaptureDialog dialog
 
 //IMPLEMENT_DYNAMIC(CPlayerCaptureDialog, CMPCThemeResizableDialog)
-CPlayerCaptureDialog::CPlayerCaptureDialog(CMainFrame* pMainFrame)
+CPlayerCaptureDialog::CPlayerCaptureDialog(CMainFrame* pMainFrame, CPlayerCaptureBar* playerCaptureBar)
     : CMPCThemeResizableDialog(CPlayerCaptureDialog::IDD, nullptr)
     , m_pMainFrame(pMainFrame)
+    , playerCaptureBar(playerCaptureBar)
     , m_bInitialized(false)
     , m_vidfps(0)
     , m_nVidBuffers(0)
@@ -1576,6 +1577,8 @@ void CPlayerCaptureDialog::OnOpenFile()
                    OFN_EXPLORER | OFN_ENABLESIZING | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR,
                    _T("Media files (*.avi,*.ogm,*.mkv,*.dsm)|*.avi;*.ogm;*.mkv;*.dsm|"), this, 0);
 
+    playerCaptureBar->OnEnterMenuLoop(false);
+
     if (fd.DoModal() == IDOK) {
         CString str = fd.GetPathName();
 
@@ -1604,7 +1607,8 @@ void CPlayerCaptureDialog::OnOpenFile()
 
         UpdateData(FALSE);
     }
-
+    playerCaptureBar->OnExitMenuLoop(false);
+    GetDlgItem(IDC_EDIT4)->SetFocus(); //this is going to keep the bar from auto-hiding after exiting the modal dialog
     UpdateOutputControls();
 }
 

@@ -30,7 +30,7 @@
 IMPLEMENT_DYNAMIC(CPlayerCaptureBar, CMPCThemePlayerBar)
 CPlayerCaptureBar::CPlayerCaptureBar(CMainFrame* pMainFrame)
     : CMPCThemePlayerBar(pMainFrame)
-    , m_capdlg(pMainFrame)
+    , m_capdlg(pMainFrame, this)
 {
     GetEventd().Connect(m_eventc, {
         MpcEvent::DPI_CHANGED,
