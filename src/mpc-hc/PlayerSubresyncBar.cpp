@@ -1075,7 +1075,7 @@ void CPlayerSubresyncBar::OnRclickList(NMHDR* pNMHDR, LRESULT* pResult)
         if (AppNeedsThemedControls()) {
             m.fulfillThemeReqs();
         }
-        UINT id = m.TrackPopupMenu(TPM_LEFTBUTTON | TPM_RETURNCMD, p.x, p.y, this);
+        UINT id = m.TrackPopupMenu(TPM_LEFTBUTTON | TPM_RETURNCMD, p.x, p.y, m_pMainFrame);
 
         bool bNeedsUpdate = false;
 

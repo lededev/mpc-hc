@@ -1,8 +1,9 @@
 #pragma once
 #include <afxwin.h>
 #include "CMPCThemeScrollBarHelper.h"
-class CMPCThemeEdit :
-    public CEdit
+#include <imm.h>
+
+class CMPCThemeEdit : public CEdit
     , public CMPCThemeScrollable
 {
 public:
@@ -19,6 +20,7 @@ protected:
     CMPCThemeScrollBarHelper* themedSBHelper;
     CFont font;
     bool isFileDialogChild;
+    void SetCompWindowPos(HIMC himc, UINT start);
 
     DECLARE_MESSAGE_MAP()
     
@@ -30,5 +32,8 @@ protected:
     afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 public:
     afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+    afx_msg LRESULT OnContextMenu(WPARAM wParam, LPARAM lParam);
+    afx_msg void OnMeasureItem(int nIDCtl, LPMEASUREITEMSTRUCT lpMeasureItemStruct);
 };
+
 

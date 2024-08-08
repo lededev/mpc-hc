@@ -14,9 +14,6 @@ CFont CMPCThemeMenu::font;
 CFont CMPCThemeMenu::symbolFont;
 CFont CMPCThemeMenu::bulletFont;
 CFont CMPCThemeMenu::checkFont;
-
-IMPLEMENT_DYNAMIC(CMPCThemeMenu, CMenu);
-
 bool CMPCThemeMenu::hasDimensions = false;
 int CMPCThemeMenu::subMenuPadding;
 int CMPCThemeMenu::iconSpacing;
@@ -27,20 +24,24 @@ int CMPCThemeMenu::separatorHeight;
 int CMPCThemeMenu::postTextSpacing;
 int CMPCThemeMenu::accelSpacing;
 CCritSec CMPCThemeMenu::resourceLock;
+std::mutex CMPCThemeMenu::submenuMutex;
 
+IMPLEMENT_DYNAMIC(CMPCThemeMenu, CMenu);
 CMPCThemeMenu::CMPCThemeMenu()
 {
 }
 
-
 CMPCThemeMenu::~CMPCThemeMenu()
 {
-    std::map<UINT, CMPCThemeMenu*>::iterator itr = subMenuIDs.begin();
-    while (itr != subMenuIDs.end()) {
-        if (itr->second == this) {
-            itr = subMenuIDs.erase(itr);
-        } else {
-            ++itr;
+    {
+        std::lock_guard<std::mutex> guard(submenuMutex);
+        std::map<UINT, CMPCThemeMenu*>::iterator itr = subMenuIDs.begin();
+        while (itr != subMenuIDs.end()) {
+            if (itr->second == this) {
+                itr = subMenuIDs.erase(itr);
+            } else {
+                ++itr;
+            }
         }
     }
 
@@ -244,7 +245,9 @@ void CMPCThemeMenu::fulfillThemeReqs(bool isMenubar)
             GetMenuString(i, pObject->m_strCaption, MF_BYPOSITION);
 
             UINT nID = GetMenuItemID(i);
-            pObject->m_strAccel = CPPageAccelTbl::MakeAccelShortcutLabel(nID);
+            if (!isOSMenu) {
+                pObject->m_strAccel = CPPageAccelTbl::MakeAccelShortcutLabel(nID);
+            }
 
             subMenuIDs[nID] = this;
 
@@ -273,6 +276,7 @@ void CMPCThemeMenu::fulfillThemeReqs(bool isMenubar)
                 pSubMenu = DYNAMIC_DOWNCAST(CMPCThemeMenu, t);
                 if (!pSubMenu) {
                     pSubMenu = DEBUG_NEW CMPCThemeMenu;
+                    pSubMenu->setOSMenu(isOSMenu);
                     allocatedMenus.push_back(pSubMenu);
                     pSubMenu->Attach(t->Detach());
                 }
@@ -328,6 +332,7 @@ void CMPCThemeMenu::fulfillThemeReqsItem(UINT i, bool byCommand, bool isMenuBar)
                 pSubMenu = DYNAMIC_DOWNCAST(CMPCThemeMenu, t);
                 if (!pSubMenu) {
                     pSubMenu = DEBUG_NEW CMPCThemeMenu;
+                    pSubMenu->setOSMenu(isOSMenu);
                     allocatedMenus.push_back(pSubMenu);
                     pSubMenu->Attach(t->Detach());
                 }

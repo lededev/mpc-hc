@@ -35,6 +35,7 @@ public:
     CMPCThemeMenu* GetSubMenu(int nPos);
     static void updateItem(CCmdUI* pCmdUI);
     static void clearDimensions() { hasDimensions = false; };
+    void setOSMenu(bool isOSMenu) { this->isOSMenu = isOSMenu; };
 protected:
     static std::map<UINT, CMPCThemeMenu*> subMenuIDs;
     std::vector<MenuObject*> allocatedItems;
@@ -42,7 +43,7 @@ protected:
     void initDimensions();
     UINT findID(UINT& i, bool byCommand);
     void cleanupItem(UINT nPosition, UINT nFlags);
-
+    bool isOSMenu = false;
 
     void GetRects(RECT rcItem, CRect& rectFull, CRect& rectM, CRect& rectIcon, CRect& rectText, CRect& rectArrow);
     static bool hasDimensions;
@@ -57,5 +58,6 @@ protected:
     static HBRUSH bgBrush, bgMenubarBrush;
     static CFont font, symbolFont, bulletFont, checkFont;
     static CCritSec resourceLock;
+    static std::mutex submenuMutex;
 };
 
