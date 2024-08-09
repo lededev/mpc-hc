@@ -242,6 +242,7 @@ LRESULT CMPCThemeEdit::OnContextMenu(WPARAM wParam, LPARAM lParam) {
                     case WM_APP + 1: //show unicode control chars
                         if (pwd) {
                             pwd->flags ^= ENABLE_UNICODE_CONTROL_CHARS;
+                            Invalidate();
                         }
                         break;
                     case ID_CONTEXT_MENU_IME: //IME

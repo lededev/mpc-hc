@@ -1,18 +1,20 @@
 #pragma once
 #include <afxwin.h>
+#include "CMPCThemeEdit.h"
 class CMPCThemeComboBox :
     public CComboBox
 {
     DECLARE_DYNAMIC(CMPCThemeComboBox)
 private:
     bool isHover;
-    bool isThemedDropDown;
+    bool hasThemedControls;
     CBrush bgBrush;
+    CMPCThemeEdit cbEdit;
 public:
     CMPCThemeComboBox();
     void doDraw(CDC& dc, CString strText, CRect r, COLORREF bkColor, COLORREF fgColor, bool drawDotted);
     virtual ~CMPCThemeComboBox();
-    void themeDropDown();
+    void themeControls();
     void PreSubclassWindow();
     void drawComboArrow(CDC& dc, COLORREF arrowClr, CRect arrowRect);
     void checkHover(UINT nFlags, CPoint point, bool invalidate = true);

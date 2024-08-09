@@ -3,6 +3,7 @@
 #include "CMPCTheme.h"
 #include "CMPCThemeUtil.h"
 #include "mplayerc.h"
+#undef SubclassWindow
 
 IMPLEMENT_DYNAMIC(CMPCThemeComboBox, CComboBox)
 
@@ -20,7 +21,7 @@ END_MESSAGE_MAP()
 CMPCThemeComboBox::CMPCThemeComboBox()
     :CComboBox(),
     isHover(false),
-    isThemedDropDown(false)
+    hasThemedControls(false)
 {
 }
 
@@ -55,14 +56,19 @@ CMPCThemeComboBox::~CMPCThemeComboBox()
 {
 }
 
-void CMPCThemeComboBox::themeDropDown()
+void CMPCThemeComboBox::themeControls()
 {
     if (AppNeedsThemedControls()) {
-        if (CMPCThemeUtil::canUseWin10DarkTheme() && !isThemedDropDown) {
+        if (CMPCThemeUtil::canUseWin10DarkTheme() && !hasThemedControls) {
             COMBOBOXINFO info = { sizeof(COMBOBOXINFO) };
             if (GetComboBoxInfo(&info)) {
                 SetWindowTheme(info.hwndList, L"DarkMode_Explorer", NULL);
-                isThemedDropDown = true;
+                DWORD dropdownType = GetStyle() & 3;
+                if (CBS_DROPDOWN == dropdownType || CBS_SIMPLE == dropdownType) {
+                    cbEdit.SubclassWindow(info.hwndItem);
+                }
+
+                hasThemedControls = true;
             }
         }
     }
@@ -70,7 +76,7 @@ void CMPCThemeComboBox::themeDropDown()
 
 void CMPCThemeComboBox::PreSubclassWindow()
 {
-    themeDropDown();
+    themeControls();
 }
 
 
@@ -263,7 +269,7 @@ int CMPCThemeComboBox::OnCreate(LPCREATESTRUCT lpCreateStruct)
         return -1;
     }
 
-    themeDropDown();
+    themeControls();
 
     return 0;
 }
