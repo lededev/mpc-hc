@@ -12334,7 +12334,7 @@ CSize CMainFrame::GetZoomWindowSize(double dScale, bool ignore_video_size)
         if (ignore_video_size || videoSize.cx <= 1 || videoSize.cy <= 1) {
             videoSize.SetSize(0, 0);
         }
-        if (videoSize.cx == 0 || m_fAudioOnly) {
+        if (videoSize.cx == 0 || m_fAudioOnly && videoSize.cy < 300) {
             CRect windowRect;
             GetWindowRect(windowRect);
             if (windowRect.Height() < 420 && windowRect.Width() < 3800) {
