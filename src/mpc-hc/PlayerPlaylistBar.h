@@ -129,7 +129,7 @@ public:
     virtual void SaveState();
 
     bool IsHiddenDueToFullscreen() const;
-    void SetHiddenDueToFullscreen(bool bHidenDueToFullscreen);
+    void SetHiddenDueToFullscreen(bool bHidenDueToFullscreen, bool returningFromFullScreen = false );
 
     void LoadDuration(POSITION pos);
 

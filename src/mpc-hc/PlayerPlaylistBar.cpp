@@ -159,10 +159,12 @@ bool CPlayerPlaylistBar::IsHiddenDueToFullscreen() const
     return m_bHiddenDueToFullscreen;
 }
 
-void CPlayerPlaylistBar::SetHiddenDueToFullscreen(bool bHiddenDueToFullscreen)
+void CPlayerPlaylistBar::SetHiddenDueToFullscreen(bool bHiddenDueToFullscreen, bool returningFromFullScreen /* = false */)
 {
     if (bHiddenDueToFullscreen) {
         SetAutohidden(false);
+    } else if (returningFromFullScreen) { //it was already hidden, but now we will flag it as autohidden vs. hiddenDueToFullscreen
+        SetAutohidden(true);
     }
     m_bHiddenDueToFullscreen = bHiddenDueToFullscreen;
 }

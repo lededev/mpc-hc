@@ -11755,8 +11755,12 @@ void CMainFrame::ToggleFullscreen(bool fToNearest, bool fSwitchScreenResWhenHasT
             }
 
             if (m_wndPlaylistBar.IsHiddenDueToFullscreen() && !m_controls.ControlChecked(CMainFrameControls::Panel::PLAYLIST)) {
-                m_wndPlaylistBar.SetHiddenDueToFullscreen(false);
-                m_controls.ToggleControl(CMainFrameControls::Panel::PLAYLIST);
+                if (s.bHideWindowedControls) {
+                    m_wndPlaylistBar.SetHiddenDueToFullscreen(false, true);
+                } else {
+                    m_wndPlaylistBar.SetHiddenDueToFullscreen(false);
+                    m_controls.ToggleControl(CMainFrameControls::Panel::PLAYLIST);
+                }
             }
 
             // If MPC-HC wasn't previously set "on top" by an external tool,
