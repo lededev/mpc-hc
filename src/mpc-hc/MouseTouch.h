@@ -71,12 +71,13 @@ private:
     CPoint m_hideCursorPoint;
     bool m_bLeftDown;
     bool m_bLeftUpDelayed;
-    bool m_bLeftUpIgnoreNext;
+    LONG m_bLeftUpIgnoreUntil;
     CPoint m_LeftUpPoint;
     bool m_bLeftDoubleStarted;
     CPoint m_leftDoubleStartPoint;
-    int m_leftDoubleStartTime;
+    LONG m_leftDoubleStartTime;
     int m_popupMenuUninitTime;
+    int m_doubleclicktime;
 
     std::pair<bool, CPoint> m_switchingToFullscreen;
 

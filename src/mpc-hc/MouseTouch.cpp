@@ -25,6 +25,8 @@
 #include "FullscreenWnd.h"
 #include <mvrInterfaces.h>
 
+#define TRACE_LEFTCLICKS 0
+
 #define CURSOR_HIDE_TIMEOUT 2000
 
 CMouse::CMouse(CMainFrame* pMainFrm, bool bD3DFS/* = false*/)
@@ -33,10 +35,11 @@ CMouse::CMouse(CMainFrame* pMainFrm, bool bD3DFS/* = false*/)
     , m_dwMouseHiderStartTick(0)
     , m_bLeftDown(false)
     , m_bLeftUpDelayed(false)
-    , m_bLeftUpIgnoreNext(false)
+    , m_bLeftUpIgnoreUntil(0)
     , m_bLeftDoubleStarted(false)
     , m_leftDoubleStartTime(0)
     , m_popupMenuUninitTime(0)
+    , m_doubleclicktime((int)GetDoubleClickTime())
 {
     m_cursors[Cursor::NONE] = nullptr;
     m_cursors[Cursor::ARROW] = LoadCursor(nullptr, IDC_ARROW);
@@ -123,7 +126,7 @@ void CMouse::ResetToBlankState()
     m_drag = Drag::NO_DRAG;
     m_cursor = Cursor::ARROW;
     m_switchingToFullscreen.first = false;
-    m_bLeftUpIgnoreNext = false;
+    m_bLeftUpIgnoreUntil = 0;
     if (m_bLeftUpDelayed) {
         m_bLeftUpDelayed = false;
         KillTimer(GetWnd(), (UINT_PTR)this);
@@ -298,19 +301,21 @@ void CMouse::InternalOnLButtonDown(UINT nFlags, const CPoint& point)
         return;
     }
 
-    //ASSERT(!m_bLeftUpIgnoreNext);
+#if TRACE_LEFTCLICKS
+    TRACE(L"InternalOnLButtonDown\n");
+#endif
+
+    int msgtime = GetMessageTime();
 
     m_bLeftDown = true;
     bool bDouble = false;
-    if (m_bLeftDoubleStarted &&
-            GetMessageTime() - m_leftDoubleStartTime < (int)GetDoubleClickTime() &&
-            CMouse::PointEqualsImprecise(m_leftDoubleStartPoint, point,
-                                         GetSystemMetrics(SM_CXDOUBLECLK) / 2, GetSystemMetrics(SM_CYDOUBLECLK) / 2)) {
+    if (m_bLeftDoubleStarted && (msgtime - m_leftDoubleStartTime < m_doubleclicktime) &&
+            CMouse::PointEqualsImprecise(m_leftDoubleStartPoint, point, GetSystemMetrics(SM_CXDOUBLECLK) / 2, GetSystemMetrics(SM_CYDOUBLECLK) / 2)) {
         m_bLeftDoubleStarted = false;
         bDouble = true;
     } else {
         m_bLeftDoubleStarted = true;
-        m_leftDoubleStartTime = GetMessageTime();
+        m_leftDoubleStartTime = msgtime;
         m_leftDoubleStartPoint = point;
     }
 
@@ -335,9 +340,15 @@ void CMouse::InternalOnLButtonDown(UINT nFlags, const CPoint& point)
                 // the first LeftUp was delayed and then skipped, so skip second one as well
                 m_bLeftUpDelayed = false;
             } else {
+#if TRACE_LEFTCLICKS
+                TRACE(L"doing early LEFT UP\n");
+#endif
                 OnButton(wmcmd::LUP, point);
             }
-            m_bLeftUpIgnoreNext = true;
+            m_bLeftUpIgnoreUntil = msgtime + m_doubleclicktime;
+#if TRACE_LEFTCLICKS
+            TRACE(L"doing DOUBLE\n");
+#endif
             ret = OnButton(wmcmd::LDBLCLK, point) || ret;
         }
         if (!ret) {
@@ -373,8 +384,11 @@ void CMouse::OnTimerLeftUp(HWND hWnd, UINT nMsg, UINT_PTR nIDEvent, DWORD dwTime
 
 void CMouse::InternalOnLButtonUp(UINT nFlags, const CPoint& point)
 {
+#if TRACE_LEFTCLICKS
+    TRACE(L"InternalOnLButtonUp\n");
+#endif
     ReleaseCapture();
-    if (!MVRUp(nFlags, point) && !m_bLeftUpIgnoreNext) {
+    if (!MVRUp(nFlags, point) && (m_bLeftUpIgnoreUntil == 0 || m_bLeftUpIgnoreUntil < GetMessageTime())) {
         bool bIsOnFS = IsOnFullscreenWindow();
         if (!(m_bD3DFS && bIsOnFS && m_pMainFrame->m_OSD.OnLButtonUp(nFlags, point)) && m_bLeftDown) {
             UINT delay = (UINT)AfxGetAppSettings().iMouseLeftUpDelay;
@@ -387,8 +401,12 @@ void CMouse::InternalOnLButtonUp(UINT nFlags, const CPoint& point)
                 OnButton(wmcmd::LUP, point);
             }
         }
+    } else {
+#if TRACE_LEFTCLICKS
+        TRACE(L"skipped LEFT UP\n");
+#endif
     }
-    m_bLeftUpIgnoreNext = false;
+    m_bLeftUpIgnoreUntil = 0;
 
     m_drag = Drag::NO_DRAG;
     m_bLeftDown = false;
