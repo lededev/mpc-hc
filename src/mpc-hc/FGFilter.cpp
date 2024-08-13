@@ -35,6 +35,10 @@
 
 #define LOG_FILTER_INSERT 0
 
+#if !TRACE_GRAPH_BUILD
+#define TRACE(...)
+#endif
+
 //
 // CFGFilter
 //

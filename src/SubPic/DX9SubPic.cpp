@@ -24,6 +24,12 @@
 #include <vmr9.h>
 #include <algorithm>
 
+#include "mpc-hc_config.h"
+
+#if !TRACE_SUBTITLES
+#define TRACE(...)
+#endif
+
 //
 // CDX9SubPic
 //

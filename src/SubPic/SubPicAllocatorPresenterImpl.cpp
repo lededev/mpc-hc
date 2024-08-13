@@ -33,6 +33,12 @@
 #include <functional>
 #include "ScreenUtil.h"
 
+#include "mpc-hc_config.h"
+
+#if !TRACE_SUBTITLES
+#define TRACE(...)
+#endif
+
 CSubPicAllocatorPresenterImpl::CSubPicAllocatorPresenterImpl(HWND hWnd, HRESULT& hr, CString* _pError)
     : CUnknown(NAME("CSubPicAllocatorPresenterImpl"), nullptr)
     , m_hWnd(hWnd)

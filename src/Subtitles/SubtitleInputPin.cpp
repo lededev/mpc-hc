@@ -30,6 +30,10 @@
 #include "moreuuids.h"
 #include "../DSUtil/ISOLang.h"
 
+#if !TRACE_SUBTITLES
+#define TRACE(...)
+#endif
+
 // our first format id
 #define __GAB1__ "GAB1"
 

@@ -28,6 +28,10 @@
 #include "../filters/renderer/VideoRenderers/RenderersSettings.h"
 #include "moreuuids.h"
 
+#if !TRACE_SUBTITLES
+#define TRACE(...)
+#endif
+
 #define MAXGDIFONTSIZE 36000
 
 // WARNING: this isn't very thread safe, use only one RTS a time. We should use TLS in future.

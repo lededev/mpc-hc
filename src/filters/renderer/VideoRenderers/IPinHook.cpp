@@ -1537,7 +1537,7 @@ static HRESULT STDMETHODCALLTYPE CreateVideoDecoderMine(
     }
 #endif
 
-    TRACE(_T("DXVA Decoder : %s\n"), GetDXVADecoderDescription());
+    //TRACE(_T("DXVA Decoder : %s\n"), GetDXVADecoderDescription());
 #ifdef _DEBUG
     LOG(_T("IDirectXVideoDecoderService::CreateVideoDecoder  %s  (%u render targets) hr = %08x"), GetDXVAMode(&g_guidDXVADecoder), NumRenderTargets, hr);
 #endif

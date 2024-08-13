@@ -49,6 +49,10 @@
 #include "moreuuids.h"
 #include <dmodshow.h>
 
+#if !TRACE_GRAPH_BUILD
+#define TRACE(...)
+#endif
+
 //
 // CFGManager
 //

@@ -23,6 +23,12 @@
 #include "SubPicImpl.h"
 #include "../DSUtil/DSUtil.h"
 
+#include "mpc-hc_config.h"
+
+#if !TRACE_SUBTITLES
+#define TRACE(...)
+#endif
+
 //
 // CSubPicImpl
 //

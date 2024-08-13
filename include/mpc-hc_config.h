@@ -68,4 +68,9 @@
 #define MPCHC_WINSDK_VER 8.1
 #endif
 
+
+#define TRACE_GRAPH_BUILD 0
+#define TRACE_SANEAR      0
+#define TRACE_SUBTITLES   0
+
 #endif // MPC_HC_CONFIG_H
