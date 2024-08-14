@@ -11666,8 +11666,10 @@ void CMainFrame::ToggleFullscreen(bool fToNearest, bool fSwitchScreenResWhenHasT
                 m_pMFVDC->SetVideoWindow(m_pVideoWnd->m_hWnd);
             } else if (m_pVMRWC) {
                 m_pVMRWC->SetVideoClippingWindow(m_pVideoWnd->m_hWnd);
-            } else if (m_pVW) {
+            }
+            if (m_pVW) {
                 m_pVW->put_Owner((OAHWND)m_pVideoWnd->m_hWnd);
+                m_pVW->put_MessageDrain((OAHWND)m_pVideoWnd->m_hWnd);
             }
             m_wndView.Invalidate();
         } else {
@@ -11678,8 +11680,10 @@ void CMainFrame::ToggleFullscreen(bool fToNearest, bool fSwitchScreenResWhenHasT
                 m_pMFVDC->SetVideoWindow(m_pVideoWnd->m_hWnd);
             } else if (m_pVMRWC) {
                 m_pVMRWC->SetVideoClippingWindow(m_pVideoWnd->m_hWnd);
-            } else if (m_pVW) {
+            }
+            if (m_pVW) {
                 m_pVW->put_Owner((OAHWND)m_pVideoWnd->m_hWnd);
+                m_pVW->put_MessageDrain((OAHWND)m_pVideoWnd->m_hWnd);
             }
             if (s.autoChangeFSMode.bEnabled && s.autoChangeFSMode.bApplyDefaultModeAtFSExit && !s.autoChangeFSMode.modes.empty() && s.autoChangeFSMode.modes[0].bChecked) {
                 SetDispMode(s.strFullScreenMonitorID, s.autoChangeFSMode.modes[0].dm, s.fAudioTimeShift ? s.iAudioTimeShift : 0); // Restore default time shift
@@ -11731,8 +11735,10 @@ void CMainFrame::ToggleFullscreen(bool fToNearest, bool fSwitchScreenResWhenHasT
                     m_pMFVDC->SetVideoWindow(m_pVideoWnd->m_hWnd);
                 } else if (m_pVMRWC) {
                     m_pVMRWC->SetVideoClippingWindow(m_pVideoWnd->m_hWnd);
-                } else if (m_pVW) {
+                }
+                if (m_pVW) {
                     m_pVW->put_Owner((OAHWND)m_pVideoWnd->m_hWnd);
+                    m_pVW->put_MessageDrain((OAHWND)m_pVideoWnd->m_hWnd);
                 }
             }
             m_pDedicatedFSVideoWnd->DestroyWindow();
