@@ -1388,7 +1388,7 @@ BOOL CMainFrame::PreTranslateMessage(MSG* pMsg)
 {
     if (pMsg->message == WM_KEYDOWN) {
         if (pMsg->wParam == VK_ESCAPE) {
-            bool fEscapeNotAssigned = !AssignedToCmd(VK_ESCAPE, false);
+            bool fEscapeNotAssigned = !AssignedToCmd(VK_ESCAPE);
 
             if (fEscapeNotAssigned) {
                 if (IsFullScreenMode()) {

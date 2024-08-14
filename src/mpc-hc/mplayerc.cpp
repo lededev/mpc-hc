@@ -547,9 +547,9 @@ CString GetContentType(CString fn, CAtlList<CString>* redir)
     return content;
 }
 
-WORD AssignedToCmd(UINT keyOrMouseValue, bool bCheckMouse)
+WORD AssignedToCmd(UINT keyValue)
 {
-    if (keyOrMouseValue == 0) {
+    if (keyValue == 0) {
         ASSERT(false);
         return 0;
     }
@@ -557,33 +557,11 @@ WORD AssignedToCmd(UINT keyOrMouseValue, bool bCheckMouse)
     WORD assignTo = 0;
     const CAppSettings& s = AfxGetAppSettings();
 
-#if 0
-    BYTE mouseVirt = 0;
-    if (bCheckMouse) {
-        if (GetKeyState(VK_SHIFT) & 0x8000) {
-            mouseVirt |= FSHIFT;
-        }
-        if (GetKeyState(VK_MENU) & 0x8000) {
-            mouseVirt |= FALT;
-        }
-        if (GetKeyState(VK_CONTROL) & 0x8000) {
-            mouseVirt |= FCONTROL;
-        }
-    }
-#endif
-
     POSITION pos = s.wmcmds.GetHeadPosition();
     while (pos && !assignTo) {
         const wmcmd& wc = s.wmcmds.GetNext(pos);
 
-#if 0
-        if (bCheckMouse) {
-            if (wc.mouse == keyOrMouseValue && (wc.mouseVirt & ~FVIRTKEY) == mouseVirt) {
-                assignTo = wc.cmd;
-            }
-        } else
-#endif
-        if (wc.key == keyOrMouseValue) {
+        if (wc.key == keyValue) {
             assignTo = wc.cmd;
         }
     }

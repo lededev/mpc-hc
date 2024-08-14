@@ -538,6 +538,9 @@ CAppSettings::CAppSettings()
 }
 #pragma warning(pop)
 
+/* Note: the mouse commands in this list are no longer being used. Mouse binding are now stored elsewhere.
+ * They are included for backwards compatibility.
+ */
 static constexpr wmcmd_base default_wmcmds[] = {
     { ID_FILE_OPENQUICK,                  'Q', FVIRTKEY | FCONTROL | FNOINVERT,         IDS_MPLAYERC_0 },
     { ID_FILE_OPENMEDIA,                  'O', FVIRTKEY | FCONTROL | FNOINVERT,         IDS_AG_OPEN_FILE },

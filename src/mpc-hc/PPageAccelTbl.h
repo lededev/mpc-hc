@@ -40,8 +40,6 @@ private:
         COL_CMD,
         COL_KEY,
         COL_ID,
-        COL_MOUSE_MODIFIER,
-        COL_MOUSE,
         COL_APPCMD,
         COL_RMCMD,
         COL_RMREPCNT
@@ -52,7 +50,6 @@ private:
     CList<wmcmd> m_wmcmds;
 
 	void UpdateKeyDupFlags();
-	void UpdateMouseDupFlags();
 	void UpdateAppcmdDupFlags();
 	void UpdateRmcmdDupFlags();
 	void UpdateAllDupFlags();
@@ -82,7 +79,6 @@ private:
 
     static CString MakeAccelModLabel(BYTE fVirt);
     static CString MakeAccelShortcutLabel(const ACCEL& a);
-    static CString MakeMouseButtonLabel(UINT mouse);
     static CString MakeAppCommandLabel(UINT id);
 
     void SetupList(bool allowResize = true);
