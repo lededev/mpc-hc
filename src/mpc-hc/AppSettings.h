@@ -627,6 +627,26 @@ public:
     CUIceClient     UIceClient;
     bool            fGlobalMedia;
 
+    // Mouse
+    UINT			nMouseLeftClick;
+    bool			bMouseLeftClickOpenRecent;
+    UINT			nMouseLeftDblClick;
+    bool			bMouseEasyMove;
+    UINT			nMouseRightClick;
+    struct MOUSE_ASSIGNMENT {
+        UINT normal;
+        UINT ctrl;
+        UINT shift;
+        UINT rbtn;
+    };
+    MOUSE_ASSIGNMENT MouseMiddleClick;
+    MOUSE_ASSIGNMENT MouseX1Click;
+    MOUSE_ASSIGNMENT MouseX2Click;
+    MOUSE_ASSIGNMENT MouseWheelUp;
+    MOUSE_ASSIGNMENT MouseWheelDown;
+    MOUSE_ASSIGNMENT MouseWheelLeft;
+    MOUSE_ASSIGNMENT MouseWheelRight;
+
     // Logo
     int             nLogoId;
     bool            fLogoExternal;

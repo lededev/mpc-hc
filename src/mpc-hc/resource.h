@@ -359,6 +359,7 @@
 #define IDD_PPAGEFULLSCREEN             10056
 #define IDD_RFS_FILELIST_EXT            10057
 #define IDD_PPAGEAUDIORENDERER          10058
+#define IDD_PPAGEMOUSE                  10059
 #define IDC_COMBO1                      11000
 #define IDC_COMBO2                      11001
 #define IDC_COMBO3                      11002
@@ -620,6 +621,7 @@
 #define IDD_CRASH_REPORTER              20017
 #define IDD_PPAGEDPICALC                20018
 #define IDD_RAR_ENTRY_SELECTOR          20019
+#define IDD_ADDCOMMAND_DLG              20020
 #define IDB_DT_CB_96                    20050
 #define IDB_DT_CB_120                   20051
 #define IDB_DT_CB_144                   20052
@@ -1459,6 +1461,16 @@
 #define IDS_NAVIGATE_CHANNELS           41465
 #define IDS_PPAGE_OUTPUT_MPCVR          41466
 #define IDS_PPAGE_OUTPUT_VMR7           41467
+#define IDS_MOUSE_CLICK_MIDDLE          41702
+#define IDS_MOUSE_CLICK_X1              41703
+#define IDS_MOUSE_CLICK_X2              41704
+#define IDS_MOUSE_WHEEL_UP              41705
+#define IDS_MOUSE_WHEEL_DOWN            41706
+#define IDS_MOUSE_WHEEL_LEFT            41707
+#define IDS_MOUSE_WHEEL_RIGHT           41708
+#define IDS_MOUSE_ACTION                41710
+#define IDS_MOUSE_COMMAND               41711
+#define IDS_MOUSE_RIGHT_BUTTON          41712
 #define IDS_PPAGE_CAPTURE_FG0           57345
 #define IDS_PPAGE_CAPTURE_FG1           57346
 #define IDS_PPAGE_CAPTURE_FG2           57347

@@ -1132,3 +1132,17 @@ BOOL CPlayerListCtrl::OnLvnEndlabeledit(NMHDR* pNMHDR, LRESULT* pResult) {
     inPlaceControl = false;
     return FALSE;
 }
+
+int CPlayerListCtrl::InsertColumn(_In_ int nCol, _In_z_ LPCWSTR lpszColumnHeading,
+    _In_ int nFormat, _In_ int nWidth, _In_ int nSubItem, _In_ int nMinWidth) {
+    nCol = __super::InsertColumn(nCol, lpszColumnHeading, nFormat, nWidth, nSubItem);
+    if (nCol != -1 && nMinWidth > 0) {
+        LVCOLUMNW col;
+        col.mask = LVCF_MINWIDTH;
+        col.cxMin = nMinWidth;
+        SetColumn(nCol, &col);
+        SetExtendedStyle(GetExtendedStyle() | LVS_EX_COLUMNSNAPPOINTS);
+    }
+
+    return nCol;
+}

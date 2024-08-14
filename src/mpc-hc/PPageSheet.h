@@ -26,6 +26,7 @@
 #include "PPageTheme.h"
 #include "PPageFormats.h"
 #include "PPageAccelTbl.h"
+#include "PPageMouse.h"
 #include "PPageLogo.h"
 #include "PPagePlayback.h"
 #include "PPageDVD.h"
@@ -94,6 +95,7 @@ private:
     CPPageTheme m_theme;
     CPPageFormats m_formats;
     CPPageAccelTbl m_acceltbl;
+    CPPageMouse m_mouse;
     CPPageLogo m_logo;
     CPPageWebServer m_webserver;
     CPPagePlayback m_playback;

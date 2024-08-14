@@ -132,6 +132,7 @@
     <ClCompile Include="..\thirdparty\MessageBoxDialog\MessageBoxDialog.cpp" />
     <ClCompile Include="..\thirdparty\XeScrollBar\XeScrollBarBase.cpp" />
     <ClCompile Include="AboutDlg.cpp" />
+    <ClCompile Include="AddCommandDlg.cpp" />
     <ClCompile Include="AppSettings.cpp" />
     <ClCompile Include="AuthDlg.cpp" />
     <ClCompile Include="BaseGraph.cpp" />
@@ -263,6 +264,7 @@
     <ClCompile Include="PPageInternalFilters.cpp" />
     <ClCompile Include="PPageLogo.cpp" />
     <ClCompile Include="PPageMisc.cpp" />
+    <ClCompile Include="PPageMouse.cpp" />
     <ClCompile Include="PPageOutput.cpp" />
     <ClCompile Include="PPagePlayback.cpp" />
     <ClCompile Include="PPagePlayer.cpp" />
@@ -324,6 +326,7 @@
     <ClInclude Include="..\thirdparty\MessageBoxDialog\MessageBoxDialog.h" />
     <ClInclude Include="..\thirdparty\XeScrollBar\xescrollbarbase.h" />
     <ClInclude Include="AboutDlg.h" />
+    <ClInclude Include="AddCommandDlg.h" />
     <ClInclude Include="AppSettings.h" />
     <ClInclude Include="AuthDlg.h" />
     <ClInclude Include="BaseGraph.h" />
@@ -462,6 +465,7 @@
     <ClInclude Include="PPageInternalFilters.h" />
     <ClInclude Include="PPageLogo.h" />
     <ClInclude Include="PPageMisc.h" />
+    <ClInclude Include="PPageMouse.h" />
     <ClInclude Include="PPageOutput.h" />
     <ClInclude Include="PPagePlayback.h" />
     <ClInclude Include="PPagePlayer.h" />

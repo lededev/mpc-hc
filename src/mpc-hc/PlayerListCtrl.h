@@ -169,6 +169,7 @@ public:
     CEdit* ShowInPlaceFloatEdit(int nItem, int nCol);
     CComboBox* ShowInPlaceComboBox(int nItem, int nCol, CAtlList<CString>& lstItems, int nSel, bool bShowDropDown = false);
     CListBox* ShowInPlaceListBox(int nItem, int nCol, CAtlList<CString>& lstItems, int nSel);
+    int InsertColumn(_In_ int nCol, _In_z_ LPCWSTR lpszColumnHeading, _In_ int nFormat = LVCFMT_LEFT, _In_ int nWidth = -1, _In_ int nSubItem = -1, _In_ int nMinWidth = 20);
 
     bool m_fInPlaceDirty;
 

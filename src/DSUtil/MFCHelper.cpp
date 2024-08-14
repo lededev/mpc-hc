@@ -76,7 +76,7 @@ int CorrectComboListWidth(CComboBox& ComboBox, bool dryRun /*= false*/)
 
 	// Get the scrollbar width if it exists
 	int min_visible = ComboBox.GetMinVisible();
-	int scroll_width = (ComboBox.GetCount() > min_visible) ?
+	int scroll_width = (ComboBox.GetCount() > min_visible || (ComboBox.GetStyle() & CBS_DISABLENOSCROLL)) ?
 					   ::GetSystemMetrics(SM_CXVSCROLL) : 0;
 
 	// Adjust the width for the vertical scroll bar and the left and right border.

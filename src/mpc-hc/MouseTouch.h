@@ -77,6 +77,7 @@ private:
     LONG m_leftDoubleStartTime;
     int m_popupMenuUninitTime;
     int m_doubleclicktime;
+    bool m_bWaitingRButtonUp = false;
 
     std::pair<bool, CPoint> m_switchingToFullscreen;
 
@@ -91,7 +92,8 @@ private:
 
     CPoint GetVideoPoint(const CPoint& point) const;
     bool IsOnFullscreenWindow() const;
-    bool OnButton(UINT id, const CPoint& point);
+    WORD AssignedMouseToCmd(UINT mouseValue, UINT nFlags);
+    bool OnButton(UINT id, const CPoint& point, int nFlags=0);
     bool SelectCursor(const CPoint& screenPoint, const CPoint& clientPoint, UINT nFlags);
     void SetCursor(UINT nFlags, const CPoint& screenPoint, const CPoint& clientPoint);
     void SetCursor(UINT nFlags, const CPoint& clientPoint);

@@ -520,6 +520,21 @@ CAppSettings::CAppSettings()
     ZeroMemory(&DVDPosition, sizeof(DVDPosition));
 
     ENSURE(SUCCEEDED(SaneAudioRenderer::Factory::CreateSettings(&sanear)));
+
+    // Mouse
+    nMouseLeftClick = ID_PLAY_PLAYPAUSE;
+    nMouseLeftDblClick = ID_VIEW_FULLSCREEN;
+    nMouseRightClick = ID_MENU_PLAYER_LONG;
+    MouseMiddleClick = { 0, 0, 0, 0 };
+    MouseX1Click = { ID_NAVIGATE_SKIPBACK, 0, 0, 0 };
+    MouseX2Click = { ID_NAVIGATE_SKIPFORWARD, 0, 0, 0 };
+    MouseWheelUp = { ID_VOLUME_UP, ID_PLAY_SEEKFORWARDLARGE, 0, ID_PLAY_SEEKFORWARDLARGE };
+    MouseWheelDown = { ID_VOLUME_DOWN, ID_PLAY_SEEKBACKWARDLARGE, 0, ID_PLAY_SEEKBACKWARDLARGE };
+    MouseWheelLeft = { 0, 0, 0, 0 };
+    MouseWheelRight = { 0, 0, 0, 0 };
+    bMouseLeftClickOpenRecent = false;
+    bMouseEasyMove = true;
+
 }
 #pragma warning(pop)
 
@@ -1033,6 +1048,30 @@ void CAppSettings::SaveSettings(bool write_full_history /* = false */)
     // Multi-monitor code
     pApp->WriteProfileString(IDS_R_SETTINGS, IDS_RS_FULLSCREENMONITOR, CString(strFullScreenMonitorID));
     pApp->WriteProfileString(IDS_R_SETTINGS, IDS_RS_FULLSCREENMONITORDEVICE, CString(strFullScreenMonitorDeviceName));
+
+    // Mouse
+    CStringW str;
+    str.Format(L"%u", nMouseLeftClick);
+    pApp->WriteProfileString(IDS_R_MOUSE, IDS_RS_MOUSE_BTN_LEFT, str);
+    str.Format(L"%u", nMouseLeftDblClick);
+    pApp->WriteProfileString(IDS_R_MOUSE, IDS_RS_MOUSE_BTN_LEFT_DBLCLICK, str);
+    str.Format(L"%u", nMouseRightClick);
+    pApp->WriteProfileString(IDS_R_MOUSE, IDS_RS_MOUSE_BTN_RIGHT, str);
+    str.Format(L"%u;%u;%u;%u", MouseMiddleClick.normal, MouseMiddleClick.ctrl, MouseMiddleClick.shift, MouseMiddleClick.rbtn);
+    pApp->WriteProfileString(IDS_R_MOUSE, IDS_RS_MOUSE_BTN_MIDDLE, str);
+    str.Format(L"%u;%u;%u;%u", MouseX1Click.normal, MouseX1Click.ctrl, MouseX1Click.shift, MouseX1Click.rbtn);
+    pApp->WriteProfileString(IDS_R_MOUSE, IDS_RS_MOUSE_BTN_X1, str);
+    str.Format(L"%u;%u;%u;%u", MouseX2Click.normal, MouseX2Click.ctrl, MouseX2Click.shift, MouseX2Click.rbtn);
+    pApp->WriteProfileString(IDS_R_MOUSE, IDS_RS_MOUSE_BTN_X2, str);
+    str.Format(L"%u;%u;%u;%u", MouseWheelUp.normal, MouseWheelUp.ctrl, MouseWheelUp.shift, MouseWheelUp.rbtn);
+    pApp->WriteProfileString(IDS_R_MOUSE, IDS_RS_MOUSE_WHEEL_UP, str);
+    str.Format(L"%u;%u;%u;%u", MouseWheelDown.normal, MouseWheelDown.ctrl, MouseWheelDown.shift, MouseWheelDown.rbtn);
+    pApp->WriteProfileString(IDS_R_MOUSE, IDS_RS_MOUSE_WHEEL_DOWN, str);
+    str.Format(L"%u;%u;%u;%u", MouseWheelLeft.normal, MouseWheelLeft.ctrl, MouseWheelLeft.shift, MouseWheelLeft.rbtn);
+    pApp->WriteProfileString(IDS_R_MOUSE, IDS_RS_MOUSE_WHEEL_LEFT, str);
+    str.Format(L"%u;%u;%u;%u", MouseWheelRight.normal, MouseWheelRight.ctrl, MouseWheelRight.shift, MouseWheelRight.rbtn);
+    pApp->WriteProfileString(IDS_R_MOUSE, IDS_RS_MOUSE_WHEEL_RIGHT, str);
+
 
     // Prevent Minimize when in Fullscreen mode on non default monitor
     pApp->WriteProfileInt(IDS_R_SETTINGS, IDS_RS_PREVENT_MINIMIZE, fPreventMinimize);
@@ -1624,6 +1663,38 @@ void CAppSettings::LoadSettings()
     strFullScreenMonitorID = pApp->GetProfileString(IDS_R_SETTINGS, IDS_RS_FULLSCREENMONITOR);
     strFullScreenMonitorDeviceName = pApp->GetProfileString(IDS_R_SETTINGS, IDS_RS_FULLSCREENMONITORDEVICE);
 
+    // Mouse
+    CStringW str;
+    str = pApp->GetProfileString(IDS_R_MOUSE, IDS_RS_MOUSE_BTN_LEFT);
+    swscanf_s(str, L"%u", &nMouseLeftClick);
+    if (nMouseLeftClick != 0 && nMouseLeftClick != ID_PLAY_PLAYPAUSE) {
+        nMouseLeftClick = ID_PLAY_PLAYPAUSE;
+    }
+
+    str = pApp->GetProfileString(IDS_R_MOUSE, IDS_RS_MOUSE_BTN_LEFT_DBLCLICK);
+    swscanf_s(str, L"%u", &nMouseLeftDblClick);
+    str = pApp->GetProfileString(IDS_R_MOUSE, IDS_RS_MOUSE_BTN_RIGHT);
+    swscanf_s(str, L"%u", &nMouseRightClick);
+    if (nMouseRightClick != ID_MENU_PLAYER_SHORT && nMouseRightClick != ID_MENU_PLAYER_LONG) {
+        nMouseRightClick = ID_MENU_PLAYER_LONG;
+    }
+
+    str = pApp->GetProfileString(IDS_R_MOUSE, IDS_RS_MOUSE_BTN_MIDDLE);
+    swscanf_s(str, L"%u;%u;%u;%u", &MouseMiddleClick.normal, &MouseMiddleClick.ctrl, &MouseMiddleClick.shift, &MouseMiddleClick.rbtn);
+    str = pApp->GetProfileString(IDS_R_MOUSE, IDS_RS_MOUSE_BTN_X1);
+    swscanf_s(str, L"%u;%u;%u;%u", &MouseX1Click.normal, &MouseX1Click.ctrl, &MouseX1Click.shift, &MouseX1Click.rbtn);
+    str = pApp->GetProfileString(IDS_R_MOUSE, IDS_RS_MOUSE_BTN_X2);
+    swscanf_s(str, L"%u;%u;%u;%u", &MouseX2Click.normal, &MouseX2Click.ctrl, &MouseX2Click.shift, &MouseX2Click.rbtn);
+    str = pApp->GetProfileString(IDS_R_MOUSE, IDS_RS_MOUSE_WHEEL_UP);
+    swscanf_s(str, L"%u;%u;%u;%u", &MouseWheelUp.normal, &MouseWheelUp.ctrl, &MouseWheelUp.shift, &MouseWheelUp.rbtn);
+    str = pApp->GetProfileString(IDS_R_MOUSE, IDS_RS_MOUSE_WHEEL_DOWN);
+    swscanf_s(str, L"%u;%u;%u;%u", &MouseWheelDown.normal, &MouseWheelDown.ctrl, &MouseWheelDown.shift, &MouseWheelDown.rbtn);
+    str = pApp->GetProfileString(IDS_R_MOUSE, IDS_RS_MOUSE_WHEEL_LEFT);
+    swscanf_s(str, L"%u;%u;%u;%u", &MouseWheelLeft.normal, &MouseWheelLeft.ctrl, &MouseWheelLeft.shift, &MouseWheelLeft.rbtn);
+    str = pApp->GetProfileString(IDS_R_MOUSE, IDS_RS_MOUSE_WHEEL_RIGHT);
+    swscanf_s(str, L"%u;%u;%u;%u", &MouseWheelRight.normal, &MouseWheelRight.ctrl, &MouseWheelRight.shift, &MouseWheelRight.rbtn);
+
+
     // Prevent Minimize when in fullscreen mode on non default monitor
     fPreventMinimize = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_PREVENT_MINIMIZE, FALSE);
     bUseEnhancedTaskBar = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_ENHANCED_TASKBAR, TRUE);
@@ -1677,7 +1748,7 @@ void CAppSettings::LoadSettings()
 
     fRememberWindowPos = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_REMEMBERWINDOWPOS, FALSE);
     fRememberWindowSize = !!pApp->GetProfileInt(IDS_R_SETTINGS, IDS_RS_REMEMBERWINDOWSIZE, FALSE);
-    CString str = pApp->GetProfileString(IDS_R_SETTINGS, IDS_RS_PANSCANZOOM);
+    str = pApp->GetProfileString(IDS_R_SETTINGS, IDS_RS_PANSCANZOOM);
     if (_stscanf_s(str, _T("%lf,%lf"), &dZoomX, &dZoomY) == 2 &&
             dZoomX >= 0.196 && dZoomX <= 5.0 &&
             dZoomY >= 0.196 && dZoomY <= 5.0) {

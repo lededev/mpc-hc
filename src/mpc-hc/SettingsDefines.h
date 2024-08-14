@@ -396,3 +396,15 @@
 #define IDS_LAST_FILEOPENDIR_PATH           _T("LastFileOpenDirPath")
 #define IDS_EXTERNAL_PLAYLIST_PATH          _T("ExternalPlayListPath")
 
+// Mouse
+#define IDS_R_MOUSE                         L"Mouse"
+#define IDS_RS_MOUSE_BTN_LEFT               L"ButtonLeft"
+#define IDS_RS_MOUSE_BTN_LEFT_DBLCLICK      L"ButtonLeftDblClick"
+#define IDS_RS_MOUSE_BTN_RIGHT              L"ButtonRight"
+#define IDS_RS_MOUSE_BTN_MIDDLE             L"ButtonMiddle"
+#define IDS_RS_MOUSE_BTN_X1                 L"ButtonX1"
+#define IDS_RS_MOUSE_BTN_X2                 L"ButtonX2"
+#define IDS_RS_MOUSE_WHEEL_UP               L"WheelUp"
+#define IDS_RS_MOUSE_WHEEL_DOWN             L"WheelDown"
+#define IDS_RS_MOUSE_WHEEL_LEFT             L"WheelLeft"
+#define IDS_RS_MOUSE_WHEEL_RIGHT            L"WheelRight"
