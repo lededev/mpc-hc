@@ -35,7 +35,6 @@ CMouse::CMouse(CMainFrame* pMainFrm, bool bD3DFS/* = false*/)
     , m_dwMouseHiderStartTick(0)
     , m_bLeftDown(false)
     , m_bLeftUpDelayed(false)
-    , m_bLeftUpIgnoreUntil(0)
     , m_bLeftDoubleStarted(false)
     , m_leftDoubleStartTime(0)
     , m_popupMenuUninitTime(0)
@@ -126,7 +125,6 @@ void CMouse::ResetToBlankState()
     m_drag = Drag::NO_DRAG;
     m_cursor = Cursor::ARROW;
     m_switchingToFullscreen.first = false;
-    m_bLeftUpIgnoreUntil = 0;
     if (m_bLeftUpDelayed) {
         m_bLeftUpDelayed = false;
         KillTimer(GetWnd(), (UINT_PTR)this);
@@ -345,13 +343,13 @@ void CMouse::InternalOnLButtonDown(UINT nFlags, const CPoint& point)
 #endif
                 OnButton(wmcmd::LUP, point);
             }
-            m_bLeftUpIgnoreUntil = msgtime + m_doubleclicktime;
 #if TRACE_LEFTCLICKS
             TRACE(L"doing DOUBLE\n");
 #endif
             ret = OnButton(wmcmd::LDBLCLK, point) || ret;
+            m_bLeftDown = false; // skip next LEFT UP
         }
-        if (!ret) {
+        if (!ret || bDouble) {
             ReleaseCapture();
         }
         return ret;
@@ -388,9 +386,9 @@ void CMouse::InternalOnLButtonUp(UINT nFlags, const CPoint& point)
     TRACE(L"InternalOnLButtonUp\n");
 #endif
     ReleaseCapture();
-    if (!MVRUp(nFlags, point) && (m_bLeftUpIgnoreUntil == 0 || m_bLeftUpIgnoreUntil < GetMessageTime())) {
+    if (!MVRUp(nFlags, point) && m_bLeftDown) {
         bool bIsOnFS = IsOnFullscreenWindow();
-        if (!(m_bD3DFS && bIsOnFS && m_pMainFrame->m_OSD.OnLButtonUp(nFlags, point)) && m_bLeftDown) {
+        if (!(m_bD3DFS && bIsOnFS && m_pMainFrame->m_OSD.OnLButtonUp(nFlags, point))) {
             UINT delay = (UINT)AfxGetAppSettings().iMouseLeftUpDelay;
             if (delay > 0 && m_pMainFrame->GetLoadState() == MLS::LOADED) {
                 ASSERT(!m_bLeftUpDelayed);
@@ -406,7 +404,6 @@ void CMouse::InternalOnLButtonUp(UINT nFlags, const CPoint& point)
         TRACE(L"skipped LEFT UP\n");
 #endif
     }
-    m_bLeftUpIgnoreUntil = 0;
 
     m_drag = Drag::NO_DRAG;
     m_bLeftDown = false;

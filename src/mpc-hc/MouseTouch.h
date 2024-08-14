@@ -71,7 +71,6 @@ private:
     CPoint m_hideCursorPoint;
     bool m_bLeftDown;
     bool m_bLeftUpDelayed;
-    LONG m_bLeftUpIgnoreUntil;
     CPoint m_LeftUpPoint;
     bool m_bLeftDoubleStarted;
     CPoint m_leftDoubleStartPoint;
