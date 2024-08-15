@@ -3679,7 +3679,7 @@ BEGIN
     IDS_MFMT_FLIC           "FLIC Animation"
     IDS_MFMT_DSM            "DirectShow Media"
     IDS_MFMT_IVF            "Indeo Video Format"
-    IDS_MFMT_AVS            "AviSynth script"
+    IDS_MFMT_AVS            "AviSynth Script"
 END
 
 STRINGTABLE
