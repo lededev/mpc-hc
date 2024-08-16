@@ -13151,6 +13151,14 @@ HRESULT CMainFrame::PreviewWindowHide() {
         m_wndPreView.SetWindowPos(&wndNoTopMost, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
         if (WindowExpectedOnTop()) {
             SetWindowPos(&wndTopMost, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+            //now that we have set the main window to topMost, its toolbars will have to be re-ordered as well
+            for (const auto& pair : m_controls.m_panels) {
+                CWnd* owner = pair.second->GetParentOwner();
+                if (owner && owner->IsWindowVisible()) {
+                    owner->SetWindowPos(&wndTopMost, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+                }
+            }
+
         }
 
         // Enable animation
