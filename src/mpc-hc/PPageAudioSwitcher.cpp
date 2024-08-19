@@ -78,6 +78,10 @@ void CPPageAudioSwitcher::DoDataExchange(CDataExchange* pDX)
     DDX_Check(pDX, IDC_CHECK1, m_fCustomChannelMapping);
     DDX_Control(pDX, IDC_EDIT1, m_nChannelsCtrl);
     DDX_Text(pDX, IDC_EDIT1, m_nChannels);
+    if (m_nChannels > AS_MAX_CHANNELS) {
+        m_nChannels = AS_MAX_CHANNELS;
+        SetDlgItemText(IDC_EDIT1, L"18");
+    }
     DDX_Control(pDX, IDC_SPIN1, m_nChannelsSpinCtrl);
     DDX_Control(pDX, IDC_LIST1, m_list);
     DDX_Check(pDX, IDC_CHECK2, m_fEnableAudioSwitcher);
@@ -141,7 +145,7 @@ BOOL CPPageAudioSwitcher::OnInitDialog()
     m_fCustomChannelMapping = s.fCustomChannelMapping;
     memcpy(m_pSpeakerToChannelMap, s.pSpeakerToChannelMap, sizeof(s.pSpeakerToChannelMap));
 
-    m_nChannels = s.nSpeakerChannels;
+    m_nChannels = std::clamp(s.nSpeakerChannels, 1, AS_MAX_CHANNELS);
     m_nChannelsSpinCtrl.SetRange(1, AS_MAX_CHANNELS);
 
     m_list.setAdditionalStyles(0); //cleans up styles if necessary for mpc theme
@@ -209,7 +213,7 @@ BOOL CPPageAudioSwitcher::OnApply()
     s.iAudioTimeShift = m_tAudioTimeShift;
     s.fCustomChannelMapping = !!m_fCustomChannelMapping;
     memcpy(s.pSpeakerToChannelMap, m_pSpeakerToChannelMap, sizeof(m_pSpeakerToChannelMap));
-    s.nSpeakerChannels = m_nChannels;
+    s.nSpeakerChannels = std::clamp(m_nChannels, 1, AS_MAX_CHANNELS);
 
     // There is no main frame when the option dialog is displayed stand-alone
     if (CMainFrame* pMainFrame = AfxGetMainFrame()) {
