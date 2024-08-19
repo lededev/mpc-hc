@@ -219,8 +219,7 @@ BOOL CPlayerToolBar::Create(CWnd* pParentWnd)
     return TRUE;
 }
 
-void CPlayerToolBar::ArrangeControls()
-{
+void CPlayerToolBar::ArrangeControls() {
     if (!::IsWindow(m_volctrl.m_hWnd)) {
         return;
     }
@@ -233,15 +232,25 @@ void CPlayerToolBar::ArrangeControls()
     CRect r10;
     GetItemRect(10, &r10);
 
-    CRect vr(r.right + br.right - 60, r.top - 2, r.right + br.right + 6, r.bottom);
-    m_volctrl.MoveWindow(vr);
+    CRect vr;
+    if (AppIsThemeLoaded()) {
+        float dpiScaling = (float)std::min(m_pMainFrame->m_dpi.ScaleFactorX(), m_pMainFrame->m_dpi.ScaleFactorY());
+        int targetsize = int(dpiScaling * AfxGetAppSettings().nDefaultToolbarSize);
 
-    CRect thumbRect;
-    m_volctrl.GetThumbRect(thumbRect);
-    m_volctrl.MapWindowPoints(this, thumbRect);
-    vr.top += std::max((r.bottom - thumbRect.bottom - 4) / 2, 0l);
-    vr.left -= m_volumeMinSizeInc = MulDiv(thumbRect.Height(), 50, 19) - 50;
-    m_volctrl.MoveWindow(vr);
+        m_volumeMinSizeInc = targetsize * 2.5f;
+        vr = CRect(r.right + br.right - m_volumeMinSizeInc, r.top+targetsize/4, r.right + br.right, r.bottom-targetsize/4);
+        m_volctrl.MoveWindow(vr);
+    } else {
+        vr = CRect(r.right + br.right - 60, r.top - 2, r.right + br.right + 6, r.bottom);
+        m_volctrl.MoveWindow(vr);
+
+        CRect thumbRect;
+        m_volctrl.GetThumbRect(thumbRect);
+        m_volctrl.MapWindowPoints(this, thumbRect);
+        vr.top += std::max((r.bottom - thumbRect.bottom - 4) / 2, 0l);
+        vr.left -= m_volumeMinSizeInc = MulDiv(thumbRect.Height(), 50, 19) - 50;
+        m_volctrl.MoveWindow(vr);
+    }
 
     UINT nID;
     UINT nStyle;

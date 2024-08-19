@@ -13158,7 +13158,6 @@ HRESULT CMainFrame::PreviewWindowHide() {
                     owner->SetWindowPos(&wndTopMost, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
                 }
             }
-
         }
 
         // Enable animation

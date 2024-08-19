@@ -25,6 +25,7 @@
 #include "AppSettings.h"
 #include "CMPCTheme.h"
 #include "CMPCThemeUtil.h"
+#include "MainFrm.h"
 #undef SubclassWindow
 
 
@@ -110,12 +111,18 @@ END_MESSAGE_MAP()
 
 void CVolumeCtrl::getCustomChannelRect(LPRECT rc)
 {
-    CRect channelRect;
-    GetChannelRect(channelRect);
-    CRect thumbRect;
-    GetThumbRect(thumbRect);
+    if (AppIsThemeLoaded()) {
+        CRect channelRect;
+        GetClientRect(channelRect);
+        CopyRect(rc, CRect(channelRect.left, channelRect.top, channelRect.right - AfxGetMainFrame()->m_dpi.ScaleFloorX(2), channelRect.bottom));
+    } else {
+        CRect channelRect;
+        GetChannelRect(channelRect);
+        CRect thumbRect;
+        GetThumbRect(thumbRect);
 
-    CopyRect(rc, CRect(channelRect.left, thumbRect.top + 2, channelRect.right - 2, thumbRect.bottom - 2));
+        CopyRect(rc, CRect(channelRect.left, thumbRect.top + 2, channelRect.right - 2, thumbRect.bottom - 2));
+    }
 }
 
 void CVolumeCtrl::OnNMCustomdraw(NMHDR* pNMHDR, LRESULT* pResult)
